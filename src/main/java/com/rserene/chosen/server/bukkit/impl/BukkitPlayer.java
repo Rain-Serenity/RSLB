@@ -2,7 +2,6 @@ package com.rserene.chosen.server.bukkit.impl;
 
 import com.rserene.chosen.server.RSLB;
 import com.rserene.chosen.server.api.internal.plugin.IPlayer;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Objects;
 import java.util.UUID;

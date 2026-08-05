@@ -11,7 +11,6 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import lombok.Generated;
 import com.rserene.chosen.server.api.internal.util.ValueUtil;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.api.profile.Property;

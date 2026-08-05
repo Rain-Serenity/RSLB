@@ -8,7 +8,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import lombok.Generated;
 import com.rserene.chosen.server.api.profile.Property;
 import com.rserene.chosen.server.core.auth.service.yggdrasil.UnmodifiableGameProfile;
 
