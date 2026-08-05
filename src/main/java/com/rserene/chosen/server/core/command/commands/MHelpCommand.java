@@ -38,9 +38,9 @@ public class MHelpCommand {
       this.handler = handler;
    }
 
-   public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
-      return (LiteralArgumentBuilder<ISender>)literalArgumentBuilder.then(this.handler.literal("help").executes(this::executeHelp));
-   }
+    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
+       return (LiteralArgumentBuilder<ISender>)literalArgumentBuilder.executes(this::executeHelp);
+    }
 
    private int executeHelp(CommandContext<ISender> context) {
       ISender sender = (ISender)context.getSource();

@@ -23,7 +23,7 @@ public class BukkitPlayer implements IPlayer {
 
     @Override
     public void kickPlayer(String message) {
-        this.player.kickPlayer(message);
+        this.player.kick(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
     }
 
     @Override
