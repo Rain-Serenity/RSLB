@@ -7,7 +7,7 @@ import java.util.Objects;
 import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.core.configuration.service.yggdrasil.BaseYggdrasilServiceConfig;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.core.ohc.LoggingInterceptor;
 import com.rserene.chosen.server.core.ohc.RetryInterceptor;
 import com.rserene.chosen.server.flows.workflows.BaseFlows;
@@ -20,13 +20,13 @@ import okhttp3.Response;
 import okhttp3.Request.Builder;
 
 public class YggdrasilAuthenticationFlows extends BaseFlows<HasJoinedContext> {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private final String username;
    private final String serverId;
    private final String ip;
    private final BaseYggdrasilServiceConfig config;
 
-   protected YggdrasilAuthenticationFlows(RSLVCore core, String username, String serverId, String ip, BaseYggdrasilServiceConfig config) {
+   protected YggdrasilAuthenticationFlows(RSLBCore core, String username, String serverId, String ip, BaseYggdrasilServiceConfig config) {
       this.core = core;
       this.username = username;
       this.serverId = serverId;

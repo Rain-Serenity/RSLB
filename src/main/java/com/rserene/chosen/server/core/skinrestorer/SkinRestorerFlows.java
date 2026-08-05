@@ -15,7 +15,7 @@ import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.api.profile.Property;
 import com.rserene.chosen.server.core.configuration.SkinRestorerConfig;
 import com.rserene.chosen.server.core.configuration.service.BaseServiceConfig;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -25,14 +25,14 @@ import okhttp3.Response;
 import okhttp3.Request.Builder;
 
 public class SkinRestorerFlows implements Callable<SkinRestorerResultImpl> {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private final BaseServiceConfig config;
    private final OkHttpClient okHttpClient;
    private final String skinUrl;
    private final String skinModel;
    private final GameProfile profile;
 
-   protected SkinRestorerFlows(RSLVCore core, BaseServiceConfig config, OkHttpClient okHttpClient, String skinUrl, String skinModel, GameProfile profile) {
+   protected SkinRestorerFlows(RSLBCore core, BaseServiceConfig config, OkHttpClient okHttpClient, String skinUrl, String skinModel, GameProfile profile) {
       this.core = core;
       this.config = config;
       this.okHttpClient = okHttpClient;

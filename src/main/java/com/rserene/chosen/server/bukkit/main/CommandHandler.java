@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Bukkit 指令桥接层。
  *
- * 将 Bukkit 的 onCommand / onTabComplete 转发给 RSLV 核心的
+ * 将 Bukkit 的 onCommand / onTabComplete 转发给 RSLB 核心的
  * brigadier 命令调度器（CommandAPI），并补齐根命令前缀
  * （/rslb 与 /rsl 统一映射为 "rsl"）。TAB 补全同样经由核心
  * 调度器生成建议。
@@ -28,7 +28,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     }
 
     public void register(String name) {
-        this.commandHandler = this.plugin.getRSLVCoreAPI().getCommandHandler();
+        this.commandHandler = this.plugin.getCoreAPI().getCommandHandler();
         this.plugin.getCommand(name.toLowerCase()).setExecutor(this);
         this.plugin.getCommand(name.toLowerCase()).setTabCompleter(this);
     }

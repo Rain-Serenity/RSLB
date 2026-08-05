@@ -2,14 +2,14 @@ package com.rserene.chosen.server.core.auth.validate.entry;
 
 import java.util.Locale;
 import com.rserene.chosen.server.core.auth.validate.ValidateContext;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.flows.workflows.BaseFlows;
 import com.rserene.chosen.server.flows.workflows.Signal;
 
 public class WhitelistCheckFlows extends BaseFlows<ValidateContext> {
-   private final RSLVCore core;
+   private final RSLBCore core;
 
-   public WhitelistCheckFlows(RSLVCore core) {
+   public WhitelistCheckFlows(RSLBCore core) {
       this.core = core;
    }
 

@@ -17,7 +17,7 @@ import com.rserene.chosen.server.core.command.argument.OnlineArgumentType;
 import com.rserene.chosen.server.core.command.argument.ProfileArgumentType;
 import com.rserene.chosen.server.core.command.argument.StringArgumentType;
 import com.rserene.chosen.server.core.command.argument.UUIDArgumentType;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 
 public class MProfileCommand {
    private final CommandHandler handler;
@@ -184,7 +184,7 @@ public class MProfileCommand {
    }
 
    private void processCreate(CommandContext<ISender> context, String name, UUID uuid) throws SQLException {
-      RSLVCore core = CommandHandler.getCore();
+      RSLBCore core = CommandHandler.getCore();
       String nameAllowedRegular = core.getPluginConfig().getNameAllowedRegular();
       if (!ValueUtil.isEmpty(nameAllowedRegular) && !Pattern.matches(nameAllowedRegular, name)) {
          ((ISender)context.getSource())

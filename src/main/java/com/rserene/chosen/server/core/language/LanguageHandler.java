@@ -13,16 +13,16 @@ import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.api.internal.util.IOUtil;
 import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.internal.util.ValueUtil;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader.Builder;
 
 public class LanguageHandler implements LanguageAPI {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private Map<String, String> language;
 
-   public LanguageHandler(RSLVCore core) {
+   public LanguageHandler(RSLBCore core) {
       this.core = core;
    }
 

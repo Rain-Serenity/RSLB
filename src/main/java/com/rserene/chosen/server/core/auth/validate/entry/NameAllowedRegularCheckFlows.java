@@ -4,14 +4,14 @@ import java.util.regex.Pattern;
 import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.internal.util.ValueUtil;
 import com.rserene.chosen.server.core.auth.validate.ValidateContext;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.flows.workflows.BaseFlows;
 import com.rserene.chosen.server.flows.workflows.Signal;
 
 public class NameAllowedRegularCheckFlows extends BaseFlows<ValidateContext> {
-   private final RSLVCore core;
+   private final RSLBCore core;
 
-   public NameAllowedRegularCheckFlows(RSLVCore core) {
+   public NameAllowedRegularCheckFlows(RSLBCore core) {
       this.core = core;
    }
 

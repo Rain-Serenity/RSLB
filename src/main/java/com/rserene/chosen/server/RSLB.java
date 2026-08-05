@@ -1,14 +1,16 @@
 package com.rserene.chosen.server;
 
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
-import com.rserene.chosen.server.api.internal.main.RSLVCoreAPI;
+import com.rserene.chosen.server.api.internal.main.RSLBCoreAPI;
 import com.rserene.chosen.server.api.internal.plugin.IPlugin;
 import com.rserene.chosen.server.api.internal.plugin.IServer;
 import com.rserene.chosen.server.bukkit.auth.LoginHandler;
 import com.rserene.chosen.server.bukkit.impl.BukkitServer;
 import com.rserene.chosen.server.bukkit.logger.JavaUtilLoggerBridge;
+import com.rserene.chosen.server.bukkit.main.CommandHandler;
+import com.rserene.chosen.server.bukkit.main.GlobalListener;
 import com.rserene.chosen.server.bukkit.metrics.Metrics;
-import java.io.File;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -16,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * 启动流程：
  *  1. 注册日志桥接（JavaUtilLoggerBridge）与 Bukkit 运行时适配（BukkitServer）；
- *  2. 初始化 RSLV 核心（RSLVCore）：加载配置、语言文件、认证服务与数据库；
+ *  2. 初始化 RSLB 核心（RSLBCore）：加载配置、语言文件、认证服务与数据库；
  *  3. 注册事件监听（GlobalListener）与指令（CommandHandler）；
  *  4. 启动登录拦截器（LoginHandler）：包装 netty acceptor，强制所有登录
  *     经过 Yggdrasil 认证后才进入游戏。
@@ -25,7 +27,7 @@ public final class RSLB extends JavaPlugin implements IPlugin {
     private static final int PLUGIN_ID = 33158;
     private static RSLB instance;
     private BukkitServer runServer;
-    private RSLVCoreAPI RSLVCoreAPI;
+    private RSLBCoreAPI coreAPI;
     private LoginHandler authListener;
 
     @Override
@@ -34,10 +36,10 @@ public final class RSLB extends JavaPlugin implements IPlugin {
         try {
             LoggerProvider.setLogger(new JavaUtilLoggerBridge(this.getLogger()));
             this.runServer = new BukkitServer(this);
-            this.RSLVCoreAPI = new com.rserene.chosen.server.core.main.RSLVCore(this);
-            this.RSLVCoreAPI.load();
-            new com.rserene.chosen.server.bukkit.main.GlobalListener(this).register();
-            new com.rserene.chosen.server.bukkit.main.CommandHandler(this).register("RSLB");
+            this.coreAPI = new RSLBCore(this);
+            this.coreAPI.load();
+            new GlobalListener(this).register();
+            new CommandHandler(this).register("RSLB");
             initAuthListener();
             initMetrics();
         } catch (Throwable e) {
@@ -66,7 +68,7 @@ public final class RSLB extends JavaPlugin implements IPlugin {
      */
     private void initMetrics() {
         try {
-            boolean enabled = this.RSLVCoreAPI instanceof com.rserene.chosen.server.core.main.RSLVCore core
+            boolean enabled = this.coreAPI instanceof RSLBCore core
                     && core.getPluginConfig().isMetricsEnabled();
             if (enabled && PLUGIN_ID > 0) {
                 new Metrics(this, PLUGIN_ID);
@@ -83,8 +85,8 @@ public final class RSLB extends JavaPlugin implements IPlugin {
             if (this.authListener != null) {
                 this.authListener.stop();
             }
-            if (this.RSLVCoreAPI != null) {
-                this.RSLVCoreAPI.close();
+            if (this.coreAPI != null) {
+                this.coreAPI.close();
             }
         } catch (Exception e) {
             this.getLogger().severe("An exception was encountered while closing: " + e.getMessage());
@@ -92,17 +94,12 @@ public final class RSLB extends JavaPlugin implements IPlugin {
     }
 
     @Override
-    public File getTempFolder() {
-        return new File(this.getDataFolder(), "tmp");
-    }
-
-    @Override
     public IServer getRunServer() {
         return this.runServer;
     }
 
-    public RSLVCoreAPI getRSLVCoreAPI() {
-        return this.RSLVCoreAPI;
+    public RSLBCoreAPI getCoreAPI() {
+        return this.coreAPI;
     }
 
     public boolean isAuthListenerActive() {

@@ -11,16 +11,16 @@ import com.rserene.chosen.server.core.database.pool.MysqlConnectionPool;
 import com.rserene.chosen.server.core.database.table.InGameProfileTableV3;
 import com.rserene.chosen.server.core.database.table.SkinRestoredCacheTableV2;
 import com.rserene.chosen.server.core.database.table.UserDataTableV3;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 
 public class SQLManager {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private ISQLConnectionPool pool;
    private InGameProfileTableV3 inGameProfileTable;
    private UserDataTableV3 userDataTable;
    private SkinRestoredCacheTableV2 skinRestoredCacheTable;
 
-   public SQLManager(RSLVCore core) {
+   public SQLManager(RSLBCore core) {
       this.core = core;
    }
 
@@ -76,7 +76,7 @@ public class SQLManager {
    }
 
    @Generated
-   public RSLVCore getCore() {
+   public RSLBCore getCore() {
       return this.core;
    }
 

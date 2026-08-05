@@ -7,12 +7,12 @@ import lombok.Generated;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 
 public class BuildManifest {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private String buildType;
    private Date buildDate;
    private String version;
 
-   public BuildManifest(RSLVCore core) {
+   public BuildManifest(RSLBCore core) {
       this.core = core;
    }
 
@@ -26,12 +26,12 @@ public class BuildManifest {
 
    public void checkStable() {
       if (!this.buildType.equalsIgnoreCase("final")) {
-         LoggerProvider.getLogger().warn("当前 RSLV 构建不是正式版本，请谨慎用于生产环境。");
+         LoggerProvider.getLogger().warn("当前 RSLB 构建不是正式版本，请谨慎用于生产环境。");
       }
    }
 
    @Generated
-   public RSLVCore getCore() {
+   public RSLBCore getCore() {
       return this.core;
    }
 
