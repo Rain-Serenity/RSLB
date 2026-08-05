@@ -38,7 +38,6 @@ public class PluginConfig {
    private boolean nameCorrect;
    private boolean autoNameChange;
    private SqlConfig sqlConfig;
-   private MapperConfig mapperConfig;
    private String nameAllowedRegular;
    private final RSLBCore core;
    private boolean welcomeMsg;
@@ -64,15 +63,8 @@ public class PluginConfig {
 
       IOUtil.removeAllFiles(new File(this.dataFolder, "examples"));
       this.saveResource("config.yml", false);
-      this.saveResource("mapper.yml", false);
       this.saveResource("services/official.yml", true);
       this.saveResource("services/littleskin.yml", true);
-      if (this.mapperConfig != null) {
-         this.mapperConfig.save();
-      }
-
-      this.mapperConfig = new MapperConfig(this.dataFolder);
-      this.mapperConfig.reload();
       CommentedConfigurationNode configConfigurationNode = (CommentedConfigurationNode)((Builder)YamlConfigurationLoader.builder()
             .file(new File(this.dataFolder, "config.yml")))
          .build()
@@ -247,11 +239,6 @@ public class PluginConfig {
    @Generated
    public SqlConfig getSqlConfig() {
       return this.sqlConfig;
-   }
-
-   @Generated
-   public MapperConfig getMapperConfig() {
-      return this.mapperConfig;
    }
 
    @Generated

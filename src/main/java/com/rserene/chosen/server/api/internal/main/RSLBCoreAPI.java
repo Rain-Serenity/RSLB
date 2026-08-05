@@ -1,6 +1,5 @@
 package com.rserene.chosen.server.api.internal.main;
 
-import com.rserene.chosen.server.api.MapperConfigAPI;
 import com.rserene.chosen.server.api.internal.auth.AuthAPI;
 import com.rserene.chosen.server.api.internal.command.CommandAPI;
 import com.rserene.chosen.server.api.internal.handle.HandlerAPI;
@@ -24,8 +23,6 @@ public interface RSLBCoreAPI {
    SkinRestorerAPI getSkinRestorerHandler();
 
    HandlerAPI getPlayerHandler();
-
-   MapperConfigAPI getMapperConfig();
 
    IPlugin getPlugin();
 }
