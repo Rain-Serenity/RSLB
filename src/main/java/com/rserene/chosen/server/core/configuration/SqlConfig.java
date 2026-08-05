@@ -21,7 +21,7 @@ public class SqlConfig {
       int port = ((CommentedConfigurationNode)node.node(new Object[]{"port"})).getInt(3306);
       String username = ((CommentedConfigurationNode)node.node(new Object[]{"username"})).getString("root");
       String password = ((CommentedConfigurationNode)node.node(new Object[]{"password"})).getString("root");
-      String database = ((CommentedConfigurationNode)node.node(new Object[]{"database"})).getString("rslogin");
+      String database = ((CommentedConfigurationNode)node.node(new Object[]{"database"})).getString("rslb");
       String tablePrefix = ((CommentedConfigurationNode)node.node(new Object[]{"table-prefix"})).getString("rslb");
       String connectUrl = ((CommentedConfigurationNode)node.node(new Object[]{"connect-url"})).getString("");
       return new SqlConfig(backend, ip, port, username, password, database, tablePrefix, connectUrl);

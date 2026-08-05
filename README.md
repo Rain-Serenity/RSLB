@@ -1,7 +1,7 @@
 # RSLB (RSereneLoginBukkit)
 
 正版（Mojang/Microsoft）与 LittleSkin 等多 Yggdrasil 认证服务登录插件。
-RSLV 的 Bukkit 重制版，支持 Paper 系核心（Luminol / Paper / Folia）。
+RSLV 的 Bukkit 重制版，支持 Paper 系核心（Paper / Folia）。
 
 拦截 netty 登录管道，将原版会话验证替换为多服务认证：玩家使用哪个账号服务登录，
 由数据库中的在线档案决定，一个服务器可同时承载正版玩家与 LittleSkin 玩家。
@@ -9,10 +9,11 @@ RSLV 的 Bukkit 重制版，支持 Paper 系核心（Luminol / Paper / Folia）�
 ## 功能特性
 
 - **多认证服务**：内置官方正版（`services/official.yml`）与 LittleSkin（`services/littleskin.yml`）服务，也可自行添加其他兼容 Yggdrasil 的 API。
-- **无感知登录**：玩家照常用原版方式登录，插件在 netty 层接管 `hasJoined` 会话验证。
-- **档案系统**：一个账号可创建多个游戏档案（`/rslb profile`），登录时自动分配/纠正档案名。
-- **名字回收**：档案改名后自动回收旧名（`auto-name-change`），防抢注。
-- **服务白名单**：可按服务开启白名单，仅允许指定账号进入。
+- **无感知登录**：玩家照常用原版方式登录，插件在 netty 层接管 `hasJoined` 会话验证，无需客户端安装任何东西。
+- **档案系统**：一个在线账号可创建多个游戏档案（`/rslb profile create`），登录时按数据库映射自动分配对应的游戏档案（详见下文"档案名分配与纠正"）。
+- **档案名自动纠正**：登录时若档案名与他人冲突，自动追加数字（Steven → Steven1 → Steven2），不会让玩家卡在登录界面。
+- **档案名自动回收**：在线账号在认证服务端（如正版）改名后，旧档案名自动释放给其他人注册（`auto-name-change`），防抢注。
+- **服务白名单**：可按认证服务开启白名单（`whitelist: true`），仅允许指定账号进入，白名单外的账号在登录阶段即被拒绝。
 - **风险指令二次确认**：`/rslb confirm` 机制防止误操作。
 - **数据持久化**：内置 H2 数据库，也可切换 MySQL（HikariCP 连接池）。
 - **完整中文本地化**：全部消息集中在 `messages.yml`，支持 `&` 颜色码，可自由修改。
@@ -20,10 +21,17 @@ RSLV 的 Bukkit 重制版，支持 Paper 系核心（Luminol / Paper / Folia）�
 
 ## 环境要求
 
-| 项目 | 要求 |
-| --- | --- |
-| 服务端 | Paper 系核心，API 26.2（Luminol 26.2 / Paper / Folia） |
-| Java | 运行时 Java 21+（构建需要 JDK 25） |
+| 项目   | 要求                                                          |
+|------|-------------------------------------------------------------|
+| 服务端  | **26.2 的 Paper 系核心**：Paper 26.2 / Folia 26.2 及其分叉（如 Purpur） |
+| Java | 运行时 Java 21+（构建需要 JDK 25）                                   |
+
+> **为什么不能跑纯 Spigot / 其他版本核心？**
+> 1. 登录拦截依赖 Paper 专属 API `Bukkit.getGlobalRegionScheduler()`（纯 Spigot 没有此方法）；
+> 2. `LoginHandler` 直接编译引用 **26.2 的 NMS 类与字段**（`net.minecraft.network` 协议包、`Connection.channel`、
+>    `authenticatedProfile` 等），旧版核心的 NMS 结构不同，运行时直接崩溃。
+>
+> 因此仅支持 26.2 的 Paper 系核心（`plugin.yml` 中 `api-version: '26.2'` 与此对应）。
 
 ## 下载最新版（GitHub Actions 自动构建）
 
@@ -40,7 +48,7 @@ RSLV 的 Bukkit 重制版，支持 Paper 系核心（Luminol / Paper / Folia）�
 
 ## 安装与首次启动
 
-1. 将 `RSLB-1.0-SNAPSHOT-all.jar` 放入 `plugins/`；
+1. 将 插件 放入 `plugins/`；
 2. 启动服务器（或 `/reload confirm`）；
 3. 插件自动生成配置与数据库文件：
 
@@ -82,7 +90,7 @@ database:
   port: 3306                      # MYSQL 端口
   username: root                  # MYSQL 用户
   password: root                  # MYSQL 密码
-  database: rslogin               # MYSQL 库名
+  database: rslb                 # MYSQL 库名
   table-prefix: rslb              # 表前缀（勿随意更改，否则数据丢失）
   connect-url: ''                 # 自定义 JDBC URL（留空自动拼接）
 ```
@@ -112,28 +120,28 @@ LittleSkin 服务可自定义 `yggdrasilAuth.littleSkin.apiRoot`。
 
 所有指令通过 `/rslb`（别名 `/rsl`）调用，输入 `/rslb help` 查看有权限使用的指令列表。
 
-| 指令 | 权限（默认） | 说明 |
-| --- | --- | --- |
-| `/rslb help` | `command.rslb.base`（所有人） | 帮助列表 |
-| `/rslb reload` | op | 重载配置与语言文件 |
-| `/rslb confirm` | 所有人 | 确认待执行的风险指令 |
-| `/rslb list` | op | 按服务分组显示在线玩家 |
-| `/rslb whitelist add <玩家名>` | op | 添加白名单 |
-| `/rslb whitelist remove <玩家名>` | op | 移除白名单（在线玩家会被踢出） |
-| `/rslb whitelist specific add/remove <服务ID> <玩家名>` | op | 按服务操作白名单 |
-| `/rslb whitelist list [-verbose]` | op | 列出白名单 |
-| `/rslb rename oneself <新名>` | 所有人 | 修改自己的档案名 |
-| `/rslb rename other <玩家> <新名>` | op | 修改他人档案名 |
-| `/rslb info [玩家]` | 所有人（他人需 op） | 查询登录档案信息 |
-| `/rslb profile create <名字> [uuid]` | op | 创建档案 |
-| `/rslb profile set oneself/other <名字>` | 所有人/op | 切换档案 |
-| `/rslb profile remove <名字>` | op | 删除档案 |
-| `/rslb find online/profile <关键词>` | op | 检索在线玩家/档案 |
-| `/rslb link to <玩家>` | 所有人 | 请求迁移账号（如正版→LittleSkin） |
-| `/rslb link accept` | 所有人 | 接受迁移请求 |
-| `/rslb link code <验证码>` | 所有人 | 用验证码确认迁移 |
-| `/rslb eraseUsername <名字>` | op | 回收指定档案名（需 confirm） |
-| `/rslb eraseAllUsernames` | op | 回收所有档案名（需 confirm） |
+| 指令                                                 | 权限（默认）                   | 说明                     |
+|----------------------------------------------------|--------------------------|------------------------|
+| `/rslb help`                                       | `command.rslb.base`（所有人） | 帮助列表                   |
+| `/rslb reload`                                     | op                       | 重载配置与语言文件              |
+| `/rslb confirm`                                    | 所有人                      | 确认待执行的风险指令             |
+| `/rslb list`                                       | op                       | 按服务分组显示在线玩家            |
+| `/rslb whitelist add <玩家名>`                        | op                       | 添加白名单                  |
+| `/rslb whitelist remove <玩家名>`                     | op                       | 移除白名单（在线玩家会被踢出）        |
+| `/rslb whitelist specific add/remove <服务ID> <玩家名>` | op                       | 按服务操作白名单               |
+| `/rslb whitelist list [-verbose]`                  | op                       | 列出白名单                  |
+| `/rslb rename oneself <新名>`                        | 所有人                      | 修改自己的档案名               |
+| `/rslb rename other <玩家> <新名>`                     | op                       | 修改他人档案名                |
+| `/rslb info [玩家]`                                  | 所有人（他人需 op）              | 查询登录档案信息               |
+| `/rslb profile create <名字> [uuid]`                 | op                       | 创建档案                   |
+| `/rslb profile set oneself/other <名字>`             | 所有人/op                   | 切换档案                   |
+| `/rslb profile remove <名字>`                        | op                       | 删除档案                   |
+| `/rslb find online/profile <关键词>`                  | op                       | 检索在线玩家/档案              |
+| `/rslb link to <玩家>`                               | 所有人                      | 请求迁移账号（如正版→LittleSkin） |
+| `/rslb link accept`                                | 所有人                      | 接受迁移请求                 |
+| `/rslb link code <验证码>`                            | 所有人                      | 用验证码确认迁移               |
+| `/rslb eraseUsername <名字>`                         | op                       | 回收指定档案名（需 confirm）     |
+| `/rslb eraseAllUsernames`                          | op                       | 回收所有档案名（需 confirm）     |
 
 ### 白名单使用示例
 
@@ -143,6 +151,39 @@ LittleSkin 服务可自定义 `yggdrasilAuth.littleSkin.apiRoot`。
 2. `/rslb whitelist add 玩家名` 或 `/rslb whitelist specific add 1 玩家名`（1 = LittleSkin 服务 id）。
 
 未在白名单的账号登录时会被拒绝并提示。
+
+### 档案名分配与纠正（登录时自动发生）
+
+玩家每次通过认证后，插件会执行"档案分配"流程（`AssignInGameFlows`），决定他这次进服用什么游戏内名字：
+
+**首次登录（分配档案）**
+
+1. 用账号的在线 UUID + 服务 id 查询数据库映射，没有记录则视为新账号；
+2. 按该服务配置的 `initUUID` 策略生成初始档案 UUID；若与其他档案冲突（UUID 碰撞）则自动换成随机 UUID；
+3. 按服务配置的 `initNameFormat` 生成初始档案名（默认 `{name}` = 账号名，如正版名为 `Steven` 则档案名也是 `Steven`）；
+4. 写入数据库：`userdata`（在线账号 ↔ 游戏档案映射）+ `ingameprofile`（档案 UUID ↔ 档案名）。
+
+**档案名已被占用（自动纠正）**
+
+- 若目标档案名已被**其他**档案占用（忽略大小写），自动递增改名：`Steven` → `Steven1` → `Steven2` ……
+- 玩家进服 2 秒后会收到提示："您的名字已被占用，已改为 xxx"；
+- 若最终的名字仍与他人冲突（数据库唯一约束），登录被拒绝并提示，不会出现两个同名玩家。
+
+**正版账号改名（自动回收旧名）**
+
+- 正版玩家在 Mojang 改名后（如 `Steven` → `Steve`），登录时检测到名字已更新，
+  自动把旧档案名 `Steven` 从档案表中**释放**，其他人即可注册/纠正到该名字；
+- 旧名释放后玩家继续用新名 `Steve` 登录，档案 UUID 不变，皮肤、数据不受影响。
+
+**已有档案（保持不变）**
+
+- 老玩家登录时直接沿用数据库中的档案 UUID 与当前档案名，不会重复分配或重置。
+
+**有什么用？**
+
+- 正版/LittleSkin 玩家同服共存且互不抢名（两边 UUID 空间不同）；
+- 玩家在认证服务端改名后无需管理员干预，服务器内名字自动跟随，且旧名不会被抢注者占用（先回收后释放）；
+- 名字冲突时玩家仍能正常进服，而不是被卡在登录界面。
 
 ### 二次确认示例
 
