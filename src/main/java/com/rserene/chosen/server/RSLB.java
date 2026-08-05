@@ -9,7 +9,6 @@ import com.rserene.chosen.server.bukkit.impl.BukkitServer;
 import com.rserene.chosen.server.bukkit.logger.JavaUtilLoggerBridge;
 import com.rserene.chosen.server.bukkit.metrics.Metrics;
 import java.io.File;
-import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**

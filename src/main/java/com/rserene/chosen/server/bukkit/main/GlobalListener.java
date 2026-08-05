@@ -3,7 +3,6 @@ package com.rserene.chosen.server.bukkit.main;
 import com.rserene.chosen.server.RSLB;
 import com.rserene.chosen.server.api.internal.handle.HandleResult;
 import com.rserene.chosen.server.bukkit.impl.BukkitPlayer;
-import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
