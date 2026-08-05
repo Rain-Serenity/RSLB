@@ -9,7 +9,7 @@ serviceType: OFFICIAL
 
 # 正版 Yggdrasil 会话验证设置。
 yggdrasilAuth:
-  # 是否向会话服务器提交玩家 IP；通常保持 false。 
+  # 是否向会话服务器提交玩家 IP；通常保持 false。
   trackIp: false
 
   # 网络请求超时时间，单位毫秒，建议 3000-30000。

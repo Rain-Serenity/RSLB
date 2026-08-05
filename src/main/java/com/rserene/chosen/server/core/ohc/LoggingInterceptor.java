@@ -47,8 +47,7 @@ public class LoggingInterceptor implements Interceptor {
          Buffer buffer = source.getBuffer();
          long size = buffer.size();
          if (size > 0L) {
-            String bodyStr = buffer.clone().readString(java.nio.charset.StandardCharsets.UTF_8);
-            LoggerProvider.getLogger().info(String.format("<-- (%d bytes): %s", size, bodyStr));
+            LoggerProvider.getLogger().debug(String.format("<-- (%d bytes)", size));
          }
       }
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Objects;
-import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.core.configuration.service.yggdrasil.BaseYggdrasilServiceConfig;
@@ -37,7 +36,6 @@ public class YggdrasilAuthenticationFlows extends BaseFlows<HasJoinedContext> {
 
    public GameProfile call() throws Exception {
       String url = this.config.generateAuthURL(this.username, this.serverId, this.ip);
-      LoggerProvider.getLogger().info("hasJoined URL: " + url);
       if (this.config.getHttpRequestMethod() == BaseYggdrasilServiceConfig.HttpRequestMethod.GET) {
          return this.call0(this.config, new Builder().get().url(url).header("User-Agent", this.core.getHttpRequestHeaderUserAgent()).build());
       } else if (this.config.getHttpRequestMethod() == BaseYggdrasilServiceConfig.HttpRequestMethod.POST) {
@@ -70,9 +68,7 @@ public class YggdrasilAuthenticationFlows extends BaseFlows<HasJoinedContext> {
 
       GameProfile var6;
       try {
-         String bodyStr = Objects.requireNonNull(execute.body()).string();
-         LoggerProvider.getLogger().info("hasJoined response body: " + bodyStr);
-         var6 = (GameProfile)this.core.getGson().fromJson(bodyStr, GameProfile.class);
+         var6 = (GameProfile)this.core.getGson().fromJson(Objects.requireNonNull(execute.body()).string(), GameProfile.class);
       } catch (Throwable var9) {
          if (execute != null) {
             try {
