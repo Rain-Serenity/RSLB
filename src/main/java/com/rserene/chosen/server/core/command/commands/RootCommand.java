@@ -57,7 +57,8 @@ public class RootCommand {
                   .then(new MRenameCommand(this.handler).register(this.handler.literal("rename"))))
                .then(new MFindCommand(this.handler).register(this.handler.literal("find"))))
             .then(new MInfoCommand(this.handler).register(this.handler.literal("info"))))
-         .then(new MLinkCommand(this.handler).register(this.handler.literal("link")));
+          .then(new MLinkCommand(this.handler).register(this.handler.literal("link")))
+          .then(new MHelpCommand(this.handler).register(this.handler.literal("help")));
    }
 
    private int executeList(CommandContext<ISender> context) {

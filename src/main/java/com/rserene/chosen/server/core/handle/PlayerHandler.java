@@ -81,9 +81,9 @@ public class PlayerHandler implements HandlerAPI {
                   Pair<GameProfile, BaseServiceConfig> pair = this.getPlayerOnlineProfile0(player.getUniqueId());
                   String msg;
                   if (pair == null) {
-                     msg = this.core
-                        .getLanguageHandler()
-                        .getMessage("welcome_msg_to_unknown", new Pair("profile_name", player.getName()), new Pair("profile_uuid", player.getName()));
+                      msg = this.core
+                         .getLanguageHandler()
+                         .getMessage("welcome_msg_to_unknown", new Pair("profile_name", player.getName()), new Pair("profile_uuid", player.getUniqueId()));
                   } else {
                      msg = this.core
                         .getLanguageHandler()
@@ -109,15 +109,15 @@ public class PlayerHandler implements HandlerAPI {
       return this.cache.get(inGameUUID);
    }
 
-   public Pair<GameProfile, Integer> getPlayerOnlineProfile(UUID inGameUUID) {
-      PlayerHandler.Entry entry = this.cache.get(inGameUUID);
-      return entry == null ? null : new Pair(entry.onlineProfile, entry.serviceConfig.getId());
-   }
+    public Pair<GameProfile, Integer> getPlayerOnlineProfile(UUID inGameUUID) {
+       PlayerHandler.Entry entry = this.cache.get(inGameUUID);
+       return entry == null ? null : new Pair<>(entry.onlineProfile, entry.serviceConfig.getId());
+    }
 
-   public Pair<GameProfile, BaseServiceConfig> getPlayerOnlineProfile0(UUID inGameUUID) {
-      PlayerHandler.Entry entry = this.cache.get(inGameUUID);
-      return entry == null ? null : new Pair(entry.onlineProfile, entry.serviceConfig);
-   }
+    private Pair<GameProfile, BaseServiceConfig> getPlayerOnlineProfile0(UUID inGameUUID) {
+       PlayerHandler.Entry entry = this.cache.get(inGameUUID);
+       return entry == null ? null : new Pair<>(entry.onlineProfile, entry.serviceConfig);
+    }
 
    public UUID getInGameUUID(UUID onlineUUID, int serviceId) {
       for (Map.Entry<UUID, PlayerHandler.Entry> entry : this.cache.entrySet()) {

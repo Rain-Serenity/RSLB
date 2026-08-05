@@ -11,6 +11,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Bukkit 指令桥接层。
+ *
+ * 将 Bukkit 的 onCommand / onTabComplete 转发给 RSLV 核心的
+ * brigadier 命令调度器（CommandAPI），并补齐根命令前缀
+ * （/rslb 与 /rsl 统一映射为 "rsl"）。TAB 补全同样经由核心
+ * 调度器生成建议。
+ */
 public class CommandHandler implements CommandExecutor, TabCompleter {
     private final RSLB plugin;
     private com.rserene.chosen.server.api.internal.command.CommandAPI commandHandler;

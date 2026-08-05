@@ -9,6 +9,12 @@ import java.util.UUID;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
+/**
+ * IPlayer 的 Bukkit 实现：包装在线玩家实体。
+ *
+ * 提供核心所需的玩家信息查询（UUID、地址、在线状态）与消息发送；
+ * 消息同样经 legacy '&' 颜色码解析后发送。
+ */
 public class BukkitPlayer implements IPlayer {
     private final Player player;
 

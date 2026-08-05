@@ -389,3 +389,28 @@ command_exception_dispatcher_exception_argument_separator: "&8[&b&lRSLB&8]&r&cEx
 
 # 指令解析失败
 command_exception_dispatcher_parse_exception: "&8[&b&lRSLB&8]&r&c无法解析指令 &e{command}&c。"
+
+# ==================== 指令帮助 ====================
+
+# 帮助列表头部（{count} = 可用指令数量）
+help_header: "&8[&b&lRSLB&8]&r&a===== 指令帮助 &7(可用的指令共 {count} 条) &a====="
+
+# 帮助列表底部提示
+help_footer: "&8[&b&lRSLB&8]&r&7提示: 输入 /rsl <指令> 执行对应操作，风险指令需用 /rsl confirm 二次确认"
+
+# 帮助列表条目（{command} = 指令名, {description} = 说明）
+help_entry: "&8[&b&lRSLB&8]&r&a/rsl &e{command}&8 - &7{description}"
+
+# 各指令说明
+help_reload: "重载插件配置文件与语言文件"
+help_confirm: "确认执行待确认的风险指令"
+help_list: "查看当前在线玩家列表"
+help_whitelist: "管理玩家白名单 (add/remove/list)"
+help_rename: "修改档案名称 (oneself/other)"
+help_info: "查看玩家当前登录档案信息"
+help_profile: "管理游戏档案 (create/set/remove)"
+help_find: "检索玩家登录数据与档案 (online/profile)"
+help_link: "账号迁移 (to/accept/code)"
+help_eraseusername: "回收指定的档案名"
+help_eraseallusernames: "回收所有档案名"
+help_help: "显示本帮助列表"

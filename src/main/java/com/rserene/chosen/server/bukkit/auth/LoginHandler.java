@@ -38,21 +38,17 @@ import net.minecraft.util.Crypt;
 import org.bukkit.Bukkit;
 
 /**
- * Pure-NMS multi-Yggdrasil login interception for Luminol 26.2 (Folia).
+ * 纯 NMS 多 Yggdrasil 登录拦截器（Luminol 26.2 / Folia）。
  *
- * The ChannelInitializer of every ServerBootstrapAcceptor is wrapped so that
- * each accepted connection gets an interceptor installed inside initChannel,
- * before the client's first packet is ever processed. ServerboundHelloPacket
- * is consumed and replaced with a native ClientboundHelloPacket that carries
- * {@code shouldAuthenticate = true}, forcing 26.2 clients to call joinServer
- * with their session token. ServerboundKeyPacket is consumed, the shared
- * secret is decrypted with the server keypair, and the resulting serverId is
- * verified against every configured Yggdrasil service through RSLV's
- * AuthHandler (hasJoined). Only on ALLOW is the vanilla login state machine
- * resumed by setting {@code authenticatedProfile} + {@code state = VERIFYING}
- * on the login listener, which makes the vanilla tick() drive compression,
- * duplicate checks and LoginFinished. Unauthenticated players never reach the
- * game - they are disconnected during the login phase.
+ * 通过包装 ServerBootstrapAcceptor 的 ChannelInitializer，使每个新连接在
+ * initChannel 内（即客户端首个数据包被处理之前）就注入登录拦截器。
+ * ServerboundHelloPacket 被消费并替换为携带 shouldAuthenticate=true 的
+ * 原生 ClientboundHelloPacket，强制 26.2 客户端携带会话令牌调用 joinServer。
+ * ServerboundKeyPacket 被消费后用服务器密钥对解密共享密钥，得到 serverId，
+ * 再经 RSLV 的 AuthHandler（hasJoined）对每个已配置的 Yggdrasil 服务校验。
+ * 仅当返回 ALLOW 时，通过反射设置登录监听器的 authenticatedProfile 与
+ * state = VERIFYING 恢复 vanilla 登录状态机，由原生 tick() 驱动压缩、
+ * 重名检查与 LoginFinished。未认证玩家在登录阶段即被断开，无法进入游戏。
  */
 public final class LoginHandler {
     private static final String HANDLER_NAME = "rslb_login_handler";
