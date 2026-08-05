@@ -73,8 +73,8 @@ database:
   password: root
 
   # 数据库名称（仅 MYSQL 生效）。
-  # 默认值: rslogin
-  database: rslogin
+  # 默认值: rslb
+  database: rslb
 
   # 数据表前缀，使用时自动补全后缀 '_'。
   # 请勿随意更改，否则数据会丢失。
