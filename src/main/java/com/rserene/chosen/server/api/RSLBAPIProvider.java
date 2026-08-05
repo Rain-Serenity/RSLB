@@ -4,20 +4,20 @@ import lombok.Generated;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.NonExtendable
-public class RSLVAPIProvider {
-   private static RSLVAPI api;
+public class RSLBAPIProvider {
+   private static RSLBAPI api;
 
    @ApiStatus.Internal
-   public static synchronized void setApi(RSLVAPI api) {
-      if (RSLVAPIProvider.api != null) {
+   public static synchronized void setApi(RSLBAPI api) {
+      if (RSLBAPIProvider.api != null) {
          throw new UnsupportedOperationException("duplicate api.");
       }
 
-      RSLVAPIProvider.api = api;
+      RSLBAPIProvider.api = api;
    }
 
    @Generated
-   public static RSLVAPI getApi() {
+   public static RSLBAPI getApi() {
       return api;
    }
 }

@@ -1,7 +1,7 @@
 # RSLB (RSereneLoginBukkit)
 
 正版（Mojang/Microsoft）与 LittleSkin 等多 Yggdrasil 认证服务登录插件。
-RSLV 的 Bukkit 重制版，支持 Paper 系核心（Paper / Folia）。
+支持 Paper 系核心（Paper / Folia）。
 
 拦截 netty 登录管道，将原版会话验证替换为多服务认证：玩家使用哪个账号服务登录，
 由数据库中的在线档案决定，一个服务器可同时承载正版玩家与 LittleSkin 玩家。
@@ -60,7 +60,7 @@ plugins/RSLB/
 ├── services/           # 认证服务配置
 │   ├── official.yml    # 正版服务
 │   └── littleskin.yml  # LittleSkin 服务
-├── RSLV.mv.db          # H2 数据库（默认后端）
+├── RSLB.mv.db          # H2 数据库（默认后端）
 └── bStats/             # bStats 匿名统计配置（全局）
 ```
 
@@ -235,7 +235,7 @@ netty 管道（LoginHandler 注入）
 
 - **登录拦截**：`LoginHandler` 包装服务端 netty acceptor 与管道，在 vanilla 会话验证之前截获登录流程，使所有玩家必须经插件认证。拦截器初始化失败不影响插件加载，但所有登录会退回原版流程。
 - **认证服务**：`services/*.yml` 定义服务类型与 API 地址，`PluginConfig` 读取并校验 id 唯一性与服务重复。
-- **数据库**：默认 H2 单文件库（`RSLV.mv.db`），支持 MySQL。表结构含用户数据（`userdata`）、游戏档案（`ingameprofile`）、皮肤缓存等，表名带 `table-prefix` 前缀。
+- **数据库**：默认 H2 单文件库（`RSLB.mv.db`），支持 MySQL。表结构含用户数据（`userdata`）、游戏档案（`ingameprofile`）、皮肤缓存等，表名带 `table-prefix` 前缀。
 - **指令系统**：核心使用 brigadier 命令树（权限过滤、参数解析、TAB 补全），Bukkit 层桥接 `/rslb` 与 `/rsl` 别名。
 - **语言系统**：`messages.yml` 键值 + `{name}` 占位符替换，缺失键自动回填默认值。
 - **统计**：bStats 匿名上报（`Metrics.java` 官方类，仅改包名），开关 `settings.metrics-enabled`。

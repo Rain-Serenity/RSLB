@@ -25,7 +25,7 @@ import com.rserene.chosen.server.api.service.ServiceType;
 import com.rserene.chosen.server.core.configuration.service.BaseServiceConfig;
 import com.rserene.chosen.server.core.configuration.service.yggdrasil.LittleSkinYggdrasilServiceConfig;
 import com.rserene.chosen.server.core.configuration.service.yggdrasil.OfficialYggdrasilServiceConfig;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -40,14 +40,14 @@ public class PluginConfig {
    private SqlConfig sqlConfig;
    private MapperConfig mapperConfig;
    private String nameAllowedRegular;
-   private final RSLVCore core;
+   private final RSLBCore core;
    private boolean welcomeMsg;
    private Map<Integer, BaseServiceConfig> serviceIdMap = new HashMap<>();
    private long confirmCommandValidTimeMills;
    private long linkAcceptValidTimeMills;
    private boolean metricsEnabled;
 
-   public PluginConfig(File dataFolder, RSLVCore core) {
+   public PluginConfig(File dataFolder, RSLBCore core) {
       this.dataFolder = dataFolder;
       this.core = core;
    }

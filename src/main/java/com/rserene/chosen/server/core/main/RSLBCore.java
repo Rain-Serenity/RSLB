@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import lombok.Generated;
-import com.rserene.chosen.server.api.RSLVAPI;
-import com.rserene.chosen.server.api.RSLVAPIProvider;
+import com.rserene.chosen.server.api.RSLBAPI;
+import com.rserene.chosen.server.api.RSLBAPIProvider;
 import com.rserene.chosen.server.api.MapperConfigAPI;
-import com.rserene.chosen.server.api.data.RSLVPlayerData;
+import com.rserene.chosen.server.api.data.RSLBPlayerData;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
-import com.rserene.chosen.server.api.internal.main.RSLVCoreAPI;
+import com.rserene.chosen.server.api.internal.main.RSLBCoreAPI;
 import com.rserene.chosen.server.api.internal.plugin.IPlugin;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.api.profile.Property;
@@ -32,7 +32,7 @@ import com.rserene.chosen.server.core.skinrestorer.SkinRestorerCore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
+public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
    private final IPlugin plugin;
    private final BuildManifest buildManifest;
    private final SQLManager sqlManager;
@@ -46,7 +46,7 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
    private final Gson gson;
    private final String httpRequestHeaderUserAgent = "RSLB/1.1.1";
 
-   public RSLVCore(IPlugin plugin) {
+   public RSLBCore(IPlugin plugin) {
       this.plugin = plugin;
       this.buildManifest = new BuildManifest(this);
       this.languageHandler = new LanguageHandler(this);
@@ -69,7 +69,7 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
    }
 
    public void load() throws IOException, SQLException, ClassNotFoundException, URISyntaxException {
-      RSLVAPIProvider.setApi(this);
+      RSLBAPIProvider.setApi(this);
       this.showBanner();
       this.buildManifest.read();
       this.buildManifest.checkStable();
@@ -81,7 +81,7 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
       LoggerProvider.getLogger()
          .info(
             String.format(
-               "Loaded, using RSLV v%s on %s - %s",
+               "Loaded, using RSLB v%s on %s - %s",
                this.buildManifest.getVersion(),
                this.plugin.getRunServer().getName(),
                this.plugin.getRunServer().getVersion()
@@ -123,7 +123,7 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
    }
 
    @Nullable
-   public RSLVPlayerData getPlayerData(@NotNull UUID inGameUUID) {
+   public RSLBPlayerData getPlayerData(@NotNull UUID inGameUUID) {
       return this.playerHandler.getPlayerData(inGameUUID);
    }
 

@@ -15,7 +15,7 @@ public class H2ConnectionPool implements ISQLConnectionPool {
 
    public H2ConnectionPool(File dataFolder, String user, String password, String url) throws ClassNotFoundException {
       Class.forName("org.h2.Driver");
-      this.cp = JdbcConnectionPool.create(url.replace("{0}", dataFolder.getAbsolutePath() + File.separator + "RSLV"), user, password);
+      this.cp = JdbcConnectionPool.create(url.replace("{0}", dataFolder.getAbsolutePath() + File.separator + "RSLB"), user, password);
    }
 
    @Override

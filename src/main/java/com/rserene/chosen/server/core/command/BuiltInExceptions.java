@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.rserene.chosen.server.api.internal.util.Pair;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 
 public class BuiltInExceptions implements BuiltInExceptionProvider {
    private final Dynamic2CommandExceptionType DOUBLE_TOO_SMALL;
@@ -42,7 +42,7 @@ public class BuiltInExceptions implements BuiltInExceptionProvider {
    private final SimpleCommandExceptionType NO_SELF;
    private final Dynamic2CommandExceptionType CACHE_NOT_FOUND_OTHER;
 
-   public BuiltInExceptions(RSLVCore core) {
+   public BuiltInExceptions(RSLBCore core) {
       this.DOUBLE_TOO_SMALL = new Dynamic2CommandExceptionType(
          (found, min) -> new LiteralMessage(
             core.getLanguageHandler().getMessage("command_exception_double_too_small", new Pair("found", found), new Pair("min", min))

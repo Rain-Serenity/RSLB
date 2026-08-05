@@ -7,7 +7,5 @@ import org.jetbrains.annotations.ApiStatus;
 public interface IPlugin {
    File getDataFolder();
 
-   File getTempFolder();
-
    IServer getRunServer();
 }

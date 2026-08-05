@@ -11,14 +11,14 @@ import com.rserene.chosen.server.api.internal.util.ValueUtil;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.core.configuration.service.BaseServiceConfig;
 import com.rserene.chosen.server.core.configuration.service.yggdrasil.BaseYggdrasilServiceConfig;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.flows.workflows.EntrustFlows;
 import com.rserene.chosen.server.flows.workflows.Signal;
 
 public class YggdrasilAuthenticationService {
-   private final RSLVCore core;
+   private final RSLBCore core;
 
-   public YggdrasilAuthenticationService(RSLVCore core) {
+   public YggdrasilAuthenticationService(RSLBCore core) {
       this.core = core;
    }
 

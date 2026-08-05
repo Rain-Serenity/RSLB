@@ -10,14 +10,14 @@ import com.rserene.chosen.server.core.auth.service.yggdrasil.YggdrasilAuthentica
 import com.rserene.chosen.server.core.auth.validate.ValidateAuthenticationResult;
 import com.rserene.chosen.server.core.auth.validate.ValidateAuthenticationService;
 import com.rserene.chosen.server.core.handle.PlayerHandler;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 
 public class AuthHandler implements AuthAPI {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private final YggdrasilAuthenticationService yggdrasilAuthenticationService;
    private final ValidateAuthenticationService validateAuthenticationService;
 
-   public AuthHandler(RSLVCore core) {
+   public AuthHandler(RSLBCore core) {
       this.core = core;
       this.yggdrasilAuthenticationService = new YggdrasilAuthenticationService(core);
       this.validateAuthenticationService = new ValidateAuthenticationService(core);
@@ -101,7 +101,7 @@ public class AuthHandler implements AuthAPI {
    }
 
    @Generated
-   public RSLVCore getCore() {
+   public RSLBCore getCore() {
       return this.core;
    }
 

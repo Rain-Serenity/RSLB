@@ -10,7 +10,7 @@ import com.rserene.chosen.server.api.internal.skinrestorer.SkinRestorerAPI;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public interface RSLVCoreAPI {
+public interface RSLBCoreAPI {
    void load() throws Exception;
 
    void close() throws Exception;

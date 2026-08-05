@@ -25,7 +25,7 @@ import com.rserene.chosen.server.api.profile.Property;
 import com.rserene.chosen.server.core.auth.LoginAuthResult;
 import com.rserene.chosen.server.core.configuration.SkinRestorerConfig;
 import com.rserene.chosen.server.core.configuration.service.BaseServiceConfig;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.core.ohc.LoggingInterceptor;
 import com.rserene.chosen.server.core.ohc.RetryInterceptor;
 import okhttp3.OkHttpClient;
@@ -35,9 +35,9 @@ public class SkinRestorerCore implements SkinRestorerAPI {
    private static final String[] ALLOWED_DOMAINS = new String[]{".minecraft.net", ".mojang.com"};
    private static final String[] BLOCKED_DOMAINS = new String[]{"bugs.mojang.com", "education.minecraft.net", "feedback.minecraft.net"};
    private static PublicKey publicKey;
-   private final RSLVCore core;
+   private final RSLBCore core;
 
-   public SkinRestorerCore(RSLVCore core) {
+   public SkinRestorerCore(RSLBCore core) {
       this.core = core;
    }
 

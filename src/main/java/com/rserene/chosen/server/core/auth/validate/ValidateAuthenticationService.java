@@ -7,15 +7,15 @@ import com.rserene.chosen.server.core.auth.validate.entry.AssignInGameFlows;
 import com.rserene.chosen.server.core.auth.validate.entry.InitialLoginDataFlows;
 import com.rserene.chosen.server.core.auth.validate.entry.NameAllowedRegularCheckFlows;
 import com.rserene.chosen.server.core.auth.validate.entry.WhitelistCheckFlows;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.flows.workflows.SequenceFlows;
 import com.rserene.chosen.server.flows.workflows.Signal;
 
 public class ValidateAuthenticationService {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private final SequenceFlows<ValidateContext> sequenceFlows;
 
-   public ValidateAuthenticationService(RSLVCore core) {
+   public ValidateAuthenticationService(RSLBCore core) {
       this.core = core;
       this.sequenceFlows = new SequenceFlows(
          Arrays.asList(new InitialLoginDataFlows(core), new NameAllowedRegularCheckFlows(core), new WhitelistCheckFlows(core), new AssignInGameFlows(core))

@@ -43,7 +43,7 @@ import org.bukkit.Bukkit;
  * ServerboundHelloPacket 被消费并替换为携带 shouldAuthenticate=true 的
  * 原生 ClientboundHelloPacket，强制 26.2 客户端携带会话令牌调用 joinServer。
  * ServerboundKeyPacket 被消费后用服务器密钥对解密共享密钥，得到 serverId，
- * 再经 RSLV 的 AuthHandler（hasJoined）对每个已配置的 Yggdrasil 服务校验。
+ * 再经 RSLB 的 AuthHandler（hasJoined）对每个已配置的 Yggdrasil 服务校验。
  * 仅当返回 ALLOW 时，通过反射设置登录监听器的 authenticatedProfile 与
  * state = VERIFYING 恢复 vanilla 登录状态机，由原生 tick() 驱动压缩、
  * 重名检查与 LoginFinished。未认证玩家在登录阶段即被断开，无法进入游戏。
@@ -289,7 +289,7 @@ public final class LoginHandler {
         private void authAsync(LoginSession session, String serverId) {
             new Thread(() -> {
                 try {
-                    LoginAuthResult authResult = (LoginAuthResult) plugin.getRSLVCoreAPI().getAuthHandler().auth(session.getUsername(), serverId, session.getIp());
+                    LoginAuthResult authResult = (LoginAuthResult) plugin.getCoreAPI().getAuthHandler().auth(session.getUsername(), serverId, session.getIp());
                     if (authResult.getResult() == AuthResult.Result.ALLOW) {
                         com.rserene.chosen.server.api.profile.GameProfile profile = authResult.getResponse();
                         com.mojang.authlib.GameProfile mojangProfile = toMojangProfile(profile);

@@ -2,14 +2,14 @@ package com.rserene.chosen.server.core.auth.validate.entry;
 
 import com.rserene.chosen.server.core.auth.validate.ValidateContext;
 import com.rserene.chosen.server.core.database.table.UserDataTableV3;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import com.rserene.chosen.server.flows.workflows.BaseFlows;
 import com.rserene.chosen.server.flows.workflows.Signal;
 
 public class InitialLoginDataFlows extends BaseFlows<ValidateContext> {
-   private final RSLVCore core;
+   private final RSLBCore core;
 
-   public InitialLoginDataFlows(RSLVCore core) {
+   public InitialLoginDataFlows(RSLBCore core) {
       this.core = core;
    }
 

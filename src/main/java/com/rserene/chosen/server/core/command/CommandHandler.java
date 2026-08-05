@@ -20,15 +20,15 @@ import com.rserene.chosen.server.api.internal.plugin.ISender;
 import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.core.command.commands.RootCommand;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 
 public class CommandHandler implements CommandAPI {
-   private static RSLVCore core;
+   private static RSLBCore core;
    private static BuiltInExceptions builtInExceptions;
    private final CommandDispatcher<ISender> dispatcher;
    private final SecondaryConfirmationHandler secondaryConfirmationHandler;
 
-   public CommandHandler(RSLVCore core) {
+   public CommandHandler(RSLBCore core) {
       CommandHandler.core = core;
       this.dispatcher = new CommandDispatcher();
       this.secondaryConfirmationHandler = new SecondaryConfirmationHandler();
@@ -130,7 +130,7 @@ public class CommandHandler implements CommandAPI {
    }
 
    @Generated
-   public static RSLVCore getCore() {
+   public static RSLBCore getCore() {
       return core;
    }
 

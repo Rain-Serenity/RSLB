@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.Generated;
-import com.rserene.chosen.server.api.data.RSLVPlayerData;
+import com.rserene.chosen.server.api.data.RSLBPlayerData;
 import com.rserene.chosen.server.api.internal.handle.HandleResult;
 import com.rserene.chosen.server.api.internal.handle.HandlerAPI;
 import com.rserene.chosen.server.api.internal.handle.HandleResult.Type;
@@ -17,15 +17,15 @@ import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.profile.GameProfile;
 import com.rserene.chosen.server.api.service.IService;
 import com.rserene.chosen.server.core.configuration.service.BaseServiceConfig;
-import com.rserene.chosen.server.core.main.RSLVCore;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerHandler implements HandlerAPI {
-   private final RSLVCore core;
+   private final RSLBCore core;
    private final Map<UUID, PlayerHandler.Entry> cache;
    private final Map<UUID, PlayerHandler.Entry> loginCache;
 
-   public PlayerHandler(RSLVCore core) {
+   public PlayerHandler(RSLBCore core) {
       this.core = core;
       this.cache = new ConcurrentHashMap<>();
       this.loginCache = new ConcurrentHashMap<>();
@@ -45,7 +45,7 @@ public class PlayerHandler implements HandlerAPI {
          LoggerProvider.getLogger()
             .warn(
                String.format(
-                  "The player with in game UUID %s and name %s is not logged into the server by RSLV, some features will be disabled for him.",
+                  "The player with in game UUID %s and name %s is not logged into the server by RSLB, some features will be disabled for him.",
                   inGameUUID.toString(),
                   username
                )
@@ -105,7 +105,7 @@ public class PlayerHandler implements HandlerAPI {
       }
    }
 
-   public RSLVPlayerData getPlayerData(UUID inGameUUID) {
+   public RSLBPlayerData getPlayerData(UUID inGameUUID) {
       return this.cache.get(inGameUUID);
    }
 
@@ -178,7 +178,7 @@ public class PlayerHandler implements HandlerAPI {
       return this.loginCache;
    }
 
-   public static class Entry implements RSLVPlayerData {
+   public static class Entry implements RSLBPlayerData {
       private final GameProfile onlineProfile;
       private final BaseServiceConfig serviceConfig;
       private final long signTimeMillis;
