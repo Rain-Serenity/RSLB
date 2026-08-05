@@ -13,75 +13,75 @@ permissions:
   command.rslb.base:
     description: "RSLB base command"
     default: true
-  command.RSLV.tab.complete:
-    description: "RSLV tab complete"
+  command.RSLB.tab.complete:
+    description: "RSLB tab complete"
     default: op
-  command.RSLV.reload:
-    description: "RSLV reload"
+  command.RSLB.reload:
+    description: "RSLB reload"
     default: op
-  command.RSLV.confirm:
-    description: "RSLV confirm"
+  command.RSLB.confirm:
+    description: "RSLB confirm"
     default: true
-  command.RSLV.eraseusername:
-    description: "RSLV erase username"
+  command.RSLB.eraseusername:
+    description: "RSLB erase username"
     default: op
-  command.RSLV.eraseallusernames:
-    description: "RSLV erase all usernames"
+  command.RSLB.eraseallusernames:
+    description: "RSLB erase all usernames"
     default: op
-  command.RSLV.whitelist.add:
-    description: "RSLV whitelist add"
+  command.RSLB.whitelist.add:
+    description: "RSLB whitelist add"
     default: op
-  command.RSLV.whitelist.remove:
-    description: "RSLV whitelist remove"
+  command.RSLB.whitelist.remove:
+    description: "RSLB whitelist remove"
     default: op
-  command.RSLV.whitelist.list:
-    description: "RSLV whitelist list"
+  command.RSLB.whitelist.list:
+    description: "RSLB whitelist list"
     default: op
-  command.RSLV.whitelist.list.verbose:
-    description: "RSLV whitelist list verbose"
+  command.RSLB.whitelist.list.verbose:
+    description: "RSLB whitelist list verbose"
     default: op
-  command.RSLV.rename.oneself:
-    description: "RSLV rename oneself"
+  command.RSLB.rename.oneself:
+    description: "RSLB rename oneself"
     default: true
-  command.RSLV.rename.other:
-    description: "RSLV rename other"
+  command.RSLB.rename.other:
+    description: "RSLB rename other"
     default: op
-  command.RSLV.current.oneself:
-    description: "RSLV current oneself"
+  command.RSLB.current.oneself:
+    description: "RSLB current oneself"
     default: true
-  command.RSLV.current.other:
-    description: "RSLV current other"
+  command.RSLB.current.other:
+    description: "RSLB current other"
     default: op
-  command.RSLV.profile.create:
-    description: "RSLV profile create"
+  command.RSLB.profile.create:
+    description: "RSLB profile create"
     default: op
-  command.RSLV.profile.set.oneself:
-    description: "RSLV profile set oneself"
+  command.RSLB.profile.set.oneself:
+    description: "RSLB profile set oneself"
     default: true
-  command.RSLV.profile.set.other:
-    description: "RSLV profile set other"
+  command.RSLB.profile.set.other:
+    description: "RSLB profile set other"
     default: op
-  command.RSLV.profile.remove:
-    description: "RSLV profile remove"
+  command.RSLB.profile.remove:
+    description: "RSLB profile remove"
     default: op
-  command.RSLV.list:
-    description: "RSLV list"
+  command.RSLB.list:
+    description: "RSLB list"
     default: op
-  command.RSLV.find.online:
-    description: "RSLV find online"
+  command.RSLB.find.online:
+    description: "RSLB find online"
     default: op
-  command.RSLV.find.profile:
-    description: "RSLV find profile"
+  command.RSLB.find.profile:
+    description: "RSLB find profile"
     default: op
-  command.RSLV.link.to:
-    description: "RSLV link to"
+  command.RSLB.link.to:
+    description: "RSLB link to"
     default: true
-  command.RSLV.link.accept:
-    description: "RSLV link accept"
+  command.RSLB.link.accept:
+    description: "RSLB link accept"
     default: true
-  command.RSLV.link.code:
-    description: "RSLV link code"
+  command.RSLB.link.code:
+    description: "RSLB link code"
     default: true
-  command.RSLV.data.convert:
-    description: "RSLV data convert"
+  command.RSLB.data.convert:
+    description: "RSLB data convert"
     default: op

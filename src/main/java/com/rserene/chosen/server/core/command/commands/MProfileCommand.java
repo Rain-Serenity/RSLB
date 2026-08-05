@@ -28,7 +28,7 @@ public class MProfileCommand {
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
       return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder.then(
-               ((LiteralArgumentBuilder)this.handler.literal("create").requires(iSender -> iSender.hasPermission("command.RSLV.profile.create")))
+               ((LiteralArgumentBuilder)this.handler.literal("create").requires(iSender -> iSender.hasPermission("command.RSLB.profile.create")))
                   .then(
                      ((RequiredArgumentBuilder)this.handler
                            .argument("username", StringArgumentType.string())
@@ -42,7 +42,7 @@ public class MProfileCommand {
                      .then(
                         ((RequiredArgumentBuilder)this.handler
                               .argument("profile", ProfileArgumentType.profile())
-                              .requires(iSender -> iSender.hasPermission("command.RSLV.profile.set.oneself")))
+                              .requires(iSender -> iSender.hasPermission("command.RSLB.profile.set.oneself")))
                            .executes(this::executeSetOneself)
                      ))
                   .then(
@@ -51,7 +51,7 @@ public class MProfileCommand {
                         .then(
                            ((RequiredArgumentBuilder)this.handler
                                  .argument("online", OnlineArgumentType.online())
-                                 .requires(iSender -> iSender.hasPermission("command.RSLV.profile.set.other")))
+                                 .requires(iSender -> iSender.hasPermission("command.RSLB.profile.set.other")))
                               .executes(this::executeSetOther)
                         )
                   )
@@ -62,7 +62,7 @@ public class MProfileCommand {
                .then(
                   ((RequiredArgumentBuilder)this.handler
                         .argument("profile", ProfileArgumentType.profile())
-                        .requires(iSender -> iSender.hasPermission("command.RSLV.profile.remove")))
+                        .requires(iSender -> iSender.hasPermission("command.RSLB.profile.remove")))
                      .executes(this::executeRemove)
                )
          );

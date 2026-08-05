@@ -169,7 +169,7 @@ public final class LoginHandler {
                         };
                         childHandlerField.set(acceptor, wrapper);
                         this.wrappedAcceptors.add(acceptor);
-                        LoggerProvider.getLogger().info("Wrapped server bootstrap acceptor - login interception installed before first packet");
+                        LoggerProvider.getLogger().debug("Wrapped server bootstrap acceptor - login interception installed before first packet");
                     } catch (Exception e) {
                         LoggerProvider.getLogger().debug("Failed to wrap server bootstrap acceptor: " + e.getMessage());
                     }
@@ -213,7 +213,7 @@ public final class LoginHandler {
                 return;
             }
             channel.pipeline().addBefore(HandlerNames.PACKET_HANDLER, HANDLER_NAME, new Interceptor(connection));
-            LoggerProvider.getLogger().info("Injected login interceptor for " + channel.remoteAddress());
+            LoggerProvider.getLogger().debug("Injected login interceptor for " + channel.remoteAddress());
         } catch (Exception e) {
             LoggerProvider.getLogger().debug("Failed to inject login interceptor: " + e.getMessage());
         }
@@ -263,7 +263,7 @@ public final class LoginHandler {
             sessions.put(this.connection, session);
             byte[] publicKey = server.getKeyPair().getPublic().getEncoded();
             this.connection.send(new ClientboundHelloPacket("", publicKey, challenge, true));
-            LoggerProvider.getLogger().info(
+            LoggerProvider.getLogger().debug(
                 "Intercepted login start from " + username + " [" + session.getIp() + "], sent encrypted auth request (shouldAuthenticate=true)"
             );
         }
@@ -284,7 +284,7 @@ public final class LoginHandler {
                 SecretKey secretKey = packet.getSecretKey(privateKey);
                 String serverId = new BigInteger(Crypt.digestData("", server.getKeyPair().getPublic(), secretKey)).toString(16);
                 this.connection.setEncryptionKey(secretKey);
-                LoggerProvider.getLogger().info("Encryption enabled for " + session.getUsername() + ", serverId=" + serverId);
+                LoggerProvider.getLogger().debug("Encryption enabled for " + session.getUsername() + ", serverId=" + serverId);
                 authAsync(session, serverId);
             } catch (Exception e) {
                 LoggerProvider.getLogger().error("Failed to process key packet for " + session.getUsername(), e);
@@ -299,8 +299,8 @@ public final class LoginHandler {
                     if (authResult.getResult() == AuthResult.Result.ALLOW) {
                         com.rserene.chosen.server.api.profile.GameProfile profile = authResult.getResponse();
                         com.mojang.authlib.GameProfile mojangProfile = toMojangProfile(profile);
-                        LoggerProvider.getLogger().info(
-                            "Authenticated " + session.getUsername() + " -> " + mojangProfile.id() + " via RSLV"
+                        LoggerProvider.getLogger().debug(
+                            "Authenticated " + session.getUsername() + " -> " + mojangProfile.id() + " via RSLB"
                         );
                         Bukkit.getGlobalRegionScheduler().run(plugin, task -> completeLogin(mojangProfile));
                     } else {
@@ -323,7 +323,7 @@ public final class LoginHandler {
             try {
                 authenticatedProfileField.set(loginListener, profile);
                 stateField.set(loginListener, Enum.valueOf((Class<Enum>) stateField.getType(), "VERIFYING"));
-                LoggerProvider.getLogger().info(
+                LoggerProvider.getLogger().debug(
                     "Login for " + profile.name() + " [" + profile.id() + "] handed to vanilla login state machine"
                 );
             } catch (Exception e) {

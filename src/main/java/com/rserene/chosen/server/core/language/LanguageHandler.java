@@ -1,26 +1,26 @@
 package com.rserene.chosen.server.core.language;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
-import java.util.Map.Entry;
 import com.rserene.chosen.server.api.internal.language.LanguageAPI;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.api.internal.util.IOUtil;
 import com.rserene.chosen.server.api.internal.util.Pair;
 import com.rserene.chosen.server.api.internal.util.ValueUtil;
 import com.rserene.chosen.server.core.main.RSLVCore;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader.Builder;
 
 public class LanguageHandler implements LanguageAPI {
    private final RSLVCore core;
-   private Properties language;
+   private Map<String, String> language;
 
    public LanguageHandler(RSLVCore core) {
       this.core = core;
@@ -31,46 +31,70 @@ public class LanguageHandler implements LanguageAPI {
    }
 
    public final String getMessage(String node, Pair<?, ?>... pairs) {
-      return ValueUtil.transPapi(this.language.getProperty(node), pairs);
+      return ValueUtil.transPapi(this.language.get(node), pairs);
    }
 
    public void reload() throws IOException {
-      Properties tmp = new Properties();
-      File messagePropertiesFile = new File(this.core.getPlugin().getDataFolder(), "message.properties");
-      if (!messagePropertiesFile.exists()) {
-         File parentDir = messagePropertiesFile.getParentFile();
+      Map<String, String> tmp = new HashMap<>();
+      File messagesFile = new File(this.core.getPlugin().getDataFolder(), "messages.yml");
+      if (!messagesFile.exists()) {
+         File parentDir = messagesFile.getParentFile();
          if (parentDir != null && !parentDir.exists()) {
             parentDir.mkdirs();
          }
          try (
-            OutputStream outputStream = new FileOutputStream(messagePropertiesFile);
-            InputStream resourceAsStream = Objects.requireNonNull(this.getClass().getResourceAsStream("/message.properties"));
+            OutputStream outputStream = new FileOutputStream(messagesFile);
+            InputStream resourceAsStream = Objects.requireNonNull(this.getClass().getResourceAsStream("/messages.yml"));
          ) {
             IOUtil.copy(resourceAsStream, outputStream);
          }
 
-         LoggerProvider.getLogger().info("Extract: message.properties");
+         LoggerProvider.getLogger().info("Extract: messages.yml");
       }
 
-      try (InputStream inputStream = new FileInputStream(messagePropertiesFile)) {
-         tmp.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+      File legacyFile = new File(this.core.getPlugin().getDataFolder(), "message.properties");
+      if (legacyFile.exists()) {
+         legacyFile.delete();
+         LoggerProvider.getLogger().info("Removed legacy message.properties, language file is now messages.yml");
       }
+
+      CommentedConfigurationNode loaded = (CommentedConfigurationNode)((Builder)YamlConfigurationLoader.builder().file(messagesFile)).build().load();
+      tmp.putAll(flatten(loaded, ""));
 
       try (
-         InputStream var19 = Objects.requireNonNull(this.getClass().getResourceAsStream("/message.properties"));
-         InputStreamReader isr = new InputStreamReader(var19, StandardCharsets.UTF_8);
+         InputStream var19 = Objects.requireNonNull(this.getClass().getResourceAsStream("/messages.yml"));
       ) {
-         Properties inside = new Properties();
-         inside.load(isr);
+         CommentedConfigurationNode inside = (CommentedConfigurationNode)((Builder)YamlConfigurationLoader.builder()
+            .source(() -> new java.io.BufferedReader(new java.io.InputStreamReader(var19, java.nio.charset.StandardCharsets.UTF_8))))
+            .build()
+            .load();
+         Map<String, String> defaults = flatten(inside, "");
 
-         for (Entry<Object, Object> entry : inside.entrySet()) {
+         for (Map.Entry<String, String> entry : defaults.entrySet()) {
             if (!tmp.containsKey(entry.getKey())) {
-               tmp.setProperty(entry.getKey().toString(), entry.getValue().toString());
-               LoggerProvider.getLogger().warn("Missing message from node " + entry.getKey().toString());
+               tmp.put(entry.getKey(), entry.getValue());
+               LoggerProvider.getLogger().warn("Missing message from node " + entry.getKey());
             }
          }
       }
 
       this.language = tmp;
+   }
+
+   private static Map<String, String> flatten(CommentedConfigurationNode node, String prefix) {
+      Map<String, String> result = new HashMap<>();
+      for (Map.Entry<Object, ? extends CommentedConfigurationNode> entry : node.childrenMap().entrySet()) {
+         String key = prefix.isEmpty() ? entry.getKey().toString() : prefix + "." + entry.getKey().toString();
+         CommentedConfigurationNode child = entry.getValue();
+         if (child.isMap()) {
+            result.putAll(flatten(child, key));
+         } else {
+            String value = child.getString();
+            if (value != null) {
+               result.put(key, value);
+            }
+         }
+      }
+      return result;
    }
 }

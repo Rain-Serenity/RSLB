@@ -2,7 +2,7 @@ package com.rserene.chosen.server.bukkit.impl;
 
 import com.rserene.chosen.server.api.internal.plugin.IPlayer;
 import com.rserene.chosen.server.api.internal.plugin.ISender;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -31,7 +31,7 @@ public class BukkitSender implements ISender {
     @Override
     public void sendMessagePL(String message) {
         for (String s : message.split("\\r?\\n")) {
-            this.sender.sendMessage(Component.text(s));
+            this.sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(s));
         }
     }
 

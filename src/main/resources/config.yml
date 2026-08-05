@@ -1,103 +1,80 @@
-#####################################################################
+# ============================================================
+#  RSLB - 正版与 LittleSkin 登录 (Bukkit 版本)
 #
-#     配置文件格式为 ‘YAML’，推荐使用 Visual Studio Code 浏览和编辑。
-#          前往 ‘https://yaml.org/’ 查阅 YAML 配置语法
+#  配置文件使用 YAML 格式，推荐使用 Visual Studio Code 编辑。
+#  前往 'https://yaml.org/' 查阅 YAML 配置语法。
+#  除布尔值、整数、浮点数外的值请使用引号包裹。
 #
-#           除了布尔值和整数、浮点数之外的配置，请使用引号包裹起来。
-#
-#    RSLB：仅支持正版与 LittleSkin 登录 (Bukkit 版本)
-#####################################################################
+#  修改后执行 /rslb reload 即可热重载（部分设置需要重启生效）。
+# ============================================================
 
-# 开启插件 DEBUG 日志。
-#
-# 此选项将会把插件内所有 DEBUG 日志转换成 INFO 日志。
-# 默认值 false
-debug: false
+# ---------- 通用设置 ----------
+settings:
+  # 开启 DEBUG 日志（将输出登录拦截、认证请求等调试信息到控制台）。
+  # 默认值: false
+  debug: false
 
-# 向登录成功的玩家发送欢迎消息。
-#
-# 默认值 true
-welcomeMsg: true
+  # 向登录成功的玩家发送欢迎消息。
+  # 默认值: true
+  welcome-message: true
 
-# 强制使用此登录
-#
-# 即强制使用 RSLV 来登录游戏。
-# 默认值 true
-forceUseLogin: true
+  # 强制所有玩家通过本插件的认证才能进入服务器。
+  # 关闭后，绕过验证的玩家（如纯离线客户端）也可进入。
+  # 默认值: true
+  force-use-login: true
 
-# 设置用户名正则约束。
-# 若不匹配将会拒绝指令或当前玩家的登录请求。
-# 如果此值留空，则不启用此功能。
-#
-# 默认值 ‘^[0-9a-zA-Z_]{3,16}$’
-nameAllowedRegular: '^[0-9a-zA-Z_]{3,16}$'
+  # 用户名正则约束，不匹配的玩家将被拒绝登录。
+  # 留空（''）则禁用此功能。
+  # 默认值: '^[0-9a-zA-Z_]{3,16}$'
+  name-allowed-regular: '^[0-9a-zA-Z_]{3,16}$'
 
-# 在线档案在用户名重复时末尾是否补全数字以允许登录服务器
-# 意思是名字冲突了在它的名字后面加个数字
-# 比如 Steven 登录游戏后发现名字被别人占用了，那它在游戏里面的名字就为 Steven1
-#
-# 默认值 true
-nameCorrect: true
+  # 用户名冲突时自动追加数字（例如 Steven 被占用则显示为 Steven1）。
+  # 默认值: true
+  auto-correct-name: true
 
-# 当在线档案改名后是否自动 erase 老的档案用户名称并且分配在线档案用户名给当前档案使用（不忽略重名检查）
-#
-# 默认值 true
-autoNameChange: true
+  # 在线档案改名后，自动回收旧用户名并释放给新档案使用。
+  # 默认值: true
+  auto-name-change: true
 
-# 风险指令二次确认过期时间设置
-#
-# 默认值 15000
-confirmCommandValidTimeMills: 15000
+  # 风险指令二次确认的过期时间（毫秒）。
+  # 默认值: 15000
+  confirm-command-valid-mills: 15000
 
-# link指令接受过期时间设置
-#
-# 默认值 30000
-linkAcceptValidTimeMills: 30000
+  # /rslb link 接受请求的过期时间（毫秒）。
+  # 默认值: 30000
+  link-accept-valid-mills: 30000
 
-# 插件数据设置
-sql:
+# ---------- 数据库设置 ----------
+database:
+  # 数据库后端类型: H2 / MYSQL
+  # 默认值: H2
+  backend: H2
 
-  # 数据库类型设置
-  #
-  # 请使用以下值:
-  #   H2
-  #   MYSQL
-  # 默认值 ‘H2’
-  backend: 'H2'
+  # 数据库地址（仅 MYSQL 生效）。
+  # 默认值: 127.0.0.1
+  host: 127.0.0.1
 
-  # 数据库访问地址
-  #
-  # 默认值 ‘127.0.0.1’
-  ip: 127.0.0.1
-
-  # 端口
-  #
-  # 默认值 ‘3306’
+  # 数据库端口（仅 MYSQL 生效）。
+  # 默认值: 3306
   port: 3306
 
-  # 用户名
-  #
-  # 默认值 ‘root’
+  # 数据库用户名（仅 MYSQL 生效）。
+  # 默认值: root
   username: root
 
-  # 访问密码
-  #
-  # 默认值 ‘root’
+  # 数据库密码（仅 MYSQL 生效）。
+  # 默认值: root
   password: root
 
-  # 数据库名称
-  #
-  # 默认值 ‘rslogin’
+  # 数据库名称（仅 MYSQL 生效）。
+  # 默认值: rslogin
   database: rslogin
 
-  # 使用的数据表前缀。
-  #
-  # 使用时将会补充后缀符号 ‘_’
-  # 请不要随意更改它，否则数据将消失
-  # 默认值 ‘rslogin’
-  tablePrefix: rslogin
+  # 数据表前缀，使用时自动补全后缀 '_'。
+  # 请勿随意更改，否则数据会丢失。
+  # 默认值: rslb
+  table-prefix: rslb
 
-  # 高级设定，指定连接 URL
-  #
-  # 默认值 ’‘
-  connectUrl: ''
+  # 高级：自定义 JDBC 连接 URL，留空则按上方参数自动拼接。
+  # 默认值: ''
+  connect-url: ''

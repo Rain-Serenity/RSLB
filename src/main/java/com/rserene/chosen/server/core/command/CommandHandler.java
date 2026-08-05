@@ -35,7 +35,7 @@ public class CommandHandler implements CommandAPI {
    }
 
    public void init() {
-      this.dispatcher.register(new RootCommand(this).register(this.literal("RSLV")));
+      this.dispatcher.register(new RootCommand(this).register(this.literal("RSLB")));
       this.dispatcher.register(new RootCommand(this).register(this.literal("rsl")));
       CommandSyntaxException.BUILT_IN_EXCEPTIONS = builtInExceptions = new BuiltInExceptions(core);
    }
@@ -63,7 +63,7 @@ public class CommandHandler implements CommandAPI {
    }
 
    public List<String> tabComplete(ISender sender, String args) {
-      if (!sender.hasPermission("command.RSLV.tab.complete")) {
+      if (!sender.hasPermission("command.RSLB.tab.complete")) {
          return Collections.emptyList();
       }
 
@@ -71,13 +71,16 @@ public class CommandHandler implements CommandAPI {
       List<String> ret = new ArrayList<>();
 
       try {
-         Suggestions suggestions1 = suggestions.get();
+         Suggestions suggestions1 = suggestions.get(2L, java.util.concurrent.TimeUnit.SECONDS);
 
          for (Suggestion suggestion : suggestions1.getList()) {
-            ret.add(suggestion.getText());
+            String text = suggestion.getText().trim();
+            if (!text.isEmpty()) {
+               ret.add(text);
+            }
          }
       } catch (Exception e) {
-         LoggerProvider.getLogger().error(String.format("An exception occurred while executing the %s command to complete.", String.join(" ", args)), e);
+         LoggerProvider.getLogger().debug(String.format("An exception occurred while executing the %s command to complete.", String.join(" ", args)), e);
       }
 
       return ret;

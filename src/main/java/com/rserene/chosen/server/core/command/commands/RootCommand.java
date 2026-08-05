@@ -29,27 +29,27 @@ public class RootCommand {
       return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder.then(
                                        ((LiteralArgumentBuilder)this.handler
                                              .literal("reload")
-                                             .requires(sender -> sender.hasPermission("command.RSLV.reload")))
+                                             .requires(sender -> sender.hasPermission("command.RSLB.reload")))
                                           .executes(this::executeReload)
                                     ))
                                     .then(
                                        ((LiteralArgumentBuilder)this.handler
                                              .literal("eraseUsername")
-                                             .requires(sender -> sender.hasPermission("command.RSLV.eraseusername")))
+                                             .requires(sender -> sender.hasPermission("command.RSLB.eraseusername")))
                                           .then(this.handler.argument("username", StringArgumentType.string()).executes(this::executeEraseUsername))
                                     ))
                                  .then(
                                     ((LiteralArgumentBuilder)this.handler
                                           .literal("eraseAllUsernames")
-                                          .requires(iSender -> iSender.hasPermission("command.RSLV.eraseallusernames")))
+                                          .requires(iSender -> iSender.hasPermission("command.RSLB.eraseallusernames")))
                                        .executes(this::executeEraseAllUsernames)
                                  ))
                               .then(
-                                 ((LiteralArgumentBuilder)this.handler.literal("confirm").requires(sender -> sender.hasPermission("command.RSLV.confirm")))
+                                 ((LiteralArgumentBuilder)this.handler.literal("confirm").requires(sender -> sender.hasPermission("command.RSLB.confirm")))
                                     .executes(this::executeConfirm)
                               ))
                            .then(
-                              ((LiteralArgumentBuilder)this.handler.literal("list").requires(sender -> sender.hasPermission("command.RSLV.list")))
+                              ((LiteralArgumentBuilder)this.handler.literal("list").requires(sender -> sender.hasPermission("command.RSLB.list")))
                                  .executes(this::executeList)
                            ))
                         .then(new MWhitelistCommand(this.handler).register(this.handler.literal("whitelist"))))
