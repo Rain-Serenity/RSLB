@@ -212,25 +212,25 @@ command_message_info_unknown: "&8[&b&lRSLB&8]&r&a玩家 &8[&e{uuid}&8](&e{name}&
 command_message_info: "&8[&b&lRSLB&8]&r&a玩家 &8(&e{name}&8)[&e{uuid}&8]&a &a的登录方式是 &e{service_name}&8(sid = &e{service_id}&8)&a  &a原始身份为 &a&8(&e{online_name}&8)[&e{online_uuid}&8]"
 
 # 在线玩家列表
-command_message_list: "&8[&b&lRSLB&8]&r{list} \n服务器总玩家数: {count}"
+command_message_list: "{list}\n&8[&b&lRSLB&8]&r服务器总玩家数: {count}"
 
 # 列表项（按服务分组）
 command_message_list_entry: "&8[&b&lRSLB&8]&r&a[{service_name}&8(sid = {service_id})&a] &e({count}): {list}"
 
 # 列表项中的未知名字
-command_message_list_unidentified_entry_name: "&8[&b&lRSLB&8]&r&8身份不明的"
+command_message_list_unidentified_entry_name: "&8身份不明的"
 
 # 列表项中的绕过登录玩家
-command_message_list_unknown_entry_name: "&8[&b&lRSLB&8]&r&8未知的"
+command_message_list_unknown_entry_name: "&8未知的"
 
 # 列表项玩家名
-command_message_list_player_entry: "&8[&b&lRSLB&8]&r&f{name}"
+command_message_list_player_entry: "&f{name}"
 
 # 列表项玩家名分隔符
-command_message_list_player_delimiter: "&8[&b&lRSLB&8]&r, &r"
+command_message_list_player_delimiter: ", &r"
 
 # 服务分组分隔符
-command_message_list_delimiter: "&8[&b&lRSLB&8]&r\n&r"
+command_message_list_delimiter: "\n"
 
 # 档案名与正则不匹配
 command_message_profile_create_namemismatch: "&8[&b&lRSLB&8]&r&c名称 &e{name} &c与正则 &e{regular} &c不匹配，请重新拟定。"

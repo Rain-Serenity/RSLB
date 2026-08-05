@@ -2,6 +2,7 @@ name: RSLB
 version: '${version}'
 main: com.rserene.chosen.server.RSLB
 author: Chosen_1st
+website: www.RSerene.com
 api-version: '26.2'
 folia-supported: true
 load: POSTWORLD

@@ -3,6 +3,8 @@ package com.rserene.chosen.server.bukkit.main;
 import com.rserene.chosen.server.RSLB;
 import com.rserene.chosen.server.api.internal.handle.HandleResult;
 import com.rserene.chosen.server.bukkit.impl.BukkitPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,9 +41,9 @@ public class GlobalListener implements Listener {
             );
         } else {
             if (result.getKickMessage() != null && !result.getKickMessage().trim().isEmpty()) {
-                event.getPlayer().kickPlayer(result.getKickMessage());
+                event.getPlayer().kick(LegacyComponentSerializer.legacyAmpersand().deserialize(result.getKickMessage()));
             } else {
-                event.getPlayer().kickPlayer("");
+                event.getPlayer().kick(Component.empty());
             }
         }
     }
