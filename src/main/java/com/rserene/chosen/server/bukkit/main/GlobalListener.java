@@ -10,6 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+/**
+ * 玩家进出服事件桥接。
+ *
+ * 将 Bukkit 的 PlayerJoin/PlayerQuit 事件转发给 RSLV 核心的 PlayerHandler，
+ * 完成入服档案注册（推送登录数据）与离服数据清理。
+ * 加入时若核心判定需要踢出（如白名单被删、档案被回收），在此统一执行。
+ */
 public class GlobalListener implements Listener {
     private final RSLB plugin;
 

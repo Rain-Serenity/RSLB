@@ -1,6 +1,7 @@
 name: RSLB
 version: '${version}'
 main: com.rserene.chosen.server.RSLB
+author: Chosen_1st
 api-version: '26.2'
 folia-supported: true
 load: POSTWORLD
@@ -15,7 +16,7 @@ permissions:
     default: true
   command.RSLB.tab.complete:
     description: "RSLB tab complete"
-    default: op
+    default: true
   command.RSLB.reload:
     description: "RSLB reload"
     default: op
@@ -33,6 +34,12 @@ permissions:
     default: op
   command.RSLB.whitelist.remove:
     description: "RSLB whitelist remove"
+    default: op
+  command.RSLB.whitelist.specific.add:
+    description: "RSLB whitelist specific add"
+    default: op
+  command.RSLB.whitelist.specific.remove:
+    description: "RSLB whitelist specific remove"
     default: op
   command.RSLB.whitelist.list:
     description: "RSLB whitelist list"

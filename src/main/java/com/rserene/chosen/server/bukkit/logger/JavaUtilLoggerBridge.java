@@ -4,6 +4,12 @@ import com.rserene.chosen.server.api.internal.logger.Level;
 import com.rserene.chosen.server.api.internal.logger.bridges.BaseLoggerBridge;
 import java.util.logging.Logger;
 
+/**
+ * 日志桥接：将 RSLV 核心的日志接口映射到 Bukkit 的 java.util.logging。
+ *
+ * DEBUG 级别映射为 FINE（默认不输出，配合调试开关提升为 INFO 输出），
+ * INFO/WARN/ERROR 分别映射到 INFO/WARNING/SEVERE。
+ */
 public class JavaUtilLoggerBridge extends BaseLoggerBridge {
     private final Logger logger;
 

@@ -44,6 +44,12 @@ settings:
   # 默认值: 30000
   link-accept-valid-mills: 30000
 
+  # 是否启用 bStats 匿名统计（https://bstats.org）。
+  # 数据完全匿名，仅用于了解插件使用量；可随时关闭。
+  # 关闭时同时跳过 bStats 全局配置检查，完全停止上报。
+  # 默认值: true
+  metrics-enabled: true
+
 # ---------- 数据库设置 ----------
 database:
   # 数据库后端类型: H2 / MYSQL

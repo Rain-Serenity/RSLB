@@ -16,8 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Generated;
@@ -48,6 +46,7 @@ public class PluginConfig {
    private Map<Integer, BaseServiceConfig> serviceIdMap = new HashMap<>();
    private long confirmCommandValidTimeMills;
    private long linkAcceptValidTimeMills;
+   private boolean metricsEnabled;
 
    public PluginConfig(File dataFolder, RSLVCore core) {
       this.dataFolder = dataFolder;
@@ -95,6 +94,7 @@ public class PluginConfig {
       this.confirmCommandValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "confirm-command-valid-mills"}))
          .getLong(15000L);
       this.linkAcceptValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "link-accept-valid-mills"})).getLong(30000L);
+      this.metricsEnabled = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "metrics-enabled"})).getBoolean(true);
       Map<Integer, BaseServiceConfig> idMap = new HashMap<>();
 
       try (Stream<Path> list = Files.list(servicesFolder.toPath())) {
@@ -207,24 +207,6 @@ public class PluginConfig {
       this.saveResource(cover, this.dataFolder, path, path);
    }
 
-   public void saveResourceDir(String path, boolean cover) throws IOException, URISyntaxException {
-      File file = new File(this.dataFolder, path);
-      if (!file.exists()) {
-         Files.createDirectory(file.toPath());
-      }
-
-      try (JarFile jarFile = new JarFile(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))) {
-         for (JarEntry je : jarFile.stream()
-            .filter(jarEntry -> jarEntry.getRealName().startsWith(path))
-            .filter(jarEntry -> !jarEntry.getRealName().equals(path + "/"))
-            .collect(Collectors.toList())) {
-            String realName = je.getRealName();
-            String fileName = realName.substring(path.length());
-            this.saveResource(cover, file, realName, fileName);
-         }
-      }
-   }
-
    private void saveResource(boolean cover, File file, String realName, String fileName) throws IOException {
       File subFile = new File(file, fileName);
       boolean exists = subFile.exists();
@@ -296,5 +278,10 @@ public class PluginConfig {
    @Generated
    public long getLinkAcceptValidTimeMills() {
       return this.linkAcceptValidTimeMills;
+   }
+
+   @Generated
+   public boolean isMetricsEnabled() {
+      return this.metricsEnabled;
    }
 }

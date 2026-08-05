@@ -12,29 +12,30 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.2.build.+")
-    // Mojang-mapped NMS classes for 26.2 (Luminol/Folia). Source: paperweight-userdev
-    // dev bundle cache (applyDevBundlePatches_.../output.jar). At runtime these classes
-    // are provided by the server jar.
+    // 26.2 的 Mojang-mapped NMS 类（Luminol/Folia）。
+    // 来源：paperweight-userdev dev bundle 缓存（applyDevBundlePatches_.../output.jar），
+    // 运行时由服务器 jar 提供。
     compileOnly(files("libs/nms-26.2.jar"))
-    // Versions match the libraries shipped in the 26.2 server (vanilla bundler)
+    // 以下两个版本必须与 26.2 服务器自带库（vanilla bundler）保持一致，切勿升级！
     compileOnly("com.mojang:authlib:9.0.75")
     compileOnly("io.netty:netty-all:4.2.15.Final")
 
-    compileOnly("org.jetbrains:annotations:26.0.2")
-    compileOnly("org.projectlombok:lombok:1.18.38")
-    annotationProcessor("org.projectlombok:lombok:1.18.38")
+    compileOnly("org.jetbrains:annotations:26.1.0")
+    compileOnly("org.projectlombok:lombok:1.18.46")
+    annotationProcessor("org.projectlombok:lombok:1.18.46")
 
-    implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("mysql:mysql-connector-java:8.0.29")
-    implementation("com.h2database:h2:2.1.214")
-    implementation("org.spongepowered:configurate-yaml:4.1.2")
-    implementation("org.spongepowered:configurate-core:4.1.2")
-    implementation("org.yaml:snakeyaml:1.33")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.squareup.okio:okio:3.3.0")
-    implementation("org.ow2.asm:asm:9.7.1")
-    implementation("org.ow2.asm:asm-commons:9.7.1")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.zaxxer:HikariCP:7.1.0")
+    implementation("com.mysql:mysql-connector-j:9.7.0")
+    implementation("com.h2database:h2:2.4.240")
+    implementation("org.spongepowered:configurate-yaml:4.2.0")
+    implementation("org.spongepowered:configurate-core:4.2.0")
+    implementation("org.yaml:snakeyaml:2.6")
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
+    implementation("com.squareup.okio:okio-jvm:3.18.1")
+    implementation("org.ow2.asm:asm:9.10.1")
+    implementation("org.ow2.asm:asm-commons:9.10.1")
+    implementation("com.google.code.gson:gson:2.14.0")
+    // brigadier 与服务器自带版本（1.0.500 魔改版）二进制兼容，保持官方最新发布版
     implementation("com.mojang:brigadier:1.0.18")
 }
 
@@ -56,12 +57,18 @@ tasks {
             "org.spongepowered.configurate" to "com.rserene.chosen.server.libs.configurate",
             "okhttp3" to "com.rserene.chosen.server.libs.okhttp",
             "okio" to "com.rserene.chosen.server.libs.okio",
-            "org.objectweb.asm" to "com.rserene.chosen.server.libs.asm"
+            "org.objectweb.asm" to "com.rserene.chosen.server.libs.asm",
+            "com.google.gson" to "com.rserene.chosen.server.libs.gson",
+            "kotlin" to "com.rserene.chosen.server.libs.kotlin"
         )
         relocate.forEach { (from, to) -> relocate(from, to) }
 
         exclude("META-INF/maven/**")
         exclude("META-INF/versions/**")
+        exclude("module-info.class")
+        exclude("META-INF/*.kotlin_module")
+        exclude("META-INF/kotlin-stdlib.kotlin_module")
+        exclude("META-INF/okhttp3.kotlin_module")
     }
 
     build {
