@@ -1,0 +1,87 @@
+name: RSLB
+version: '${version}'
+main: com.rserene.chosen.server.RSLB
+api-version: '26.2'
+folia-supported: true
+load: POSTWORLD
+commands:
+  rslb:
+    aliases: [rsl]
+    description: "RSLB - 正版与 LittleSkin 登录"
+    permission: command.rslb.base
+permissions:
+  command.rslb.base:
+    description: "RSLB base command"
+    default: true
+  command.RSLV.tab.complete:
+    description: "RSLV tab complete"
+    default: op
+  command.RSLV.reload:
+    description: "RSLV reload"
+    default: op
+  command.RSLV.confirm:
+    description: "RSLV confirm"
+    default: true
+  command.RSLV.eraseusername:
+    description: "RSLV erase username"
+    default: op
+  command.RSLV.eraseallusernames:
+    description: "RSLV erase all usernames"
+    default: op
+  command.RSLV.whitelist.add:
+    description: "RSLV whitelist add"
+    default: op
+  command.RSLV.whitelist.remove:
+    description: "RSLV whitelist remove"
+    default: op
+  command.RSLV.whitelist.list:
+    description: "RSLV whitelist list"
+    default: op
+  command.RSLV.whitelist.list.verbose:
+    description: "RSLV whitelist list verbose"
+    default: op
+  command.RSLV.rename.oneself:
+    description: "RSLV rename oneself"
+    default: true
+  command.RSLV.rename.other:
+    description: "RSLV rename other"
+    default: op
+  command.RSLV.current.oneself:
+    description: "RSLV current oneself"
+    default: true
+  command.RSLV.current.other:
+    description: "RSLV current other"
+    default: op
+  command.RSLV.profile.create:
+    description: "RSLV profile create"
+    default: op
+  command.RSLV.profile.set.oneself:
+    description: "RSLV profile set oneself"
+    default: true
+  command.RSLV.profile.set.other:
+    description: "RSLV profile set other"
+    default: op
+  command.RSLV.profile.remove:
+    description: "RSLV profile remove"
+    default: op
+  command.RSLV.list:
+    description: "RSLV list"
+    default: op
+  command.RSLV.find.online:
+    description: "RSLV find online"
+    default: op
+  command.RSLV.find.profile:
+    description: "RSLV find profile"
+    default: op
+  command.RSLV.link.to:
+    description: "RSLV link to"
+    default: true
+  command.RSLV.link.accept:
+    description: "RSLV link accept"
+    default: true
+  command.RSLV.link.code:
+    description: "RSLV link code"
+    default: true
+  command.RSLV.data.convert:
+    description: "RSLV data convert"
+    default: op

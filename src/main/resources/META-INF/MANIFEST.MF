@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Built-By: Chosen_1st
+Build-Timestamp: 2026-06-19T09:00:56.061+0800
+Build-Revision: unknown
+Created-By: Gradle 9.0.0
+Build-Jdk: 21.0.11 (Eclipse Adoptium 21.0.11+10-LTS)
+Build-OS: Windows 11 amd64 10.0
+

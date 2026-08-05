@@ -1,0 +1,26 @@
+# 正版登录服务的唯一 ID，取值范围 0-127，不可与其他服务重复。
+id: 0
+
+# 登录服务显示名称。
+name: '正版登录'
+
+# 固定为 OFFICIAL，表示 Mojang/Microsoft 正版验证。
+serviceType: OFFICIAL
+
+# 正版 Yggdrasil 会话验证设置。
+yggdrasilAuth:
+  # 是否向会话服务器提交玩家 IP；通常保持 false。 
+  trackIp: false
+
+  # 网络请求超时时间，单位毫秒，建议 3000-30000。
+  timeout: 10000
+
+  # 网络失败后的重试次数，取值建议 0-3。
+  retry: 1
+
+  # 每次重试前的等待时间，单位毫秒。
+  retryDelay: 300
+
+  official:
+    # Mojang 官方会话服务器地址。
+    sessionServer: 'https://sessionserver.mojang.com'
