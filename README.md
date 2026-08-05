@@ -56,7 +56,6 @@
 plugins/RSLB/
 ├── config.yml          # 主配置
 ├── messages.yml        # 语言文件（可自定义消息）
-├── mapper.yml          # 名称映射
 ├── services/           # 认证服务配置
 │   ├── official.yml    # 正版服务
 │   └── littleskin.yml  # LittleSkin 服务

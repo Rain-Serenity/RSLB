@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.2.build.+")
-    // 26.2 的 Mojang-mapped NMS 类（Luminol/Folia）。
+    // 26.2 的 Mojang-mapped NMS 类（Paper/Folia）。
     // 来源：paperweight-userdev dev bundle 缓存（applyDevBundlePatches_.../output.jar），
     // 运行时由服务器 jar 提供。
     compileOnly(files("libs/nms-26.2.jar"))

@@ -36,7 +36,7 @@ import net.minecraft.util.Crypt;
 import org.bukkit.Bukkit;
 
 /**
- * 纯 NMS 多 Yggdrasil 登录拦截器（Luminol 26.2 / Folia）。
+ * 纯 NMS 多 Yggdrasil 登录拦截器（Paper 26.2 / Folia）。
  *
  * 通过包装 ServerBootstrapAcceptor 的 ChannelInitializer，使每个新连接在
  * initChannel 内（即客户端首个数据包被处理之前）就注入登录拦截器。

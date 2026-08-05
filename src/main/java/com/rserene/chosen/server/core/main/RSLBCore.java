@@ -11,7 +11,6 @@ import java.util.UUID;
 import lombok.Generated;
 import com.rserene.chosen.server.api.RSLBAPI;
 import com.rserene.chosen.server.api.RSLBAPIProvider;
-import com.rserene.chosen.server.api.MapperConfigAPI;
 import com.rserene.chosen.server.api.data.RSLBPlayerData;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.api.internal.main.RSLBCoreAPI;
@@ -111,10 +110,6 @@ public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
 
    public void close() {
       this.sqlManager.close();
-   }
-
-   public MapperConfigAPI getMapperConfig() {
-      return this.pluginConfig.getMapperConfig();
    }
 
    @NotNull
