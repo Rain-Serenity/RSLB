@@ -1,0 +1,26 @@
+# LittleSkin 登录服务的唯一 ID，取值范围 0-127，不可与其他服务重复。
+id: 1
+
+# 登录服务显示名称。
+name: 'LittleSkin'
+
+# 固定为 LITTLESKIN，表示 LittleSkin 外置登录。
+serviceType: LITTLESKIN
+
+# LittleSkin Yggdrasil 会话验证设置。
+yggdrasilAuth:
+  # 是否向 LittleSkin 提交玩家 IP；通常保持 false。
+  trackIp: false
+
+  # 网络请求超时时间，单位毫秒，建议 3000-30000。
+  timeout: 10000
+
+  # 网络失败后的重试次数，取值建议 0-3。
+  retry: 1
+
+  # 每次重试前的等待时间，单位毫秒。
+  retryDelay: 300
+
+  littleSkin:
+    # LittleSkin 官方 Yggdrasil API 地址。
+    apiRoot: 'https://littleskin.cn/api/yggdrasil'
