@@ -53,7 +53,7 @@ public class SkinRestorerFlows implements Callable<SkinRestorerResultImpl> {
       if (this.config.getSkinRestorer().getMethod() == SkinRestorerConfig.Method.UPLOAD) {
          request = new Builder()
             .url("https://api.mineskin.org/generate/upload")
-            .header("User-Agent", "RSLV/1.1.1")
+            .header("User-Agent", "RSLB/1.1.1")
             .post(
                new okhttp3.MultipartBody.Builder()
                   .setType(MultipartBody.FORM)
@@ -102,7 +102,7 @@ public class SkinRestorerFlows implements Callable<SkinRestorerResultImpl> {
    }
 
    private byte[] requireValidSkin(String skinUrl, String model) throws IOException {
-      Request request = new Builder().get().header("User-Agent", "RSLV/1.1.1").url(skinUrl).build();
+      Request request = new Builder().get().header("User-Agent", "RSLB/1.1.1").url(skinUrl).build();
       byte[] bytes = Objects.requireNonNull(this.okHttpClient.newCall(request).execute().body()).bytes();
 
       try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {

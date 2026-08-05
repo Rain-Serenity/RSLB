@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 public abstract class BaseScheduler {
    private final AtomicInteger asyncThreadId = new AtomicInteger(0);
    private final ScheduledExecutorService asyncExecutor = Executors.newScheduledThreadPool(
-      5, r -> new Thread(r, "RSLV Async #" + this.asyncThreadId.incrementAndGet())
+      5, r -> new Thread(r, "RSLB Async #" + this.asyncThreadId.incrementAndGet())
    );
 
    public void runTaskAsync(Runnable runnable) {

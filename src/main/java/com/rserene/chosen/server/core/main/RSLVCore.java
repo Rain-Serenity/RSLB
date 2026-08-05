@@ -44,7 +44,7 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
    private final PlayerHandler playerHandler;
    private final CacheWhitelistHandler cacheWhitelistHandler;
    private final Gson gson;
-   private final String httpRequestHeaderUserAgent = "RSLV/1.1.1";
+   private final String httpRequestHeaderUserAgent = "RSLB/1.1.1";
 
    public RSLVCore(IPlugin plugin) {
       this.plugin = plugin;
@@ -65,7 +65,7 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
    }
 
    private void showBanner() {
-      this.plugin.getRunServer().getConsoleSender().sendMessagePL("\u001b[40;36mRSLV - 正版与 LittleSkin 登录\u001b[0m");
+      this.plugin.getRunServer().getConsoleSender().sendMessagePL("\u001b[40;36m[RSLB] 正版与 LittleSkin 登录\u001b[0m");
    }
 
    public void load() throws IOException, SQLException, ClassNotFoundException, URISyntaxException {
@@ -184,6 +184,6 @@ public class RSLVCore implements RSLVCoreAPI, RSLVAPI {
 
    @Generated
    public String getHttpRequestHeaderUserAgent() {
-      return "RSLV/1.1.1";
+      return "RSLB/1.1.1";
    }
 }

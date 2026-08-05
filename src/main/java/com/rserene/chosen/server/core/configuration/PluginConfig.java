@@ -79,22 +79,22 @@ public class PluginConfig {
             .file(new File(this.dataFolder, "config.yml")))
          .build()
          .load();
-      if (((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"debug"})).getBoolean(false)) {
+      if (((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "debug"})).getBoolean(false)) {
          DebugLoggerBridge.startDebugMode();
       } else {
          DebugLoggerBridge.cancelDebugMode();
       }
 
-      this.forceUseLogin = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"forceUseLogin"})).getBoolean(true);
-      this.sqlConfig = SqlConfig.read((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"sql"}));
-      this.nameAllowedRegular = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"nameAllowedRegular"}))
+      this.forceUseLogin = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "force-use-login"})).getBoolean(true);
+      this.sqlConfig = SqlConfig.read((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"database"}));
+      this.nameAllowedRegular = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "name-allowed-regular"}))
          .getString("^[0-9a-zA-Z_]{3,16}$");
-      this.welcomeMsg = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"welcomeMsg"})).getBoolean(true);
-      this.nameCorrect = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"nameCorrect"})).getBoolean(true);
-      this.autoNameChange = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"autoNameChange"})).getBoolean(true);
-      this.confirmCommandValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"confirmCommandValidTimeMills"}))
+      this.welcomeMsg = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "welcome-message"})).getBoolean(true);
+      this.nameCorrect = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "auto-correct-name"})).getBoolean(true);
+      this.autoNameChange = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "auto-name-change"})).getBoolean(true);
+      this.confirmCommandValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "confirm-command-valid-mills"}))
          .getLong(15000L);
-      this.linkAcceptValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"linkAcceptValidTimeMills"})).getLong(30000L);
+      this.linkAcceptValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "link-accept-valid-mills"})).getLong(30000L);
       Map<Integer, BaseServiceConfig> idMap = new HashMap<>();
 
       try (Stream<Path> list = Files.list(servicesFolder.toPath())) {

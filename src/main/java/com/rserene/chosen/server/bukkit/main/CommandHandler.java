@@ -4,6 +4,7 @@ import com.rserene.chosen.server.RSLB;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.bukkit.impl.BukkitSender;
 import java.util.List;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             this.commandHandler.execute(new BukkitSender(sender), fullArgs);
         } catch (Exception e) {
             LoggerProvider.getLogger().error("An exception occurred while executing command.", e);
-            sender.sendMessage("§8[§b§lRSLB§8]§r§c处理指令时发生异常，请与服务器管理员取得联系。");
+            sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&8[&b&lRSLB&8]&r&c处理指令时发生异常，请与服务器管理员取得联系。"));
         }
         return true;
     }

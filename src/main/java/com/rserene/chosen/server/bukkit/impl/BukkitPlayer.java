@@ -6,7 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Objects;
 import java.util.UUID;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 
 public class BukkitPlayer implements IPlayer {
@@ -54,7 +54,7 @@ public class BukkitPlayer implements IPlayer {
     @Override
     public void sendMessagePL(String message) {
         for (String s : message.split("\\r?\\n")) {
-            this.player.sendMessage(Component.text(s));
+            this.player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(s));
         }
     }
 

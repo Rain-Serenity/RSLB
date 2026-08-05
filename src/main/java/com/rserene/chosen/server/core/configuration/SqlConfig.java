@@ -17,13 +17,13 @@ public class SqlConfig {
    public static SqlConfig read(CommentedConfigurationNode node) throws SerializationException {
       SqlConfig.SqlBackend backend = (SqlConfig.SqlBackend)((CommentedConfigurationNode)node.node(new Object[]{"backend"}))
          .get(SqlConfig.SqlBackend.class, SqlConfig.SqlBackend.H2);
-      String ip = ((CommentedConfigurationNode)node.node(new Object[]{"ip"})).getString("127.0.0.1");
+      String ip = ((CommentedConfigurationNode)node.node(new Object[]{"host"})).getString("127.0.0.1");
       int port = ((CommentedConfigurationNode)node.node(new Object[]{"port"})).getInt(3306);
       String username = ((CommentedConfigurationNode)node.node(new Object[]{"username"})).getString("root");
       String password = ((CommentedConfigurationNode)node.node(new Object[]{"password"})).getString("root");
-      String database = ((CommentedConfigurationNode)node.node(new Object[]{"database"})).getString("RSLV");
-      String tablePrefix = ((CommentedConfigurationNode)node.node(new Object[]{"tablePrefix"})).getString("RSLV");
-      String connectUrl = ((CommentedConfigurationNode)node.node(new Object[]{"connectUrl"})).getString("");
+      String database = ((CommentedConfigurationNode)node.node(new Object[]{"database"})).getString("rslogin");
+      String tablePrefix = ((CommentedConfigurationNode)node.node(new Object[]{"table-prefix"})).getString("rslb");
+      String connectUrl = ((CommentedConfigurationNode)node.node(new Object[]{"connect-url"})).getString("");
       return new SqlConfig(backend, ip, port, username, password, database, tablePrefix, connectUrl);
    }
 
