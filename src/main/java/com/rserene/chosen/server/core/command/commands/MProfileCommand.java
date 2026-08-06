@@ -27,7 +27,13 @@ public class MProfileCommand {
    }
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
-      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder.then(
+      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder
+            .requires(iSender ->
+               iSender.hasPermission("command.RSLB.profile.create")
+               || iSender.hasPermission("command.RSLB.profile.set.oneself")
+               || iSender.hasPermission("command.RSLB.profile.set.other")
+               || iSender.hasPermission("command.RSLB.profile.remove"))
+            .then(
                ((LiteralArgumentBuilder)this.handler.literal("create").requires(iSender -> iSender.hasPermission("command.RSLB.profile.create")))
                   .then(
                      ((RequiredArgumentBuilder)this.handler
@@ -39,6 +45,9 @@ public class MProfileCommand {
             .then(
                ((LiteralArgumentBuilder)this.handler
                      .literal("set")
+                     .requires(iSender ->
+                        iSender.hasPermission("command.RSLB.profile.set.oneself")
+                        || iSender.hasPermission("command.RSLB.profile.set.other"))
                      .then(
                         ((RequiredArgumentBuilder)this.handler
                               .argument("profile", ProfileArgumentType.profile())

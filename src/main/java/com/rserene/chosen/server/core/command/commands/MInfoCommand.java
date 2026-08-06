@@ -29,7 +29,7 @@ public class MInfoCommand {
          .executes(this::executeInfo);
       return literalArgumentBuilder
          .then(playerArgument)
-         .requires(iSender -> iSender.hasPermission("command.RSLB.current.oneself"))
+         .requires(iSender -> iSender.hasPermission("command.RSLB.current.oneself") || iSender.hasPermission("command.RSLB.current.other"))
          .executes(this::executeInfoOneself);
    }
 

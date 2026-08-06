@@ -50,13 +50,13 @@ permissions:
     default: op
   command.RSLB.rename.oneself:
     description: "RSLB rename oneself"
-    default: true
+    default: op
   command.RSLB.rename.other:
     description: "RSLB rename other"
     default: op
   command.RSLB.current.oneself:
     description: "RSLB current oneself"
-    default: true
+    default: op
   command.RSLB.current.other:
     description: "RSLB current other"
     default: op
@@ -65,7 +65,7 @@ permissions:
     default: op
   command.RSLB.profile.set.oneself:
     description: "RSLB profile set oneself"
-    default: true
+    default: op
   command.RSLB.profile.set.other:
     description: "RSLB profile set other"
     default: op
@@ -90,6 +90,3 @@ permissions:
   command.RSLB.link.code:
     description: "RSLB link code"
     default: true
-  command.RSLB.data.convert:
-    description: "RSLB data convert"
-    default: op

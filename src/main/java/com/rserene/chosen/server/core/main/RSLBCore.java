@@ -33,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
    private final IPlugin plugin;
-   private final BuildManifest buildManifest;
    private final SQLManager sqlManager;
    private final PluginConfig pluginConfig;
    private final AuthHandler authHandler;
@@ -43,11 +42,9 @@ public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
    private final PlayerHandler playerHandler;
    private final CacheWhitelistHandler cacheWhitelistHandler;
    private final Gson gson;
-   private final String httpRequestHeaderUserAgent = "RSLB/1.1.1";
 
    public RSLBCore(IPlugin plugin) {
       this.plugin = plugin;
-      this.buildManifest = new BuildManifest(this);
       this.languageHandler = new LanguageHandler(this);
       this.pluginConfig = new PluginConfig(plugin.getDataFolder(), this);
       this.sqlManager = new SQLManager(this);
@@ -70,8 +67,6 @@ public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
    public void load() throws IOException, SQLException, ClassNotFoundException, URISyntaxException {
       RSLBAPIProvider.setApi(this);
       this.showBanner();
-      this.buildManifest.read();
-      this.buildManifest.checkStable();
       this.languageHandler.init();
       this.pluginConfig.reload();
       this.sqlManager.init();
@@ -81,7 +76,7 @@ public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
          .info(
             String.format(
                "Loaded, using RSLB v%s on %s - %s",
-               this.buildManifest.getVersion(),
+               this.plugin.getPluginVersion(),
                this.plugin.getRunServer().getName(),
                this.plugin.getRunServer().getVersion()
             )
@@ -125,11 +120,6 @@ public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
    @Generated
    public IPlugin getPlugin() {
       return this.plugin;
-   }
-
-   @Generated
-   public BuildManifest getBuildManifest() {
-      return this.buildManifest;
    }
 
    @Generated
@@ -179,6 +169,6 @@ public class RSLBCore implements RSLBCoreAPI, RSLBAPI {
 
    @Generated
    public String getHttpRequestHeaderUserAgent() {
-      return "RSLB/1.1.1";
+      return "RSLB/" + this.plugin.getPluginVersion();
    }
 }

@@ -22,7 +22,15 @@ public class MWhitelistCommand {
    }
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
-      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder.then(
+      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder
+            .requires(sender ->
+               sender.hasPermission("command.RSLB.whitelist.add")
+               || sender.hasPermission("command.RSLB.whitelist.remove")
+               || sender.hasPermission("command.RSLB.whitelist.specific.add")
+               || sender.hasPermission("command.RSLB.whitelist.specific.remove")
+               || sender.hasPermission("command.RSLB.whitelist.list")
+               || sender.hasPermission("command.RSLB.whitelist.list.verbose"))
+            .then(
                   ((LiteralArgumentBuilder)this.handler.literal("add").requires(sender -> sender.hasPermission("command.RSLB.whitelist.add")))
                      .then(this.handler.argument("username", StringArgumentType.string()).executes(this::executeAddUsername))
                ))
@@ -33,6 +41,9 @@ public class MWhitelistCommand {
             .then(
                ((LiteralArgumentBuilder)this.handler
                      .literal("specific")
+                     .requires(sender ->
+                        sender.hasPermission("command.RSLB.whitelist.specific.add")
+                        || sender.hasPermission("command.RSLB.whitelist.specific.remove"))
                      .then(
                         ((LiteralArgumentBuilder)this.handler.literal("add").requires(sender -> sender.hasPermission("command.RSLB.whitelist.specific.add")))
                            .then(this.handler.argument("online", OnlineArgumentType.online()).executes(this::executeAdd))

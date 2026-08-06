@@ -20,7 +20,11 @@ public class MRenameCommand {
    }
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
-      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)literalArgumentBuilder.then(
+      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)literalArgumentBuilder
+            .requires(iSender ->
+               iSender.hasPermission("command.RSLB.rename.oneself")
+               || iSender.hasPermission("command.RSLB.rename.other"))
+            .then(
             ((RequiredArgumentBuilder)this.handler
                   .argument("newname", StringArgumentType.string())
                   .requires(iSender -> iSender.hasPermission("command.RSLB.rename.oneself")))

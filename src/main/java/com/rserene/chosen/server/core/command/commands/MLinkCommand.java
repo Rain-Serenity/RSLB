@@ -26,7 +26,12 @@ public class MLinkCommand {
    }
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literal) {
-      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literal.then(
+      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literal
+            .requires(sender ->
+               sender.hasPermission("command.RSLB.link.to")
+               || sender.hasPermission("command.RSLB.link.accept")
+               || sender.hasPermission("command.RSLB.link.code"))
+            .then(
                ((LiteralArgumentBuilder)this.handler.literal("to").requires(sender -> sender.hasPermission("command.RSLB.link.to")))
                   .then(this.handler.argument("player", OnlinePlayerArgumentType.players()).executes(this::executeLinkTo))
             ))

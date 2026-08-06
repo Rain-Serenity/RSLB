@@ -25,7 +25,6 @@ public final class Permissions {
    public static final String COMMAND_LI_LOGIN_LIST = "command.RSLB.list";
    public static final String COMMAND_LI_LOGIN_FIND_ONLINE = "command.RSLB.find.online";
    public static final String COMMAND_LI_LOGIN_FIND_PROFILE = "command.RSLB.find.profile";
-   public static final String COMMAND_LI_LOGIN_DATA_CONVERT = "command.RSLB.data.convert";
    public static final String COMMAND_LI_LOGIN_LINK_TO = "command.RSLB.link.to";
    public static final String COMMAND_LI_LOGIN_LINK_ACCEPT = "command.RSLB.link.accept";
    public static final String COMMAND_LI_LOGIN_LINK_CODE = "command.RSLB.link.code";
