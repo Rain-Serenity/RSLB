@@ -28,19 +28,19 @@ public class MLinkCommand {
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literal) {
       return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literal
             .requires(sender ->
-               sender.hasPermission("command.RSLB.link.to")
-               || sender.hasPermission("command.RSLB.link.accept")
-               || sender.hasPermission("command.RSLB.link.code"))
+               sender.hasPermission("RSLB.link.to")
+               || sender.hasPermission("RSLB.link.accept")
+               || sender.hasPermission("RSLB.link.code"))
             .then(
-               ((LiteralArgumentBuilder)this.handler.literal("to").requires(sender -> sender.hasPermission("command.RSLB.link.to")))
+               ((LiteralArgumentBuilder)this.handler.literal("to").requires(sender -> sender.hasPermission("RSLB.link.to")))
                   .then(this.handler.argument("player", OnlinePlayerArgumentType.players()).executes(this::executeLinkTo))
             ))
             .then(
-               ((LiteralArgumentBuilder)this.handler.literal("accept").requires(iSender -> iSender.hasPermission("command.RSLB.link.accept")))
+               ((LiteralArgumentBuilder)this.handler.literal("accept").requires(iSender -> iSender.hasPermission("RSLB.link.accept")))
                   .then(this.handler.argument("name", StringArgumentType.string()).executes(this::executeLinkAccept))
             ))
          .then(
-            ((LiteralArgumentBuilder)this.handler.literal("code").requires(iSender -> iSender.hasPermission("command.RSLB.link.code")))
+            ((LiteralArgumentBuilder)this.handler.literal("code").requires(iSender -> iSender.hasPermission("RSLB.link.code")))
                .then(
                   this.handler
                      .argument("player", OnlinePlayerArgumentType.players())

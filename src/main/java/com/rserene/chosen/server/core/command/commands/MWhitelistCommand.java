@@ -24,44 +24,44 @@ public class MWhitelistCommand {
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
       return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder
             .requires(sender ->
-               sender.hasPermission("command.RSLB.whitelist.add")
-               || sender.hasPermission("command.RSLB.whitelist.remove")
-               || sender.hasPermission("command.RSLB.whitelist.specific.add")
-               || sender.hasPermission("command.RSLB.whitelist.specific.remove")
-               || sender.hasPermission("command.RSLB.whitelist.list")
-               || sender.hasPermission("command.RSLB.whitelist.list.verbose"))
+               sender.hasPermission("RSLB.whitelist.add")
+               || sender.hasPermission("RSLB.whitelist.remove")
+               || sender.hasPermission("RSLB.whitelist.specific.add")
+               || sender.hasPermission("RSLB.whitelist.specific.remove")
+               || sender.hasPermission("RSLB.whitelist.list")
+               || sender.hasPermission("RSLB.whitelist.list.verbose"))
             .then(
-                  ((LiteralArgumentBuilder)this.handler.literal("add").requires(sender -> sender.hasPermission("command.RSLB.whitelist.add")))
+                  ((LiteralArgumentBuilder)this.handler.literal("add").requires(sender -> sender.hasPermission("RSLB.whitelist.add")))
                      .then(this.handler.argument("username", StringArgumentType.string()).executes(this::executeAddUsername))
                ))
                .then(
-                  ((LiteralArgumentBuilder)this.handler.literal("remove").requires(sender -> sender.hasPermission("command.RSLB.whitelist.remove")))
+                  ((LiteralArgumentBuilder)this.handler.literal("remove").requires(sender -> sender.hasPermission("RSLB.whitelist.remove")))
                      .then(this.handler.argument("username", StringArgumentType.string()).executes(this::executeRemoveUsername))
                ))
             .then(
                ((LiteralArgumentBuilder)this.handler
                      .literal("specific")
                      .requires(sender ->
-                        sender.hasPermission("command.RSLB.whitelist.specific.add")
-                        || sender.hasPermission("command.RSLB.whitelist.specific.remove"))
+                        sender.hasPermission("RSLB.whitelist.specific.add")
+                        || sender.hasPermission("RSLB.whitelist.specific.remove"))
                      .then(
-                        ((LiteralArgumentBuilder)this.handler.literal("add").requires(sender -> sender.hasPermission("command.RSLB.whitelist.specific.add")))
+                        ((LiteralArgumentBuilder)this.handler.literal("add").requires(sender -> sender.hasPermission("RSLB.whitelist.specific.add")))
                            .then(this.handler.argument("online", OnlineArgumentType.online()).executes(this::executeAdd))
                      ))
                   .then(
                      ((LiteralArgumentBuilder)this.handler
                            .literal("remove")
-                           .requires(sender -> sender.hasPermission("command.RSLB.whitelist.specific.remove")))
+                           .requires(sender -> sender.hasPermission("RSLB.whitelist.specific.remove")))
                         .then(this.handler.argument("online", OnlineArgumentType.online()).executes(this::executeRemove))
                   )
             ))
          .then(
             ((LiteralArgumentBuilder)((LiteralArgumentBuilder)this.handler
                      .literal("list")
-                     .requires(sender -> sender.hasPermission("command.RSLB.whitelist.list")))
+                     .requires(sender -> sender.hasPermission("RSLB.whitelist.list")))
                   .executes(this::executeList))
                .then(
-                  ((LiteralArgumentBuilder)this.handler.literal("verbose").requires(sender -> sender.hasPermission("command.RSLB.whitelist.list.verbose")))
+                  ((LiteralArgumentBuilder)this.handler.literal("verbose").requires(sender -> sender.hasPermission("RSLB.whitelist.list.verbose")))
                      .executes(this::executeListVerbose)
                )
          );
