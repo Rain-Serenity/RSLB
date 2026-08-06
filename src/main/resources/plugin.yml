@@ -10,83 +10,83 @@ commands:
   rslb:
     aliases: [rsl]
     description: "RSLB - 正版与 LittleSkin 登录"
-    permission: command.rslb.base
+    permission: RSLB.base
 permissions:
-  command.rslb.base:
+  RSLB.base:
     description: "RSLB base command"
     default: true
-  command.RSLB.tab.complete:
+  RSLB.tab.complete:
     description: "RSLB tab complete"
     default: true
-  command.RSLB.reload:
+  RSLB.reload:
     description: "RSLB reload"
     default: op
-  command.RSLB.confirm:
+  RSLB.confirm:
     description: "RSLB confirm"
     default: true
-  command.RSLB.eraseusername:
+  RSLB.erase.username:
     description: "RSLB erase username"
     default: op
-  command.RSLB.eraseallusernames:
+  RSLB.erase.all:
     description: "RSLB erase all usernames"
     default: op
-  command.RSLB.whitelist.add:
+  RSLB.whitelist.add:
     description: "RSLB whitelist add"
     default: op
-  command.RSLB.whitelist.remove:
+  RSLB.whitelist.remove:
     description: "RSLB whitelist remove"
     default: op
-  command.RSLB.whitelist.specific.add:
+  RSLB.whitelist.specific.add:
     description: "RSLB whitelist specific add"
     default: op
-  command.RSLB.whitelist.specific.remove:
+  RSLB.whitelist.specific.remove:
     description: "RSLB whitelist specific remove"
     default: op
-  command.RSLB.whitelist.list:
+  RSLB.whitelist.list:
     description: "RSLB whitelist list"
     default: op
-  command.RSLB.whitelist.list.verbose:
+  RSLB.whitelist.list.verbose:
     description: "RSLB whitelist list verbose"
     default: op
-  command.RSLB.rename.oneself:
+  RSLB.rename.oneself:
     description: "RSLB rename oneself"
     default: op
-  command.RSLB.rename.other:
+  RSLB.rename.other:
     description: "RSLB rename other"
     default: op
-  command.RSLB.current.oneself:
-    description: "RSLB current oneself"
+  RSLB.info.oneself:
+    description: "RSLB info oneself"
     default: op
-  command.RSLB.current.other:
-    description: "RSLB current other"
+  RSLB.info.other:
+    description: "RSLB info other"
     default: op
-  command.RSLB.profile.create:
+  RSLB.profile.create:
     description: "RSLB profile create"
     default: op
-  command.RSLB.profile.set.oneself:
+  RSLB.profile.set.oneself:
     description: "RSLB profile set oneself"
     default: op
-  command.RSLB.profile.set.other:
+  RSLB.profile.set.other:
     description: "RSLB profile set other"
     default: op
-  command.RSLB.profile.remove:
+  RSLB.profile.remove:
     description: "RSLB profile remove"
     default: op
-  command.RSLB.list:
+  RSLB.list:
     description: "RSLB list"
     default: op
-  command.RSLB.find.online:
+  RSLB.find.online:
     description: "RSLB find online"
     default: op
-  command.RSLB.find.profile:
+  RSLB.find.profile:
     description: "RSLB find profile"
     default: op
-  command.RSLB.link.to:
+  RSLB.link.to:
     description: "RSLB link to"
     default: true
-  command.RSLB.link.accept:
+  RSLB.link.accept:
     description: "RSLB link accept"
     default: true
-  command.RSLB.link.code:
+  RSLB.link.code:
     description: "RSLB link code"
     default: true

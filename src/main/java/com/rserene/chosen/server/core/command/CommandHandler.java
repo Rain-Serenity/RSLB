@@ -63,7 +63,7 @@ public class CommandHandler implements CommandAPI {
    }
 
    public List<String> tabComplete(ISender sender, String args) {
-      if (!sender.hasPermission("command.RSLB.tab.complete")) {
+      if (!sender.hasPermission("RSLB.tab.complete")) {
          return Collections.emptyList();
       }
 

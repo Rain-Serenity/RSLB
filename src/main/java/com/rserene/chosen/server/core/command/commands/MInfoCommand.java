@@ -25,11 +25,11 @@ public class MInfoCommand {
       // 反编译器生成的 raw 泛型链会让 requires 的入参退化为 Object，这里恢复 Brigadier 的强类型构建链。
       RequiredArgumentBuilder<ISender, Set<IPlayer>> playerArgument = this.handler
          .argument("player", OnlinePlayerArgumentType.players())
-         .requires(iSender -> iSender.hasPermission("command.RSLB.current.other"))
+         .requires(iSender -> iSender.hasPermission("RSLB.info.other"))
          .executes(this::executeInfo);
       return literalArgumentBuilder
          .then(playerArgument)
-         .requires(iSender -> iSender.hasPermission("command.RSLB.current.oneself") || iSender.hasPermission("command.RSLB.current.other"))
+         .requires(iSender -> iSender.hasPermission("RSLB.info.oneself") || iSender.hasPermission("RSLB.info.other"))
          .executes(this::executeInfoOneself);
    }
 

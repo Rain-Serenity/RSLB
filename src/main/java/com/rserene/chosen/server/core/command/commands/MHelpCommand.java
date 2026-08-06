@@ -18,18 +18,18 @@ import com.rserene.chosen.server.core.language.LanguageHandler;
 public class MHelpCommand {
    /** [指令名, 所需权限, 说明消息键] */
    private static final String[][] ENTRIES = {
-      {"reload", "command.RSLB.reload", "help_reload"},
-      {"confirm", "command.RSLB.confirm", "help_confirm"},
-      {"list", "command.RSLB.list", "help_list"},
-      {"whitelist", "command.RSLB.whitelist.add", "help_whitelist"},
-      {"rename", "command.RSLB.rename.oneself", "help_rename"},
-      {"info", "command.RSLB.current.oneself", "help_info"},
-      {"profile", "command.RSLB.profile.set.oneself", "help_profile"},
-      {"find", "command.RSLB.find.profile", "help_find"},
-      {"link", "command.RSLB.link.to", "help_link"},
-      {"eraseUsername", "command.RSLB.eraseusername", "help_eraseusername"},
-      {"eraseAllUsernames", "command.RSLB.eraseallusernames", "help_eraseallusernames"},
-      {"help", "command.rslb.base", "help_help"},
+      {"reload", "RSLB.reload", "help_reload"},
+      {"confirm", "RSLB.confirm", "help_confirm"},
+      {"list", "RSLB.list", "help_list"},
+      {"whitelist", "RSLB.whitelist.add", "help_whitelist"},
+      {"rename", "RSLB.rename.oneself", "help_rename"},
+      {"info", "RSLB.info.oneself", "help_info"},
+      {"profile", "RSLB.profile.set.oneself", "help_profile"},
+      {"find", "RSLB.find.profile", "help_find"},
+      {"link", "RSLB.link.to", "help_link"},
+      {"eraseUsername", "RSLB.erase.username", "help_eraseusername"},
+      {"eraseAllUsernames", "RSLB.erase.all", "help_eraseallusernames"},
+      {"help", "RSLB.base", "help_help"},
    };
 
    private final CommandHandler handler;
