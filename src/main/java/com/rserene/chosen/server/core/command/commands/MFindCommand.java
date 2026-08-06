@@ -22,7 +22,11 @@ public class MFindCommand {
    }
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
-      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)literalArgumentBuilder.then(
+      return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)literalArgumentBuilder
+            .requires(iSender ->
+               iSender.hasPermission("command.RSLB.find.online")
+               || iSender.hasPermission("command.RSLB.find.profile"))
+            .then(
             ((LiteralArgumentBuilder)this.handler.literal("profile").requires(iSender -> iSender.hasPermission("command.RSLB.find.profile")))
                .then(this.handler.argument("profile", ProfileArgumentType.profile()).executes(this::executeProfile))
          ))

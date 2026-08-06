@@ -98,6 +98,11 @@ public final class RSLB extends JavaPlugin implements IPlugin {
         return this.runServer;
     }
 
+    @Override
+    public String getPluginVersion() {
+        return getPluginMeta().getVersion();
+    }
+
     public RSLBCoreAPI getCoreAPI() {
         return this.coreAPI;
     }
