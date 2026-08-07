@@ -123,62 +123,62 @@ TAB 补全会自动隐藏当前玩家没有权限的指令。
 
 ### 指令表（按字母顺序）
 
-| 指令                                                     | 所需权限                              | 默认   | 说明                  |
-|--------------------------------------------------------|-----------------------------------|------|---------------------|
-| `/rslb confirm`                                        | `RSLB.confirm`            | 所有人  | 确认待执行的风险指令          |
-| `/rslb eraseAllUsernames`                              | `RSLB.erase.all`  | op   | 回收所有档案名（需确认）        |
-| `/rslb eraseUsername <名字>`                            | `RSLB.erase.username`      | op   | 回收指定档案名（需确认）        |
-| `/rslb find online <在线账号>`                           | `RSLB.find.online`        | op   | 检索在线账号              |
-| `/rslb find profile <档案名/UUID>`                       | `RSLB.find.profile`       | op   | 检索游戏档案              |
-| `/rslb help`                                           | `RSLB.base`               | 所有人  | 帮助列表（只列有权限的指令）      |
-| `/rslb info`                                           | `RSLB.info.oneself`    | op   | 查询自己的登录档案信息         |
-| `/rslb info <在线玩家>`                                  | `RSLB.info.other`      | op   | 查询指定在线玩家的档案信息       |
-| `/rslb link accept`                                    | `RSLB.link.accept`        | 所有人  | 接受迁移请求               |
-| `/rslb link code <验证码>`                               | `RSLB.link.code`          | 所有人  | 用验证码确认迁移             |
-| `/rslb link to <在线玩家>`                               | `RSLB.link.to`            | 所有人  | 请求迁移账号（如正版→LittleSkin） |
-| `/rslb list`                                           | `RSLB.list`               | op   | 按服务分组列出在线玩家         |
-| `/rslb profile create <用户名> [uuid]`                   | `RSLB.profile.create`     | op   | 创建档案                |
-| `/rslb profile remove <档案>`                           | `RSLB.profile.remove`     | op   | 删除档案                |
-| `/rslb profile set <档案>`                              | `RSLB.profile.set.oneself` | op  | 切换自己的档案             |
-| `/rslb profile set <档案> <在线玩家>`                     | `RSLB.profile.set.other`  | op   | 切换他人档案              |
-| `/rslb reload`                                         | `RSLB.reload`             | op   | 重载配置与语言文件           |
-| `/rslb rename <新名>`                                   | `RSLB.rename.oneself`     | op   | 修改自己的档案名            |
-| `/rslb rename <新名> <档案>`                             | `RSLB.rename.other`       | op   | 修改指定档案的名字           |
-| `/rslb whitelist add <档案名>`                          | `RSLB.whitelist.add`      | op   | 添加白名单               |
-| `/rslb whitelist list [-verbose]`                      | `RSLB.whitelist.list`     | op   | 列出白名单（verbose 需 `RSLB.whitelist.list.verbose`） |
-| `/rslb whitelist remove <档案名>`                       | `RSLB.whitelist.remove`   | op   | 移除白名单（在线玩家会被踢出）     |
-| `/rslb whitelist specific add/remove <服务ID> <在线账号>` | `RSLB.whitelist.specific.add` / `RSLB.whitelist.specific.remove` | op | 按服务操作白名单 |
+| 指令                                                  | 所需权限                                                             | 默认  | 说明                                             |
+|-----------------------------------------------------|------------------------------------------------------------------|-----|------------------------------------------------|
+| `/rslb confirm`                                     | `RSLB.confirm`                                                   | 所有人 | 确认待执行的风险指令                                     |
+| `/rslb eraseAllUsernames`                           | `RSLB.erase.all`                                                 | op  | 回收所有档案名（需确认）                                   |
+| `/rslb eraseUsername <名字>`                          | `RSLB.erase.username`                                            | op  | 回收指定档案名（需确认）                                   |
+| `/rslb find online <在线账号>`                          | `RSLB.find.online`                                               | op  | 检索在线账号                                         |
+| `/rslb find profile <档案名/UUID>`                     | `RSLB.find.profile`                                              | op  | 检索游戏档案                                         |
+| `/rslb help`                                        | `RSLB.base`                                                      | 所有人 | 帮助列表（只列有权限的指令）                                 |
+| `/rslb info`                                        | `RSLB.info.oneself`                                              | op  | 查询自己的登录档案信息                                    |
+| `/rslb info <在线玩家>`                                 | `RSLB.info.other`                                                | op  | 查询指定在线玩家的档案信息                                  |
+| `/rslb link accept`                                 | `RSLB.link.accept`                                               | 所有人 | 接受迁移请求                                         |
+| `/rslb link code <验证码>`                             | `RSLB.link.code`                                                 | 所有人 | 用验证码确认迁移                                       |
+| `/rslb link to <在线玩家>`                              | `RSLB.link.to`                                                   | 所有人 | 请求迁移账号（如正版→LittleSkin）                         |
+| `/rslb list`                                        | `RSLB.list`                                                      | op  | 按服务分组列出在线玩家                                    |
+| `/rslb profile create <用户名> [uuid]`                 | `RSLB.profile.create`                                            | op  | 创建档案                                           |
+| `/rslb profile remove <档案>`                         | `RSLB.profile.remove`                                            | op  | 删除档案                                           |
+| `/rslb profile set <档案>`                            | `RSLB.profile.set.oneself`                                       | op  | 切换自己的档案                                        |
+| `/rslb profile set <档案> <在线玩家>`                     | `RSLB.profile.set.other`                                         | op  | 切换他人档案                                         |
+| `/rslb reload`                                      | `RSLB.reload`                                                    | op  | 重载配置与语言文件                                      |
+| `/rslb rename <新名>`                                 | `RSLB.rename.oneself`                                            | op  | 修改自己的档案名                                       |
+| `/rslb rename <新名> <档案>`                            | `RSLB.rename.other`                                              | op  | 修改指定档案的名字                                      |
+| `/rslb whitelist add <档案名>`                         | `RSLB.whitelist.add`                                             | op  | 添加白名单                                          |
+| `/rslb whitelist list [-verbose]`                   | `RSLB.whitelist.list`                                            | op  | 列出白名单（verbose 需 `RSLB.whitelist.list.verbose`） |
+| `/rslb whitelist remove <档案名>`                      | `RSLB.whitelist.remove`                                          | op  | 移除白名单（在线玩家会被踢出）                                |
+| `/rslb whitelist specific add/remove <服务ID> <在线账号>` | `RSLB.whitelist.specific.add` / `RSLB.whitelist.specific.remove` | op  | 按服务操作白名单                                       |
 
 ### 权限列表
 
-| 权限                                        | 对应指令          | 默认   |
-|-------------------------------------------|---------------|------|
-| `RSLB.base`                        | `/rslb help`（基础入口） | 所有人  |
-| `RSLB.tab.complete`                | TAB 补全总开关    | 所有人  |
-| `RSLB.confirm`                     | `/rslb confirm` | 所有人  |
-| `RSLB.link.to`                     | `/rslb link to` | 所有人  |
-| `RSLB.link.accept`                 | `/rslb link accept` | 所有人  |
-| `RSLB.link.code`                   | `/rslb link code` | 所有人  |
-| `RSLB.reload`                      | `/rslb reload` | op   |
-| `RSLB.erase.username`               | `/rslb eraseUsername` | op |
-| `RSLB.erase.all`           | `/rslb eraseAllUsernames` | op |
-| `RSLB.list`                        | `/rslb list` | op   |
-| `RSLB.whitelist.add`               | `/rslb whitelist add` | op |
-| `RSLB.whitelist.remove`            | `/rslb whitelist remove` | op |
-| `RSLB.whitelist.specific.add`      | `/rslb whitelist specific add` | op |
-| `RSLB.whitelist.specific.remove`   | `/rslb whitelist specific remove` | op |
-| `RSLB.whitelist.list`              | `/rslb whitelist list` | op |
-| `RSLB.whitelist.list.verbose`      | `/rslb whitelist list -verbose` | op |
-| `RSLB.rename.oneself`              | `/rslb rename <新名>` | op |
-| `RSLB.rename.other`                | `/rslb rename <新名> <档案>` | op |
-| `RSLB.info.oneself`             | `/rslb info` | op |
-| `RSLB.info.other`               | `/rslb info <在线玩家>` | op |
-| `RSLB.profile.create`              | `/rslb profile create` | op |
-| `RSLB.profile.set.oneself`         | `/rslb profile set <档案>` | op |
-| `RSLB.profile.set.other`           | `/rslb profile set <档案> <在线玩家>` | op |
-| `RSLB.profile.remove`              | `/rslb profile remove` | op |
-| `RSLB.find.online`                 | `/rslb find online` | op |
-| `RSLB.find.profile`                | `/rslb find profile` | op |
+| 权限                               | 对应指令                              | 默认  |
+|----------------------------------|-----------------------------------|-----|
+| `RSLB.base`                      | `/rslb help`（基础入口）                | 所有人 |
+| `RSLB.tab.complete`              | TAB 补全总开关                         | 所有人 |
+| `RSLB.confirm`                   | `/rslb confirm`                   | 所有人 |
+| `RSLB.link.to`                   | `/rslb link to`                   | 所有人 |
+| `RSLB.link.accept`               | `/rslb link accept`               | 所有人 |
+| `RSLB.link.code`                 | `/rslb link code`                 | 所有人 |
+| `RSLB.reload`                    | `/rslb reload`                    | op  |
+| `RSLB.erase.username`            | `/rslb eraseUsername`             | op  |
+| `RSLB.erase.all`                 | `/rslb eraseAllUsernames`         | op  |
+| `RSLB.list`                      | `/rslb list`                      | op  |
+| `RSLB.whitelist.add`             | `/rslb whitelist add`             | op  |
+| `RSLB.whitelist.remove`          | `/rslb whitelist remove`          | op  |
+| `RSLB.whitelist.specific.add`    | `/rslb whitelist specific add`    | op  |
+| `RSLB.whitelist.specific.remove` | `/rslb whitelist specific remove` | op  |
+| `RSLB.whitelist.list`            | `/rslb whitelist list`            | op  |
+| `RSLB.whitelist.list.verbose`    | `/rslb whitelist list -verbose`   | op  |
+| `RSLB.rename.oneself`            | `/rslb rename <新名>`               | op  |
+| `RSLB.rename.other`              | `/rslb rename <新名> <档案>`          | op  |
+| `RSLB.info.oneself`              | `/rslb info`                      | op  |
+| `RSLB.info.other`                | `/rslb info <在线玩家>`               | op  |
+| `RSLB.profile.create`            | `/rslb profile create`            | op  |
+| `RSLB.profile.set.oneself`       | `/rslb profile set <档案>`          | op  |
+| `RSLB.profile.set.other`         | `/rslb profile set <档案> <在线玩家>`   | op  |
+| `RSLB.profile.remove`            | `/rslb profile remove`            | op  |
+| `RSLB.find.online`               | `/rslb find online`               | op  |
+| `RSLB.find.profile`              | `/rslb find profile`              | op  |
 
 ### 白名单使用示例
 
