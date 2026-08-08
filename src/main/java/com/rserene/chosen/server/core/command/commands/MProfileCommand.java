@@ -29,12 +29,12 @@ public class MProfileCommand {
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
       return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)((LiteralArgumentBuilder)literalArgumentBuilder
             .requires(iSender ->
-               iSender.hasPermission("RSLB.profile.create")
-               || iSender.hasPermission("RSLB.profile.set.oneself")
-               || iSender.hasPermission("RSLB.profile.set.other")
-               || iSender.hasPermission("RSLB.profile.remove"))
+               iSender.hasPermission("rslb.profile.create")
+               || iSender.hasPermission("rslb.profile.set.oneself")
+               || iSender.hasPermission("rslb.profile.set.other")
+               || iSender.hasPermission("rslb.profile.remove"))
             .then(
-               ((LiteralArgumentBuilder)this.handler.literal("create").requires(iSender -> iSender.hasPermission("RSLB.profile.create")))
+               ((LiteralArgumentBuilder)this.handler.literal("create").requires(iSender -> iSender.hasPermission("rslb.profile.create")))
                   .then(
                      ((RequiredArgumentBuilder)this.handler
                            .argument("username", StringArgumentType.string())
@@ -46,12 +46,12 @@ public class MProfileCommand {
                ((LiteralArgumentBuilder)this.handler
                      .literal("set")
                      .requires(iSender ->
-                        iSender.hasPermission("RSLB.profile.set.oneself")
-                        || iSender.hasPermission("RSLB.profile.set.other"))
+                        iSender.hasPermission("rslb.profile.set.oneself")
+                        || iSender.hasPermission("rslb.profile.set.other"))
                      .then(
                         ((RequiredArgumentBuilder)this.handler
                               .argument("profile", ProfileArgumentType.profile())
-                              .requires(iSender -> iSender.hasPermission("RSLB.profile.set.oneself")))
+                              .requires(iSender -> iSender.hasPermission("rslb.profile.set.oneself")))
                            .executes(this::executeSetOneself)
                      ))
                   .then(
@@ -60,7 +60,7 @@ public class MProfileCommand {
                         .then(
                            ((RequiredArgumentBuilder)this.handler
                                  .argument("online", OnlineArgumentType.online())
-                                 .requires(iSender -> iSender.hasPermission("RSLB.profile.set.other")))
+                                 .requires(iSender -> iSender.hasPermission("rslb.profile.set.other")))
                               .executes(this::executeSetOther)
                         )
                   )
@@ -71,7 +71,7 @@ public class MProfileCommand {
                .then(
                   ((RequiredArgumentBuilder)this.handler
                         .argument("profile", ProfileArgumentType.profile())
-                        .requires(iSender -> iSender.hasPermission("RSLB.profile.remove")))
+                        .requires(iSender -> iSender.hasPermission("rslb.profile.remove")))
                      .executes(this::executeRemove)
                )
          );

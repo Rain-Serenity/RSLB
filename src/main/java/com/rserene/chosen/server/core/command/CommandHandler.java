@@ -35,9 +35,8 @@ public class CommandHandler implements CommandAPI {
    }
 
    public void init() {
-      this.dispatcher.register(new RootCommand(this).register(this.literal("RSLB")));
-      this.dispatcher.register(new RootCommand(this).register(this.literal("rsl")));
-      CommandSyntaxException.BUILT_IN_EXCEPTIONS = builtInExceptions = new BuiltInExceptions(core);
+      this.dispatcher.register(new RootCommand(this).register(this.literal("rslb")));
+      builtInExceptions = new BuiltInExceptions(core);
    }
 
    public void execute(ISender sender, String[] args) {
@@ -63,7 +62,7 @@ public class CommandHandler implements CommandAPI {
    }
 
    public List<String> tabComplete(ISender sender, String args) {
-      if (!sender.hasPermission("RSLB.tab.complete")) {
+      if (!sender.hasPermission("rslb.tab.complete")) {
          return Collections.emptyList();
       }
 

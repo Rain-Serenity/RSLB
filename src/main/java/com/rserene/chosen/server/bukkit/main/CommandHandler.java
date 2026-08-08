@@ -16,8 +16,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * 将 Bukkit 的 onCommand / onTabComplete 转发给 RSLB 核心的
  * brigadier 命令调度器（CommandAPI），并补齐根命令前缀
- * （/rslb 与 /rsl 统一映射为 "rsl"）。TAB 补全同样经由核心
- * 调度器生成建议。
+ * （统一映射为 /rslb）。TAB 补全同样经由核心调度器生成建议。
  */
 public class CommandHandler implements CommandExecutor, TabCompleter {
     private final RSLB plugin;
@@ -36,7 +35,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
-            String cmd = label.equalsIgnoreCase("rslb") ? "rsl" : label;
+            String cmd = "rslb";
             String[] fullArgs = new String[args.length + 1];
             fullArgs[0] = cmd;
             System.arraycopy(args, 0, fullArgs, 1, args.length);
@@ -51,10 +50,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         try {
-            String cmd = alias.equalsIgnoreCase("rslb") ? "rsl" : alias;
+String cmd = "rslb";
             String[] fullArgs = new String[args.length + 1];
             fullArgs[0] = cmd;
-            System.arraycopy(args, 0, fullArgs, 1, args.length);
             return this.commandHandler.tabComplete(new BukkitSender(sender), fullArgs);
         } catch (Exception e) {
             return List.of();
