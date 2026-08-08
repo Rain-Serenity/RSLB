@@ -8,85 +8,84 @@ folia-supported: true
 load: POSTWORLD
 commands:
   rslb:
-    aliases: [rsl]
-    description: "RSLB - 正版与 LittleSkin 登录"
-    permission: RSLB.base
+    description: "rslb - 正版与 LittleSkin 登录"
+    permission: rslb.base
 permissions:
-  RSLB.base:
-    description: "RSLB base command"
+  rslb.base:
+    description: "rslb base command"
     default: true
-  RSLB.tab.complete:
-    description: "RSLB tab complete"
+  rslb.tab.complete:
+    description: "rslb tab complete"
     default: true
-  RSLB.reload:
-    description: "RSLB reload"
+  rslb.reload:
+    description: "rslb reload"
     default: op
-  RSLB.confirm:
-    description: "RSLB confirm"
+  rslb.confirm:
+    description: "rslb confirm"
     default: true
-  RSLB.erase.username:
-    description: "RSLB erase username"
+  rslb.erase.username:
+    description: "rslb erase username"
     default: op
-  RSLB.erase.all:
-    description: "RSLB erase all usernames"
+  rslb.erase.all:
+    description: "rslb erase all usernames"
     default: op
-  RSLB.whitelist.add:
-    description: "RSLB whitelist add"
+  rslb.whitelist.add:
+    description: "rslb whitelist add"
     default: op
-  RSLB.whitelist.remove:
-    description: "RSLB whitelist remove"
+  rslb.whitelist.remove:
+    description: "rslb whitelist remove"
     default: op
-  RSLB.whitelist.specific.add:
-    description: "RSLB whitelist specific add"
+  rslb.whitelist.specific.add:
+    description: "rslb whitelist specific add"
     default: op
-  RSLB.whitelist.specific.remove:
-    description: "RSLB whitelist specific remove"
+  rslb.whitelist.specific.remove:
+    description: "rslb whitelist specific remove"
     default: op
-  RSLB.whitelist.list:
-    description: "RSLB whitelist list"
+  rslb.whitelist.list:
+    description: "rslb whitelist list"
     default: op
-  RSLB.whitelist.list.verbose:
-    description: "RSLB whitelist list verbose"
+  rslb.whitelist.list.verbose:
+    description: "rslb whitelist list verbose"
     default: op
-  RSLB.rename.oneself:
-    description: "RSLB rename oneself"
+  rslb.rename.oneself:
+    description: "rslb rename oneself"
     default: op
-  RSLB.rename.other:
-    description: "RSLB rename other"
+  rslb.rename.other:
+    description: "rslb rename other"
     default: op
-  RSLB.info.oneself:
-    description: "RSLB info oneself"
+  rslb.info.oneself:
+    description: "rslb info oneself"
     default: op
-  RSLB.info.other:
-    description: "RSLB info other"
+  rslb.info.other:
+    description: "rslb info other"
     default: op
-  RSLB.profile.create:
-    description: "RSLB profile create"
+  rslb.profile.create:
+    description: "rslb profile create"
     default: op
-  RSLB.profile.set.oneself:
-    description: "RSLB profile set oneself"
+  rslb.profile.set.oneself:
+    description: "rslb profile set oneself"
     default: op
-  RSLB.profile.set.other:
-    description: "RSLB profile set other"
+  rslb.profile.set.other:
+    description: "rslb profile set other"
     default: op
-  RSLB.profile.remove:
-    description: "RSLB profile remove"
+  rslb.profile.remove:
+    description: "rslb profile remove"
     default: op
-  RSLB.list:
-    description: "RSLB list"
+  rslb.list:
+    description: "rslb list"
     default: op
-  RSLB.find.online:
-    description: "RSLB find online"
+  rslb.find.online:
+    description: "rslb find online"
     default: op
-  RSLB.find.profile:
-    description: "RSLB find profile"
+  rslb.find.profile:
+    description: "rslb find profile"
     default: op
-  RSLB.link.to:
-    description: "RSLB link to"
+  rslb.link.to:
+    description: "rslb link to"
     default: true
-  RSLB.link.accept:
-    description: "RSLB link accept"
+  rslb.link.accept:
+    description: "rslb link accept"
     default: true
-  RSLB.link.code:
-    description: "RSLB link code"
+  rslb.link.code:
+    description: "rslb link code"
     default: true

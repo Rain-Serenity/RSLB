@@ -22,12 +22,12 @@ public class MRenameCommand {
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
       return (LiteralArgumentBuilder<ISender>)((LiteralArgumentBuilder)literalArgumentBuilder
             .requires(iSender ->
-               iSender.hasPermission("RSLB.rename.oneself")
-               || iSender.hasPermission("RSLB.rename.other"))
+               iSender.hasPermission("rslb.rename.oneself")
+               || iSender.hasPermission("rslb.rename.other"))
             .then(
             ((RequiredArgumentBuilder)this.handler
                   .argument("newname", StringArgumentType.string())
-                  .requires(iSender -> iSender.hasPermission("RSLB.rename.oneself")))
+                  .requires(iSender -> iSender.hasPermission("rslb.rename.oneself")))
                .executes(this::executeRename)
          ))
          .then(
@@ -36,7 +36,7 @@ public class MRenameCommand {
                .then(
                   ((RequiredArgumentBuilder)this.handler
                         .argument("profile", ProfileArgumentType.profile())
-                        .requires(iSender -> iSender.hasPermission("RSLB.rename.other")))
+                        .requires(iSender -> iSender.hasPermission("rslb.rename.other")))
                      .executes(this::executeRenameOther)
                )
          );

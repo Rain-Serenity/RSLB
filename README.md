@@ -117,7 +117,7 @@ LittleSkin 服务可自定义 `yggdrasilAuth.littleSkin.apiRoot`。
 
 ## 指令用法
 
-所有指令通过 `/rslb`（别名 `/rsl`）调用，输入 `/rslb help` 查看有权限使用的指令列表。
+所有指令通过 `/rslb` 调用，输入 `/rslb help` 查看有权限使用的指令列表。
 除 `/rslb help`、`/rslb confirm`、`/rslb link` 外，其余指令**默认仅 OP 可用**；
 TAB 补全会自动隐藏当前玩家没有权限的指令。
 
@@ -125,60 +125,60 @@ TAB 补全会自动隐藏当前玩家没有权限的指令。
 
 | 指令                                                  | 所需权限                                                             | 默认  | 说明                                             |
 |-----------------------------------------------------|------------------------------------------------------------------|-----|------------------------------------------------|
-| `/rslb confirm`                                     | `RSLB.confirm`                                                   | 所有人 | 确认待执行的风险指令                                     |
-| `/rslb eraseAllUsernames`                           | `RSLB.erase.all`                                                 | op  | 回收所有档案名（需确认）                                   |
-| `/rslb eraseUsername <名字>`                          | `RSLB.erase.username`                                            | op  | 回收指定档案名（需确认）                                   |
-| `/rslb find online <在线账号>`                          | `RSLB.find.online`                                               | op  | 检索在线账号                                         |
-| `/rslb find profile <档案名/UUID>`                     | `RSLB.find.profile`                                              | op  | 检索游戏档案                                         |
-| `/rslb help`                                        | `RSLB.base`                                                      | 所有人 | 帮助列表（只列有权限的指令）                                 |
-| `/rslb info`                                        | `RSLB.info.oneself`                                              | op  | 查询自己的登录档案信息                                    |
-| `/rslb info <在线玩家>`                                 | `RSLB.info.other`                                                | op  | 查询指定在线玩家的档案信息                                  |
-| `/rslb link accept`                                 | `RSLB.link.accept`                                               | 所有人 | 接受迁移请求                                         |
-| `/rslb link code <验证码>`                             | `RSLB.link.code`                                                 | 所有人 | 用验证码确认迁移                                       |
-| `/rslb link to <在线玩家>`                              | `RSLB.link.to`                                                   | 所有人 | 请求迁移账号（如正版→LittleSkin）                         |
-| `/rslb list`                                        | `RSLB.list`                                                      | op  | 按服务分组列出在线玩家                                    |
-| `/rslb profile create <用户名> [uuid]`                 | `RSLB.profile.create`                                            | op  | 创建档案                                           |
-| `/rslb profile remove <档案>`                         | `RSLB.profile.remove`                                            | op  | 删除档案                                           |
-| `/rslb profile set <档案>`                            | `RSLB.profile.set.oneself`                                       | op  | 切换自己的档案                                        |
-| `/rslb profile set <档案> <在线玩家>`                     | `RSLB.profile.set.other`                                         | op  | 切换他人档案                                         |
-| `/rslb reload`                                      | `RSLB.reload`                                                    | op  | 重载配置与语言文件                                      |
-| `/rslb rename <新名>`                                 | `RSLB.rename.oneself`                                            | op  | 修改自己的档案名                                       |
-| `/rslb rename <新名> <档案>`                            | `RSLB.rename.other`                                              | op  | 修改指定档案的名字                                      |
-| `/rslb whitelist add <档案名>`                         | `RSLB.whitelist.add`                                             | op  | 添加白名单                                          |
-| `/rslb whitelist list [-verbose]`                   | `RSLB.whitelist.list`                                            | op  | 列出白名单（verbose 需 `RSLB.whitelist.list.verbose`） |
-| `/rslb whitelist remove <档案名>`                      | `RSLB.whitelist.remove`                                          | op  | 移除白名单（在线玩家会被踢出）                                |
-| `/rslb whitelist specific add/remove <服务ID> <在线账号>` | `RSLB.whitelist.specific.add` / `RSLB.whitelist.specific.remove` | op  | 按服务操作白名单                                       |
+| `/rslb confirm`                                     | `rslb.confirm`                                                   | 所有人 | 确认待执行的风险指令                                     |
+| `/rslb eraseAllUsernames`                           | `rslb.erase.all`                                                 | op  | 回收所有档案名（需确认）                                   |
+| `/rslb eraseUsername <名字>`                          | `rslb.erase.username`                                            | op  | 回收指定档案名（需确认）                                   |
+| `/rslb find online <在线账号>`                          | `rslb.find.online`                                               | op  | 检索在线账号                                         |
+| `/rslb find profile <档案名/UUID>`                     | `rslb.find.profile`                                              | op  | 检索游戏档案                                         |
+| `/rslb help`                                        | `rslb.base`                                                      | 所有人 | 帮助列表（只列有权限的指令）                                 |
+| `/rslb info`                                        | `rslb.info.oneself`                                              | op  | 查询自己的登录档案信息                                    |
+| `/rslb info <在线玩家>`                                 | `rslb.info.other`                                                | op  | 查询指定在线玩家的档案信息                                  |
+| `/rslb link accept`                                 | `rslb.link.accept`                                               | 所有人 | 接受迁移请求                                         |
+| `/rslb link code <验证码>`                             | `rslb.link.code`                                                 | 所有人 | 用验证码确认迁移                                       |
+| `/rslb link to <在线玩家>`                              | `rslb.link.to`                                                   | 所有人 | 请求迁移账号（如正版→LittleSkin）                         |
+| `/rslb list`                                        | `rslb.list`                                                      | op  | 按服务分组列出在线玩家                                    |
+| `/rslb profile create <用户名> [uuid]`                 | `rslb.profile.create`                                            | op  | 创建档案                                           |
+| `/rslb profile remove <档案>`                         | `rslb.profile.remove`                                            | op  | 删除档案                                           |
+| `/rslb profile set <档案>`                            | `rslb.profile.set.oneself`                                       | op  | 切换自己的档案                                        |
+| `/rslb profile set <档案> <在线玩家>`                     | `rslb.profile.set.other`                                         | op  | 切换他人档案                                         |
+| `/rslb reload`                                      | `rslb.reload`                                                    | op  | 重载配置与语言文件                                      |
+| `/rslb rename <新名>`                                 | `rslb.rename.oneself`                                            | op  | 修改自己的档案名                                       |
+| `/rslb rename <新名> <档案>`                            | `rslb.rename.other`                                              | op  | 修改指定档案的名字                                      |
+| `/rslb whitelist add <档案名>`                         | `rslb.whitelist.add`                                             | op  | 添加白名单                                          |
+| `/rslb whitelist list [-verbose]`                   | `rslb.whitelist.list`                                            | op  | 列出白名单（verbose 需 `rslb.whitelist.list.verbose`） |
+| `/rslb whitelist remove <档案名>`                      | `rslb.whitelist.remove`                                          | op  | 移除白名单（在线玩家会被踢出）                                |
+| `/rslb whitelist specific add/remove <服务ID> <在线账号>` | `rslb.whitelist.specific.add` / `rslb.whitelist.specific.remove` | op  | 按服务操作白名单                                       |
 
 ### 权限列表
 
 | 权限                               | 对应指令                              | 默认  |
 |----------------------------------|-----------------------------------|-----|
-| `RSLB.base`                      | `/rslb help`（基础入口）                | 所有人 |
-| `RSLB.tab.complete`              | TAB 补全总开关                         | 所有人 |
-| `RSLB.confirm`                   | `/rslb confirm`                   | 所有人 |
-| `RSLB.link.to`                   | `/rslb link to`                   | 所有人 |
-| `RSLB.link.accept`               | `/rslb link accept`               | 所有人 |
-| `RSLB.link.code`                 | `/rslb link code`                 | 所有人 |
-| `RSLB.reload`                    | `/rslb reload`                    | op  |
-| `RSLB.erase.username`            | `/rslb eraseUsername`             | op  |
-| `RSLB.erase.all`                 | `/rslb eraseAllUsernames`         | op  |
-| `RSLB.list`                      | `/rslb list`                      | op  |
-| `RSLB.whitelist.add`             | `/rslb whitelist add`             | op  |
-| `RSLB.whitelist.remove`          | `/rslb whitelist remove`          | op  |
-| `RSLB.whitelist.specific.add`    | `/rslb whitelist specific add`    | op  |
-| `RSLB.whitelist.specific.remove` | `/rslb whitelist specific remove` | op  |
-| `RSLB.whitelist.list`            | `/rslb whitelist list`            | op  |
-| `RSLB.whitelist.list.verbose`    | `/rslb whitelist list -verbose`   | op  |
-| `RSLB.rename.oneself`            | `/rslb rename <新名>`               | op  |
-| `RSLB.rename.other`              | `/rslb rename <新名> <档案>`          | op  |
-| `RSLB.info.oneself`              | `/rslb info`                      | op  |
-| `RSLB.info.other`                | `/rslb info <在线玩家>`               | op  |
-| `RSLB.profile.create`            | `/rslb profile create`            | op  |
-| `RSLB.profile.set.oneself`       | `/rslb profile set <档案>`          | op  |
-| `RSLB.profile.set.other`         | `/rslb profile set <档案> <在线玩家>`   | op  |
-| `RSLB.profile.remove`            | `/rslb profile remove`            | op  |
-| `RSLB.find.online`               | `/rslb find online`               | op  |
-| `RSLB.find.profile`              | `/rslb find profile`              | op  |
+| `rslb.base`                      | `/rslb help`（基础入口）                | 所有人 |
+| `rslb.tab.complete`              | TAB 补全总开关                         | 所有人 |
+| `rslb.confirm`                   | `/rslb confirm`                   | 所有人 |
+| `rslb.link.to`                   | `/rslb link to`                   | 所有人 |
+| `rslb.link.accept`               | `/rslb link accept`               | 所有人 |
+| `rslb.link.code`                 | `/rslb link code`                 | 所有人 |
+| `rslb.reload`                    | `/rslb reload`                    | op  |
+| `rslb.erase.username`            | `/rslb eraseUsername`             | op  |
+| `rslb.erase.all`                 | `/rslb eraseAllUsernames`         | op  |
+| `rslb.list`                      | `/rslb list`                      | op  |
+| `rslb.whitelist.add`             | `/rslb whitelist add`             | op  |
+| `rslb.whitelist.remove`          | `/rslb whitelist remove`          | op  |
+| `rslb.whitelist.specific.add`    | `/rslb whitelist specific add`    | op  |
+| `rslb.whitelist.specific.remove` | `/rslb whitelist specific remove` | op  |
+| `rslb.whitelist.list`            | `/rslb whitelist list`            | op  |
+| `rslb.whitelist.list.verbose`    | `/rslb whitelist list -verbose`   | op  |
+| `rslb.rename.oneself`            | `/rslb rename <新名>`               | op  |
+| `rslb.rename.other`              | `/rslb rename <新名> <档案>`          | op  |
+| `rslb.info.oneself`              | `/rslb info`                      | op  |
+| `rslb.info.other`                | `/rslb info <在线玩家>`               | op  |
+| `rslb.profile.create`            | `/rslb profile create`            | op  |
+| `rslb.profile.set.oneself`       | `/rslb profile set <档案>`          | op  |
+| `rslb.profile.set.other`         | `/rslb profile set <档案> <在线玩家>`   | op  |
+| `rslb.profile.remove`            | `/rslb profile remove`            | op  |
+| `rslb.find.online`               | `/rslb find online`               | op  |
+| `rslb.find.profile`              | `/rslb find profile`              | op  |
 
 ### 白名单使用示例
 
@@ -272,14 +272,14 @@ netty 管道（LoginHandler 注入）
 
 - **登录拦截**：`LoginHandler` 包装服务端 netty acceptor 与管道，在 vanilla 会话验证之前截获登录流程，使所有玩家必须经插件认证。拦截器初始化失败不影响插件加载，但所有登录会退回原版流程。
 - **认证服务**：`services/*.yml` 定义服务类型与 API 地址，`PluginConfig` 读取并校验 id 唯一性与服务重复。
-- **数据库**：默认 H2 单文件库（`RSLB.mv.db`），支持 MySQL。表结构含用户数据（`userdata`）、游戏档案（`ingameprofile`）、皮肤缓存等，表名带 `table-prefix` 前缀。
-- **指令系统**：核心使用 brigadier 命令树（权限过滤、参数解析、TAB 补全），Bukkit 层桥接 `/rslb` 与 `/rsl` 别名。
+- **数据库**：默认 H2 单文件库（`rslb.mv.db`），支持 MySQL。表结构含用户数据（`userdata`）、游戏档案（`ingameprofile`）、皮肤缓存等，表名带 `table-prefix` 前缀。
+- **指令系统**：核心使用 brigadier 命令树（权限过滤、参数解析、TAB 补全），Bukkit 层桥接 `/rslb`。
 - **语言系统**：`messages.yml` 键值 + `{name}` 占位符替换，缺失键自动回填默认值。
 - **统计**：bStats 匿名上报（`Metrics.java` 官方类，仅改包名），开关 `settings.metrics-enabled`。
 
 ## 常见问题
 
-- **TAB 补全不显示指令**：无权限的指令会被隐藏（属正常现象）；若完全无补全，检查 `RSLB.tab.complete` 权限（默认所有人）。
+- **TAB 补全不显示指令**：无权限的指令会被隐藏（属正常现象）；若完全无补全，检查 `rslb.tab.complete` 权限（默认所有人）。
 - **踢出消息显示 `&` 原文**：请确认使用最新构建（已改为 adventure 组件渲染颜色）。
 - **升级后配置不生效**：旧 `config.yml` 结构变更后不会被自动覆盖，请对照模板手动更新或删除重建（注意数据库连接配置会丢失）。
 - **登录全部失败**：检查 `services/` 下至少存在一个有效服务，且服务 `id` 不重复。

@@ -114,7 +114,7 @@ command_message_profile_not_found_by_uuid: "&8[&b&lRSLB&8]&r&c找不到UUID为 &
 command_message_confirm_not_found: "&8[&b&lRSLB&8]&r&c目前您没在执行任何一条风险指令。"
 
 # 风险指令警告
-command_message_confirm_warning: "&8[&b&lRSLB&8]&r&c&l高危指令警告！ &r&7您将要执行一条非常危险的指令，\n&7指令执行结果：\n&8 - &c{desc}\n&7将会导致：\n&8 - &c{consequences}\n&c如果您仍想执行这条风险指令，请在 &e15&c 秒内输入指令 &e/rsl confirm&c 来确认执行它。"
+command_message_confirm_warning: "&8[&b&lRSLB&8]&r&c&l高危指令警告！ &r&7您将要执行一条非常危险的指令，\n&7指令执行结果：\n&8 - &c{desc}\n&7将会导致：\n&8 - &c{consequences}\n&c如果您仍想执行这条风险指令，请在 &e15&c 秒内输入指令 &e/rslb confirm&c 来确认执行它。"
 
 # 无法确认身份（既非终端也非玩家）
 command_message_confirm_unidentified: "&8[&b&lRSLB&8]&r&c不能确认您的身份，因为您既不是终端也不是玩家。"
@@ -319,7 +319,7 @@ command_message_link_to_desc: "&8[&b&lRSLB&8]&r&c迁移你当前账号的登录�
 command_message_link_to_cq: "&8[&b&lRSLB&8]&r&c丢失现有档案的所有数据，并且无法回滚"
 
 # 迁移请求已记录
-command_message_link: "&8[&b&lRSLB&8]&r&6迁移请求已记录，现在请在目标账户下完整执行这条指令 &7/rsl link accept {self_online_name} &6以取得迁移码进行下一步迁移操作。本次迁移请求全程有效期为 &730 &6秒。"
+command_message_link: "&8[&b&lRSLB&8]&r&6迁移请求已记录，现在请在目标账户下完整执行这条指令 &7/rslb link accept {self_online_name} &6以取得迁移码进行下一步迁移操作。本次迁移请求全程有效期为 &730 &6秒。"
 
 # 迁移请求无效
 command_message_accept_invalid: "&8[&b&lRSLB&8]&r&c迁移请求已失效或迁移请求正在进行或没有针对你正在使用的档案的迁移请求。"
@@ -331,7 +331,7 @@ command_message_accept_desc: "&8[&b&lRSLB&8]&r&c同意对方迁移账户的请�
 command_message_accept_cq: "&8[&b&lRSLB&8]&r&c不可预估的财产和名誉损失，除非对方也是你"
 
 # 迁移验证码
-command_message_accept: "&8[&b&lRSLB&8]&r&6本次迁移验证码为 &e{code}&6, 现在请在目标账户下完整执行这条指令 &7/rsl link code {profile_name} {code} &6以完成最终的迁移操作。"
+command_message_accept: "&8[&b&lRSLB&8]&r&6本次迁移验证码为 &e{code}&6, 现在请在目标账户下完整执行这条指令 &7/rslb link code {profile_name} {code} &6以完成最终的迁移操作。"
 
 # 迁移码无效
 command_message_code_invalid: "&8[&b&lRSLB&8]&r&c迁移请求已失效或迁移请求正在进行或没有针对你的迁移请求。"
@@ -396,10 +396,10 @@ command_exception_dispatcher_parse_exception: "&8[&b&lRSLB&8]&r&c无法解析指
 help_header: "&8[&b&lRSLB&8]&r&a===== 指令帮助 &7(可用的指令共 {count} 条) &a====="
 
 # 帮助列表底部提示
-help_footer: "&8[&b&lRSLB&8]&r&7提示: 输入 /rsl <指令> 执行对应操作，风险指令需用 /rsl confirm 二次确认"
+help_footer: "&8[&b&lRSLB&8]&r&7提示: 输入 /rslb <指令> 执行对应操作，风险指令需用 /rslb confirm 二次确认"
 
 # 帮助列表条目（{command} = 指令名, {description} = 说明）
-help_entry: "&8[&b&lRSLB&8]&r&a/rsl &e{command}&8 - &7{description}"
+help_entry: "&8[&b&lRSLB&8]&r&a/rslb &e{command}&8 - &7{description}"
 
 # 各指令说明
 help_reload: "重载插件配置文件与语言文件"
