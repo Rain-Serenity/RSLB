@@ -34,7 +34,6 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader.Builder;
 public class PluginConfig {
    private final File dataFolder;
    private static final Map<ServiceType, String> onlyOneServiceInfoMap = Map.of(ServiceType.OFFICIAL, "official");
-   private boolean forceUseLogin;
    private boolean nameCorrect;
    private boolean autoNameChange;
    private SqlConfig sqlConfig;
@@ -76,7 +75,6 @@ public class PluginConfig {
          DebugLoggerBridge.cancelDebugMode();
       }
 
-      this.forceUseLogin = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "force-use-login"})).getBoolean(true);
       this.sqlConfig = SqlConfig.read((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"database"}));
       this.nameAllowedRegular = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "name-allowed-regular"}))
          .getString("^[0-9a-zA-Z_]{3,16}$");
@@ -221,11 +219,6 @@ public class PluginConfig {
             LoggerProvider.getLogger().info("Cover: " + realName);
          }
       }
-   }
-
-   @Generated
-   public boolean isForceUseLogin() {
-      return this.forceUseLogin;
    }
 
    @Generated

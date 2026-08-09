@@ -36,9 +36,8 @@ public class BuiltInExceptions implements BuiltInExceptionProvider {
    private final SimpleCommandExceptionType DISPATCHER_UNKNOWN_ARGUMENT;
    private final SimpleCommandExceptionType DISPATCHER_EXPECTED_ARGUMENT_SEPARATOR;
    private final DynamicCommandExceptionType DISPATCHER_PARSE_EXCEPTION;
-   private final SimpleCommandExceptionType REQUIRE_PLAYER;
-   private final DynamicCommandExceptionType PLAYER_NOT_ONLINE;
-   private final SimpleCommandExceptionType CACHE_NOT_FOUND_SELF;
+    private final SimpleCommandExceptionType REQUIRE_PLAYER;
+    private final SimpleCommandExceptionType CACHE_NOT_FOUND_SELF;
    private final SimpleCommandExceptionType NO_SELF;
    private final Dynamic2CommandExceptionType CACHE_NOT_FOUND_OTHER;
 
@@ -141,9 +140,6 @@ public class BuiltInExceptions implements BuiltInExceptionProvider {
          message -> new LiteralMessage(core.getLanguageHandler().getMessage("command_exception_dispatcher_parse_exception", new Pair("command", message)))
       );
       this.REQUIRE_PLAYER = new SimpleCommandExceptionType(new LiteralMessage(core.getLanguageHandler().getMessage("command_message_require_player")));
-      this.PLAYER_NOT_ONLINE = new DynamicCommandExceptionType(
-         value -> new LiteralMessage(core.getLanguageHandler().getMessage("command_message_player_not_online", new Pair("name", value)))
-      );
       this.CACHE_NOT_FOUND_SELF = new SimpleCommandExceptionType(
          new LiteralMessage(core.getLanguageHandler().getMessage("command_message_cache_not_found_self"))
       );
@@ -263,15 +259,11 @@ public class BuiltInExceptions implements BuiltInExceptionProvider {
       return this.DISPATCHER_PARSE_EXCEPTION;
    }
 
-   public SimpleCommandExceptionType requirePlayer() {
-      return this.REQUIRE_PLAYER;
-   }
+    public SimpleCommandExceptionType requirePlayer() {
+       return this.REQUIRE_PLAYER;
+    }
 
-   public DynamicCommandExceptionType playerNotOnline() {
-      return this.PLAYER_NOT_ONLINE;
-   }
-
-   public SimpleCommandExceptionType noSelf() {
+    public SimpleCommandExceptionType noSelf() {
       return this.NO_SELF;
    }
 

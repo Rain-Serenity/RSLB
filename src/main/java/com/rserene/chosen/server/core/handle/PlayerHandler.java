@@ -38,18 +38,7 @@ public class PlayerHandler implements HandlerAPI {
    public HandleResult pushPlayerJoinGame(UUID inGameUUID, String username) {
       PlayerHandler.Entry remove = this.loginCache.remove(inGameUUID);
       if (remove == null) {
-         if (this.core.getPluginConfig().isForceUseLogin()) {
-            return new HandleResult(Type.KICK, this.core.getLanguageHandler().getMessage("auth_handler_need_use_login"));
-         }
-
-         LoggerProvider.getLogger()
-            .warn(
-               String.format(
-                  "The player with in game UUID %s and name %s is not logged into the server by RSLB, some features will be disabled for him.",
-                  inGameUUID.toString(),
-                  username
-               )
-            );
+         return new HandleResult(Type.KICK, this.core.getLanguageHandler().getMessage("auth_handler_need_use_login"));
       } else {
          long l = System.currentTimeMillis() - remove.signTimeMillis;
          if (l > 5000L) {
