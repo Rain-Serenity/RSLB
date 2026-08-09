@@ -1,19 +1,103 @@
 # 正版登录服务的唯一 ID，取值范围 0-127，不可与其他服务重复。
 id: 0
 
+# 初始档案名格式，{name} 会被替换为外置登录用户名，空格自动转换为 '_'。
+# 默认值: '{name}'
+initNameFormat: '{name}'
+
+# 初始游戏内 UUID 生成方式：
+#   DEFAULT - 直接使用外置登录服务返回的 UUID
+#   OFFLINE - 按原版离线模式算法（OfflinePlayer:名称）生成，可获得固定 UUID
+#   RANDOM  - 每次登录随机生成 UUID
+# 默认值: DEFAULT
+initUUID: DEFAULT
+
 # 登录服务显示名称。
 name: '正版登录'
 
 # 固定为 OFFICIAL，表示 Mojang/Microsoft 正版验证。
 serviceType: OFFICIAL
 
+# 皮肤修复（Skin Restorer）设置：
+#   restorer - 修复时机: OFF 关闭 / LOGIN 登录时修复 / ASYNC 异步修复
+#   method   - 皮肤获取方式: URL 直接链接 / UPLOAD 上传给服务器
+#   timeout / retry / retryDelay - 皮肤请求网络参数
+#   proxy    - 皮肤请求使用的代理
+# 默认值: OFF 关闭
+skinRestorer:
+  # 皮肤修复时机: OFF / LOGIN / ASYNC
+  # 默认值: 'OFF'
+  restorer: 'OFF'
+
+  # 皮肤获取方式: URL / UPLOAD
+  # 默认值: URL
+  method: URL
+
+  # 皮肤请求超时时间，单位毫秒。
+  # 默认值: 10000
+  timeout: 10000
+
+  # 皮肤请求失败后的重试次数。
+  # 默认值: 2
+  retry: 2
+
+  # 每次重试前的等待时间，单位毫秒。
+  # 默认值: 5000
+  retryDelay: 5000
+
+  # 皮肤请求代理设置。
+  proxy:
+    # 代理类型: DIRECT / HTTP / SOCKS
+    # 默认值: DIRECT
+    type: DIRECT
+
+    # 代理地址。
+    # 默认值: '127.0.0.1'
+    hostname: '127.0.0.1'
+
+    # 代理端口。
+    # 默认值: 1080
+    port: 1080
+
+    # 代理认证用户名，留空表示无需认证。
+    # 默认值: ''
+    username: ''
+
+    # 代理认证密码，留空表示无需认证。
+    # 默认值: ''
+    password: ''
+
+# 该服务是否启用登录白名单，开启后该服务的玩家需先通过 /rslb whitelist 添加白名单才能进入服务器。
+# 默认值: false
+whitelist: false
+
 # 正版 Yggdrasil 会话验证设置。
 yggdrasilAuth:
-  # 是否向会话服务器提交玩家 IP；通常保持 false。
-  trackIp: false
+  # 会话验证请求代理设置（服务器无法直连会话服务器时使用，如网络受限环境）。
+  authProxy:
+    # 代理类型: DIRECT / HTTP / SOCKS
+    # 默认值: DIRECT
+    type: DIRECT
 
-  # 网络请求超时时间，单位毫秒，建议 3000-30000。
-  timeout: 10000
+    # 代理地址。
+    # 默认值: '127.0.0.1'
+    hostname: '127.0.0.1'
+
+    # 代理端口。
+    # 默认值: 1080
+    port: 1080
+
+    # 代理认证用户名，留空表示无需认证。
+    # 默认值: ''
+    username: ''
+
+    # 代理认证密码，留空表示无需认证。
+    # 默认值: ''
+    password: ''
+
+  official:
+    # Mojang 官方会话服务器地址。
+    sessionServer: 'https://sessionserver.mojang.com'
 
   # 网络失败后的重试次数，取值建议 0-3。
   retry: 1
@@ -21,6 +105,8 @@ yggdrasilAuth:
   # 每次重试前的等待时间，单位毫秒。
   retryDelay: 300
 
-  official:
-    # Mojang 官方会话服务器地址。
-    sessionServer: 'https://sessionserver.mojang.com'
+  # 网络请求超时时间，单位毫秒，建议 3000-30000。
+  timeout: 10000
+
+  # 是否向会话服务器提交玩家 IP；通常保持 false。
+  trackIp: false

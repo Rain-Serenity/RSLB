@@ -41,9 +41,6 @@ auth_validate_failed_no_whitelist: "&8[&b&lRSLB&8]&r&c您没有白名单权限�
 # 需要经过登录验证才能进入
 auth_handler_need_use_login: "&8[&b&lRSLB&8]&r&c您需要通过 &eRSereneLogin &c的验证来进入这个服务器，如有疑问，请与服务器管理员取得联系。"
 
-# 处理登录请求时发生异常
-auth_error: "&8[&b&lRSLB&8]&r&c处理登录请求时发生异常，请与服务器管理员取得联系。"
-
 # ==================== 入服消息 ====================
 
 # 档案名被强制回收
@@ -63,9 +60,6 @@ welcome_msg_to_unknown: "&8[&b&lRSLB&8]&r&a吼吼吼，欢迎 &e{profile_name} &
 
 # 欢迎消息
 welcome_msg: "&8[&b&lRSLB&8]&r&a欢迎 &e{online_name} &a加入服务器！您通过 &e{service_name} &a加入服务器，当前游戏内档案为 &e{profile_name}&a。"
-
-# 要求重新连接
-reconnect_msg: "&8[&b&lRSLB&8]&r&c请重新链接服务器"
 
 # ==================== 指令通用 ====================
 
