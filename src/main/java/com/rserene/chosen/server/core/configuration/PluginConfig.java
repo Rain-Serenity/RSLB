@@ -45,6 +45,7 @@ public class PluginConfig {
    private long confirmCommandValidTimeMills;
    private long linkAcceptValidTimeMills;
    private boolean metricsEnabled;
+   private boolean profileKeyVerify;
 
    public PluginConfig(File dataFolder, RSLBCore core) {
       this.dataFolder = dataFolder;
@@ -86,6 +87,7 @@ public class PluginConfig {
          .getLong(15000L);
       this.linkAcceptValidTimeMills = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "link-accept-valid-mills"})).getLong(30000L);
       this.metricsEnabled = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "metrics-enabled"})).getBoolean(true);
+      this.profileKeyVerify = ((CommentedConfigurationNode)configConfigurationNode.node(new Object[]{"settings", "profile-key-verify"})).getBoolean(false);
       Map<Integer, BaseServiceConfig> idMap = new HashMap<>();
 
       try (Stream<Path> list = Files.list(servicesFolder.toPath())) {
@@ -269,5 +271,10 @@ public class PluginConfig {
    @Generated
    public boolean isMetricsEnabled() {
       return this.metricsEnabled;
+   }
+
+   @Generated
+   public boolean isProfileKeyVerify() {
+      return this.profileKeyVerify;
    }
 }

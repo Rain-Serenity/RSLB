@@ -18,6 +18,14 @@ settings:
   # 默认值: true
   welcome-message: true
 
+  # 是否校验客户端的聊天会话公钥（Profile Public Key）。
+  # 默认关闭：丢弃客户端的会话更新数据包（ServerboundChatSessionUpdatePacket），
+  # 效仿 Lophine 等分支"不校验公钥"的行为，避免外置登录（如 LittleSkin）玩家的
+  # 密钥因无法通过原版签名校验而被踢出（Invalid signature for profile public key）。
+  # 开启后：放行签名合法的密钥（正版玩家保留安全聊天），仅丢弃验签失败的会话。
+  # 默认值: false
+  profile-key-verify: false
+
   # 强制所有玩家通过本插件的认证才能进入服务器。
   # 关闭后，绕过验证的玩家（如纯离线客户端）也可进入。
   # 默认值: true
