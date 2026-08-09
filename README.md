@@ -1,4 +1,4 @@
-# RSLB (RSereneLoginBukkit)
+﻿# RSLB (RSereneLoginBukkit)
 
 正版（Mojang/Microsoft）与 LittleSkin 等多 Yggdrasil 认证服务登录插件。
 支持 Paper 系核心（Paper / Folia）。
@@ -42,7 +42,7 @@
 3. 左侧选择 **Auto Gradle Build** workflow；
 4. 在最新一次**成功**（绿色 ✓）的 run 底部，找到 **Artifacts** 区域；
 5. 点击 **RSLB Artifact** 下载 zip；
-6. 解压得到 `RSLB-1.0-SNAPSHOT-all.jar`，放入服务端 `plugins/` 文件夹。
+6. 解压得到 `RSLB-1.0-all.jar`，放入服务端 `plugins/` 文件夹。
 
 > 提示：也可在代码仓库 Releases 页面查看是否有正式发布版。
 
@@ -96,20 +96,39 @@ database:
 
 ### services/*.yml（认证服务）
 
-每个服务文件定义一种认证来源，`id` 全局唯一（0-127）：
+每个服务文件定义一种认证来源，`id` 全局唯一（0-127），以下键均可选，省略时使用默认值：
 
 ```yaml
-id: 0
-name: '正版登录'        # 服务显示名
-serviceType: OFFICIAL   # OFFICIAL / LITTLESKIN
-whitelist: false        # 开启后仅白名单账号可登录（/rslb whitelist）
-initUUID: DEFAULT       # 初始 UUID 策略
-initNameFormat: '{name}'# 初始档案名格式
+id: 0                          # 服务 ID（0-127，全局唯一）
+name: '正版登录'                 # 服务显示名
+initNameFormat: '{name}'       # 初始档案名格式（{name} 替换为登录名，空格转 _）
+initUUID: DEFAULT              # 初始 UUID 策略：DEFAULT / OFFLINE / RANDOM
+serviceType: OFFICIAL          # OFFICIAL / LITTLESKIN
+skinRestorer:                  # 皮肤修复（默认关闭）
+  restorer: 'OFF'              # OFF / LOGIN / ASYNC（皮肤修复时机）
+  method: URL                  # URL / UPLOAD（皮肤获取方式）
+  timeout: 10000               # 皮肤请求超时（毫秒）
+  retry: 2                     # 皮肤请求失败重试次数
+  retryDelay: 5000             # 重试间隔（毫秒）
+  proxy:                       # 皮肤请求代理
+    type: DIRECT               # DIRECT / HTTP / SOCKS
+    hostname: '127.0.0.1'
+    port: 1080
+    username: ''               # 留空表示无需认证
+    password: ''
+whitelist: false               # 开启后仅白名单账号可登录（/rslb whitelist）
 yggdrasilAuth:
-  trackIp: false        # 是否向会话服务器提交 IP
-  timeout: 10000        # 请求超时（毫秒）
-  retry: 1              # 失败重试次数
-  retryDelay: 300       # 重试间隔（毫秒）
+  authProxy:                   # 会话验证请求代理（默认直连，如无法直连外置服可配置）
+    type: DIRECT               # DIRECT / HTTP / SOCKS
+    hostname: '127.0.0.1'
+    port: 1080
+    username: ''
+    password: ''
+  # official / littleSkin: 正版/外置服专用子块，见下方说明
+  retry: 1                     # 验证失败重试次数
+  retryDelay: 300              # 重试间隔（毫秒）
+  timeout: 10000               # 验证请求超时（毫秒）
+  trackIp: false               # 是否向会话服务器提交 IP
 ```
 
 正版服务额外可自定义 `yggdrasilAuth.official.sessionServer`（默认为 Mojang 官方地址），
@@ -242,7 +261,7 @@ TAB 补全会自动隐藏当前玩家没有权限的指令。
 chmod +x ./gradlew && ./gradlew shadowJar
 ```
 
-产物：`build/libs/RSLB-1.0-SNAPSHOT-all.jar`（含全部依赖的 fat jar）。
+产物：`build/libs/RSLB-1.0-all.jar`（含全部依赖的 fat jar）。
 
 > 注意：`com.mojang:authlib` 与 `io.netty:netty-all` 必须与服务器自带版本一致，
 > 已在 `build.gradle.kts` 中锁定，**请勿升级**，否则登录拦截可能崩溃。

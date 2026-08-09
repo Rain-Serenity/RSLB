@@ -46,7 +46,7 @@ java {
 tasks {
     shadowJar {
         archiveBaseName = "RSLB"
-        archiveVersion = "1.0-SNAPSHOT"
+        archiveVersion = "1.0"
 
         mergeServiceFiles()
 
