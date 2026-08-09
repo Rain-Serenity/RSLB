@@ -75,6 +75,7 @@ plugins/RSLB/
 settings:
   debug: false                    # DEBUG 日志（登录拦截/认证请求详情）
   welcome-message: true           # 登录成功欢迎消息
+  profile-key-verify: false       # 聊天会话公钥校验（默认关闭，丢弃会话更新包避免外置玩家被踢）
   force-use-login: true           # 强制所有玩家经本插件认证
   name-allowed-regular: '^[0-9a-zA-Z_]{3,16}$'   # 档案名正则
   auto-correct-name: true         # 名字冲突时自动追加数字

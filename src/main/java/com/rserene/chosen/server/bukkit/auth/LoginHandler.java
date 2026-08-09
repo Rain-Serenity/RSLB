@@ -5,6 +5,8 @@ import com.rserene.chosen.server.RSLB;
 import com.rserene.chosen.server.api.internal.auth.AuthResult;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.core.auth.LoginAuthResult;
+import com.rserene.chosen.server.core.configuration.PluginConfig;
+import com.rserene.chosen.server.core.main.RSLBCore;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
@@ -26,13 +28,16 @@ import javax.crypto.SecretKey;
 import net.minecraft.network.Connection;
 import net.minecraft.network.HandlerNames;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ServerboundChatSessionUpdatePacket;
 import net.minecraft.network.protocol.login.ClientboundHelloPacket;
 import net.minecraft.network.protocol.login.ClientboundLoginDisconnectPacket;
 import net.minecraft.network.protocol.login.ServerboundHelloPacket;
 import net.minecraft.network.protocol.login.ServerboundKeyPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
 import net.minecraft.util.Crypt;
+import net.minecraft.util.SignatureValidator;
 import org.bukkit.Bukkit;
 
 /**
@@ -47,6 +52,10 @@ import org.bukkit.Bukkit;
  * 仅当返回 ALLOW 时，通过反射设置登录监听器的 authenticatedProfile 与
  * state = VERIFYING 恢复 vanilla 登录状态机，由原生 tick() 驱动压缩、
  * 重名检查与 LoginFinished。未认证玩家在登录阶段即被断开，无法进入游戏。
+ *
+ * 同一拦截器贯穿到 play 阶段：按 settings.profile-key-verify 决定是否消费
+ * ServerboundChatSessionUpdatePacket，跳过原版对会话公钥的签名校验，避免
+ * 外置登录玩家因密钥非 Mojang 签发而被踢出。
  */
 public final class LoginHandler {
     private static final String HANDLER_NAME = "rslb_login_handler";
@@ -238,6 +247,11 @@ public final class LoginHandler {
                 handleKey(packet);
                 return;
             }
+            if (msg instanceof ServerboundChatSessionUpdatePacket packet) {
+                if (shouldDropChatSession(packet)) {
+                    return;
+                }
+            }
             ctx.fireChannelRead(msg);
         }
 
@@ -340,6 +354,43 @@ public final class LoginHandler {
                 return inet.getAddress().getHostAddress();
             }
             return "";
+        }
+
+        /**
+         * 判断是否丢弃客户端的聊天会话公钥更新包（ServerboundChatSessionUpdatePacket）。
+         *
+         * settings.profile-key-verify 关闭（默认）时一律丢弃，跳过原版对公钥签名的校验，
+         * 效仿 Lophine 等分支"不校验公钥"的行为，避免外置登录（如 LittleSkin）玩家的
+         * 密钥因非 Mojang 签发而被原版校验踢出（"Invalid signature for profile public key"）。
+         * 开启后则先自行验签：签名合法（正版玩家）照常放行并保留安全聊天，
+         * 仅丢弃验签失败的会话更新。无法取得档案或校验器时放行，交由原版处理。
+         */
+        private boolean shouldDropChatSession(ServerboundChatSessionUpdatePacket packet) {
+            if (!isProfileKeyVerifyEnabled()) {
+                return true;
+            }
+            try {
+                SignatureValidator validator = server.services().profileKeySignatureValidator();
+                if (validator == null) {
+                    return false;
+                }
+                Object listener = this.connection.getPacketListener();
+                if (!(listener instanceof ServerGamePacketListenerImpl gameListener) || gameListener.player == null) {
+                    return false;
+                }
+                packet.chatSession().validate(gameListener.player.getGameProfile(), validator);
+                return false;
+            } catch (Exception e) {
+                return true;
+            }
+        }
+
+        private boolean isProfileKeyVerifyEnabled() {
+            if (plugin.getCoreAPI() instanceof RSLBCore core) {
+                PluginConfig config = core.getPluginConfig();
+                return config != null && config.isProfileKeyVerify();
+            }
+            return false;
         }
     }
 
