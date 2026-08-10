@@ -63,8 +63,8 @@ public class PluginConfig {
 
       IOUtil.removeAllFiles(new File(this.dataFolder, "examples"));
       this.saveResource("config.yml", false);
-      this.saveResource("services/official.yml", true);
-      this.saveResource("services/littleskin.yml", true);
+      this.saveResource("services/official.yml", false);
+      this.saveResource("services/littleskin.yml", false);
       CommentedConfigurationNode configConfigurationNode = (CommentedConfigurationNode)((Builder)YamlConfigurationLoader.builder()
             .file(new File(this.dataFolder, "config.yml")))
          .build()

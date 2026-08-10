@@ -53,6 +53,11 @@ import org.bukkit.Bukkit;
  * state = VERIFYING 恢复 vanilla 登录状态机，由原生 tick() 驱动压缩、
  * 重名检查与 LoginFinished。未认证玩家在登录阶段即被断开，无法进入游戏。
  *
+ * 26.2 起 AsyncPlayerPreLoginEvent 在原版会话校验任务（$1.run）内触发，
+ * 而该任务随 key 包被本插件消费而跳过，因此 ALLOW 后需反射调用
+ * callPlayerPreLoginEvents 补发预登录事件（LuckPerms 等权限插件依赖它
+ * 预加载数据），再恢复状态机，顺序与原版一致。
+ *
  * 同一拦截器贯穿到 play 阶段：按 settings.profile-key-verify 决定是否消费
  * ServerboundChatSessionUpdatePacket，跳过原版对会话公钥的签名校验，避免
  * 外置登录玩家因密钥非 Mojang 签发而被踢出。
@@ -71,6 +76,7 @@ public final class LoginHandler {
     private Field channelField;
     private Field authenticatedProfileField;
     private Field stateField;
+    private Method callPlayerPreLoginEventsMethod;
 
     private volatile io.papermc.paper.threadedregions.scheduler.ScheduledTask tickTask;
 
@@ -84,6 +90,9 @@ public final class LoginHandler {
             this.authenticatedProfileField.setAccessible(true);
             this.stateField = ServerLoginPacketListenerImpl.class.getDeclaredField("state");
             this.stateField.setAccessible(true);
+            this.callPlayerPreLoginEventsMethod =
+                ServerLoginPacketListenerImpl.class.getDeclaredMethod("callPlayerPreLoginEvents", com.mojang.authlib.GameProfile.class);
+            this.callPlayerPreLoginEventsMethod.setAccessible(true);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to resolve NMS fields for login interception", e);
         }
@@ -307,10 +316,26 @@ public final class LoginHandler {
                     if (authResult.getResult() == AuthResult.Result.ALLOW) {
                         com.rserene.chosen.server.api.profile.GameProfile profile = authResult.getResponse();
                         com.mojang.authlib.GameProfile mojangProfile = toMojangProfile(profile);
+                        Object listener = this.connection.getPacketListener();
+                        if (!(listener instanceof ServerLoginPacketListenerImpl loginListener)) {
+                            LoggerProvider.getLogger().warn("Packet listener is not a login listener for " + session.getUsername() + ": " + listener);
+                            return;
+                        }
+                        if (!this.connection.isConnected()) {
+                            return;
+                        }
+                        try {
+                            mojangProfile = firePlayerPreLoginEvents(loginListener, mojangProfile);
+                        } catch (Exception e) {
+                            LoggerProvider.getLogger().error("Failed to fire pre-login events for " + session.getUsername(), e);
+                            kick(session, "认证过程发生错误，请重试");
+                            return;
+                        }
                         LoggerProvider.getLogger().debug(
                             "Authenticated " + session.getUsername() + " -> " + mojangProfile.id() + " via RSLB"
                         );
-                        Bukkit.getGlobalRegionScheduler().run(plugin, task -> completeLogin(mojangProfile));
+                        final com.mojang.authlib.GameProfile acceptedProfile = mojangProfile;
+                        Bukkit.getGlobalRegionScheduler().run(plugin, task -> completeLogin(acceptedProfile));
                     } else {
                         LoggerProvider.getLogger().info("Auth rejected for " + session.getUsername() + ": " + authResult.getKickMessage());
                         kick(session, authResult.getKickMessage());
@@ -347,6 +372,12 @@ public final class LoginHandler {
             } catch (Exception e) {
                 LoggerProvider.getLogger().error("Failed to kick " + session.getUsername(), e);
             }
+        }
+
+        private com.mojang.authlib.GameProfile firePlayerPreLoginEvents(
+            ServerLoginPacketListenerImpl loginListener, com.mojang.authlib.GameProfile profile
+        ) throws Exception {
+            return (com.mojang.authlib.GameProfile) LoginHandler.this.callPlayerPreLoginEventsMethod.invoke(loginListener, profile);
         }
 
         private String getIp() {
