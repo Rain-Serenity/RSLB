@@ -79,8 +79,18 @@ public class SkinRestorerCore implements SkinRestorerAPI {
    public SkinRestorerResultImpl doRestorer(AuthResult result0) {
       try {
          LoginAuthResult result = (LoginAuthResult)result0;
-         GameProfile profile = result.getResponse().clone();
-         BaseServiceConfig serviceConfig = result.getBaseServiceAuthenticationResult().getServiceConfig();
+         return this.doRestorer(result.getResponse().clone(), result.getBaseServiceAuthenticationResult().getServiceConfig());
+      } catch (Exception e) {
+         return SkinRestorerResultImpl.ofRestorerFailed(e);
+      }
+   }
+
+   public SkinRestorerResultImpl doRestorer(GameProfile profile, BaseServiceConfig serviceConfig) {
+      try {
+         if (serviceConfig.getSkinRestorer().getRestorer() == SkinRestorerConfig.RestorerType.OFF) {
+            return SkinRestorerResultImpl.ofNoRestorer();
+         }
+
          OkHttpClient okHttpClient = new Builder()
             .addInterceptor(new RetryInterceptor(serviceConfig.getSkinRestorer().getRetry(), serviceConfig.getSkinRestorer().getRetryDelay()))
             .addInterceptor(new LoggingInterceptor())
@@ -90,65 +100,49 @@ public class SkinRestorerCore implements SkinRestorerAPI {
             .proxy(serviceConfig.getSkinRestorer().getProxy().getProxy())
             .proxyAuthenticator(serviceConfig.getSkinRestorer().getProxy().getProxyAuthenticator())
             .build();
-         if (serviceConfig.getSkinRestorer().getRestorer() == SkinRestorerConfig.RestorerType.OFF) {
-            return SkinRestorerResultImpl.ofNoRestorer();
-         }
 
          Map<String, Property> propertyMap = profile.getPropertyMap();
-         if (propertyMap != null && propertyMap.containsKey("textures")) {
-            Property textures = propertyMap.get("textures");
-            JsonObject jsonObject = JsonParser.parseString(new String(Base64.getDecoder().decode(textures.getValue()), StandardCharsets.UTF_8))
-               .getAsJsonObject();
-            if (jsonObject.has("textures")
-               && jsonObject.getAsJsonObject("textures").has("SKIN")
-               && jsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").has("url")) {
-               JsonObject skinData = jsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").getAsJsonObject();
-               String url = skinData.getAsJsonPrimitive("url").getAsString();
-               String model = skinData.has("metadata")
-                     && skinData.getAsJsonObject("metadata").has("model")
-                     && skinData.getAsJsonObject("metadata").getAsJsonPrimitive("model").getAsString().equals("slim")
-                  ? "slim"
-                  : "classic";
-               Pair<String, String> cacheRestored = this.core.getSqlManager().getSkinRestoredCacheTable().getCacheRestored(ValueUtil.sha256(url), model);
-               if (cacheRestored != null) {
-                  Property restoredProperty = new Property();
-                  restoredProperty.setName("textures");
-                  restoredProperty.setValue((String)cacheRestored.getValue1());
-                  restoredProperty.setSignature((String)cacheRestored.getValue2());
-                  profile.getPropertyMap().remove("textures");
-                  profile.getPropertyMap().put("textures", restoredProperty);
-                  return SkinRestorerResultImpl.ofUseCache(profile);
-               }
-
-               if (isSignatureValid(textures.getValue(), textures.getSignature())) {
-                  if (isAllowedTextureDomain(url)) {
-                     return SkinRestorerResultImpl.ofSignatureValid();
-                  }
-
-                  LoggerProvider.getLogger().warn(profile.getName() + " has a valid skin signature, but the skin URL is invalid.");
-               }
-
-               SkinRestorerFlows srf = new SkinRestorerFlows(this.core, serviceConfig, okHttpClient, url, model, profile);
-               if (serviceConfig.getSkinRestorer().getRestorer() == SkinRestorerConfig.RestorerType.ASYNC) {
-                  this.core.getPlugin().getRunServer().getScheduler().runTaskAsync(() -> {
-                     try {
-                        SkinRestorerResultImpl.handleSkinRestoreResult(srf.call());
-                     } catch (Exception e) {
-                        SkinRestorerResultImpl.handleSkinRestoreResult(e);
-                     }
-                  });
-                  return SkinRestorerResultImpl.ofRestorerAsync();
-               } else {
-                  return srf.call();
-               }
-            } else {
-               return SkinRestorerResultImpl.ofNoSkin();
-            }
-         } else {
+         if (propertyMap == null || !propertyMap.containsKey("textures")) {
             return SkinRestorerResultImpl.ofNoSkin();
          }
+
+         Property textures = propertyMap.get("textures");
+         JsonObject jsonObject = JsonParser.parseString(new String(Base64.getDecoder().decode(textures.getValue()), StandardCharsets.UTF_8))
+            .getAsJsonObject();
+         if (!jsonObject.has("textures")
+            || !jsonObject.getAsJsonObject("textures").has("SKIN")
+            || !jsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").has("url")) {
+            return SkinRestorerResultImpl.ofNoSkin();
+         }
+
+         JsonObject skinData = jsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").getAsJsonObject();
+         String url = skinData.getAsJsonPrimitive("url").getAsString();
+         String model = skinData.has("metadata")
+               && skinData.getAsJsonObject("metadata").has("model")
+               && skinData.getAsJsonObject("metadata").getAsJsonPrimitive("model").getAsString().equals("slim")
+            ? "slim"
+            : "classic";
+         Pair<String, String> cacheRestored = this.core.getSqlManager().getSkinRestoredCacheTable().getCacheRestored(ValueUtil.sha256(url), model);
+         if (cacheRestored != null) {
+            Property restoredProperty = new Property();
+            restoredProperty.setName("textures");
+            restoredProperty.setValue((String)cacheRestored.getValue1());
+            restoredProperty.setSignature((String)cacheRestored.getValue2());
+            profile.getPropertyMap().remove("textures");
+            profile.getPropertyMap().put("textures", restoredProperty);
+            return SkinRestorerResultImpl.ofUseCache(profile);
+         }
+
+         if (isSignatureValid(textures.getValue(), textures.getSignature())) {
+            if (isAllowedTextureDomain(url)) {
+               return SkinRestorerResultImpl.ofSignatureValid();
+            }
+
+            LoggerProvider.getLogger().warn(profile.getName() + " has a valid skin signature, but the skin URL is invalid.");
+         }
+
+         return new SkinRestorerFlows(this.core, serviceConfig, okHttpClient, url, model, profile).call();
       } catch (Exception e) {
-         // 反编译器原本生成了不可编译的 Throwable 透传，这里按修复失败语义返回结果对象。
          return SkinRestorerResultImpl.ofRestorerFailed(e);
       }
    }

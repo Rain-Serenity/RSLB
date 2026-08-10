@@ -23,10 +23,6 @@ public class SkinRestorerResultImpl implements SkinRestorerResult {
       return new SkinRestorerResultImpl(Reason.SIGNATURE_VALID, null, null);
    }
 
-   public static SkinRestorerResultImpl ofRestorerAsync() {
-      return new SkinRestorerResultImpl(Reason.RESTORER_ASYNC, null, null);
-   }
-
    public static SkinRestorerResultImpl ofUseCache(GameProfile profile) {
       return new SkinRestorerResultImpl(Reason.USE_CACHE, profile, null);
    }

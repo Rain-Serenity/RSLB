@@ -22,7 +22,7 @@ public class MInfoCommand {
    }
 
    public LiteralArgumentBuilder<ISender> register(LiteralArgumentBuilder<ISender> literalArgumentBuilder) {
-      // 反编译器生成的 raw 泛型链会让 requires 的入参退化为 Object，这里恢复 Brigadier 的强类型构建链。
+      // 使用强类型的参数构建链，避免 requires 的入参类型退化为 Object。
       RequiredArgumentBuilder<ISender, Set<IPlayer>> playerArgument = this.handler
          .argument("player", OnlinePlayerArgumentType.players())
          .requires(iSender -> iSender.hasPermission("rslb.info.other"))

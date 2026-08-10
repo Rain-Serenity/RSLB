@@ -11,6 +11,7 @@ import com.rserene.chosen.server.core.auth.validate.ValidateAuthenticationResult
 import com.rserene.chosen.server.core.auth.validate.ValidateAuthenticationService;
 import com.rserene.chosen.server.core.handle.PlayerHandler;
 import com.rserene.chosen.server.core.main.RSLBCore;
+import com.rserene.chosen.server.core.skinrestorer.SkinRestorerResultImpl;
 
 public class AuthHandler implements AuthAPI {
    private final RSLBCore core;
@@ -77,6 +78,13 @@ public class AuthHandler implements AuthAPI {
                   )
                );
             GameProfile finalProfile = validateAuthenticationResult.getInGameProfile();
+            SkinRestorerResultImpl skinRestorerResult = this.core.getSkinRestorerHandler()
+               .doRestorer(finalProfile, baseServiceAuthenticationResult.getServiceConfig());
+            SkinRestorerResultImpl.handleSkinRestoreResult(skinRestorerResult);
+            if (skinRestorerResult.getResponse() != null) {
+               finalProfile = skinRestorerResult.getResponse();
+            }
+
             this.core
                .getPlayerHandler()
                .getLoginCache()

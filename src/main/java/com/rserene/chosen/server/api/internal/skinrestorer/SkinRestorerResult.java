@@ -18,7 +18,6 @@ public interface SkinRestorerResult {
       SIGNATURE_VALID,
       BAD_SKIN,
       RESTORER_SUCCEED,
-      RESTORER_ASYNC,
       RESTORER_FAILED;
    }
 }

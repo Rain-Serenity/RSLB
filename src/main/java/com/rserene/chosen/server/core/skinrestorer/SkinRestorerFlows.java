@@ -1,13 +1,16 @@
 package com.rserene.chosen.server.core.skinrestorer;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.imageio.ImageIO;
 import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
 import com.rserene.chosen.server.api.internal.util.ValueUtil;
@@ -25,6 +28,9 @@ import okhttp3.Response;
 import okhttp3.Request.Builder;
 
 public class SkinRestorerFlows implements Callable<SkinRestorerResultImpl> {
+   private static final String MINESKIN_ENDPOINT = "https://api.mineskin.org/v2/generate";
+   private static final AtomicLong NEXT_REQUEST_AT = new AtomicLong();
+   private static final String[] RETRYABLE_ERROR_CODES = new String[]{"rate_limit", "failed_to_create_id", "skin_change_failed"};
    private final RSLBCore core;
    private final BaseServiceConfig config;
    private final OkHttpClient okHttpClient;
@@ -49,42 +55,110 @@ public class SkinRestorerFlows implements Callable<SkinRestorerResultImpl> {
          return SkinRestorerResultImpl.ofBadSkin(e);
       }
 
-      Request request;
+      Request request = this.buildRequest(bytes);
+      SkinRestorerConfig skinRestorer = this.config.getSkinRestorer();
+      int maxAttempts = Math.max(1, skinRestorer.getRetry() + 1);
+      int attempt = 0;
+
+      while (true) {
+         long waitMills = NEXT_REQUEST_AT.get() - System.currentTimeMillis();
+         if (waitMills > 0) {
+            LoggerProvider.getLogger().debug("Waiting " + waitMills + " ms before the next MineSkin request.");
+            TimeUnit.MILLISECONDS.sleep(waitMills);
+         }
+
+         try (Response execute = this.okHttpClient.newCall(request).execute()) {
+            String responseBody = Objects.requireNonNull(execute.body()).string();
+            MineSkinResponse mineSkinResponse = MineSkinResponse.parse(responseBody);
+            this.updateNextRequestAt(mineSkinResponse);
+
+            if (mineSkinResponse.isSuccess()) {
+               return this.applyRestoredSkin(mineSkinResponse);
+            }
+
+            String errorCode = mineSkinResponse.getFirstErrorCode();
+            if (errorCode == null && execute.code() == 429) {
+               errorCode = "rate_limit";
+            }
+
+            if (errorCode == null && execute.code() == 401) {
+               errorCode = "invalid_api_key";
+            }
+
+            if (errorCode != null && errorCode.equals("invalid_api_key")) {
+               LoggerProvider.getLogger()
+                  .warn(
+                     "Skin restore failed: MineSkin rejected the API key used for " + this.profile.getName()
+                        + ", please check the mineskinApiKey config."
+                  );
+               throw new SkinRestorerException("MineSkin generation failed: invalid API key.");
+            }
+
+            if (errorCode == null || !isRetryable(errorCode)) {
+               if (errorCode != null) {
+                  LoggerProvider.getLogger()
+                     .warn(
+                        "Skin restore failed: MineSkin rejected the skin with error '" + errorCode + "' for " + this.profile.getName() + "."
+                     );
+               }
+
+               throw new SkinRestorerException("MineSkin generation failed: " + responseBody);
+            }
+
+            if (++attempt >= maxAttempts) {
+               LoggerProvider.getLogger()
+                  .warn("Skin restore failed: exhausted all " + maxAttempts + " attempts for " + this.profile.getName() + ".");
+               throw new SkinRestorerException("MineSkin generation rate limited, exhausted all " + maxAttempts + " attempts.");
+            }
+
+            long retryWait = this.getRetryWaitMills(mineSkinResponse, skinRestorer);
+            LoggerProvider.getLogger().debug("MineSkin generation failed with '" + errorCode + "', retrying in " + retryWait + " ms.");
+            TimeUnit.MILLISECONDS.sleep(Math.min(retryWait, (long)Math.max(skinRestorer.getTimeout(), 1)));
+         }
+      }
+   }
+
+   private Request buildRequest(byte[] bytes) {
+      Builder builder;
       if (this.config.getSkinRestorer().getMethod() == SkinRestorerConfig.Method.UPLOAD) {
-         request = new Builder()
-            .url("https://api.mineskin.org/generate/upload")
-            .header("User-Agent", "RSLB/1.1.1")
+         builder = new Builder()
+            .url(MINESKIN_ENDPOINT)
+            .header("User-Agent", this.core.getHttpRequestHeaderUserAgent())
             .post(
-               new okhttp3.MultipartBody.Builder()
+               new MultipartBody.Builder()
                   .setType(MultipartBody.FORM)
-                  .addFormDataPart("name", UUID.randomUUID().toString().substring(0, 6))
-                  .addFormDataPart("variant", this.skinModel)
-                  .addFormDataPart("visibility", "0")
-                  .addFormDataPart("file", "upload.png", RequestBody.create(bytes, MediaType.parse("multipart/form-data")))
+                  .addFormDataPart("visibility", this.config.getSkinRestorer().getVisibility().name().toLowerCase())
+                  .addFormDataPart("file", "skin.png", RequestBody.create(bytes, MediaType.parse("image/png")))
                   .build()
-            )
-            .build();
+            );
       } else {
          JsonObject jo = new JsonObject();
-         jo.addProperty("name", UUID.randomUUID().toString().substring(0, 6));
          jo.addProperty("variant", this.skinModel);
-         jo.addProperty("visibility", 0);
+         jo.addProperty("visibility", this.config.getSkinRestorer().getVisibility().name().toLowerCase());
          jo.addProperty("url", this.skinUrl);
-         request = new Builder()
-            .url("https://api.mineskin.org/generate/url")
+         builder = new Builder()
+            .url(MINESKIN_ENDPOINT)
             .header("User-Agent", this.core.getHttpRequestHeaderUserAgent())
             .header("Content-Type", "application/json")
-            .post(RequestBody.create(this.core.getGson().toJson(jo), MediaType.parse("application/json; charset=utf-8")))
-            .build();
+            .post(RequestBody.create(this.core.getGson().toJson(jo), MediaType.parse("application/json; charset=utf-8")));
       }
 
-      Response execute = this.okHttpClient.newCall(request).execute();
-      JsonObject jo = JsonParser.parseString(Objects.requireNonNull(execute.body()).string())
-         .getAsJsonObject()
-         .getAsJsonObject("data")
-         .getAsJsonObject("texture");
-      String value = jo.getAsJsonPrimitive("value").getAsString();
-      String signature = jo.getAsJsonPrimitive("signature").getAsString();
+      String apiKey = this.config.getSkinRestorer().getMineskinApiKey();
+      if (apiKey != null && !apiKey.trim().isEmpty()) {
+         builder.header("Authorization", "Bearer " + apiKey.trim());
+      }
+
+      return builder.build();
+   }
+
+   private SkinRestorerResultImpl applyRestoredSkin(MineSkinResponse mineSkinResponse) throws IOException {
+      JsonObject textureData = mineSkinResponse.getTextureData();
+      if (textureData == null) {
+         throw new SkinRestorerException("MineSkin response does not contain texture data.");
+      }
+
+      String value = textureData.getAsJsonPrimitive("value").getAsString();
+      String signature = textureData.getAsJsonPrimitive("signature").getAsString();
 
       try {
          this.core.getSqlManager().getSkinRestoredCacheTable().insertNew(ValueUtil.sha256(this.skinUrl), this.skinModel, value, signature);
@@ -101,23 +175,162 @@ public class SkinRestorerFlows implements Callable<SkinRestorerResultImpl> {
       return SkinRestorerResultImpl.ofRestorerSucceed(this.profile);
    }
 
+   private void updateNextRequestAt(MineSkinResponse mineSkinResponse) {
+      long relative = mineSkinResponse.getRateLimitNextRelative();
+      if (relative > 0) {
+         NEXT_REQUEST_AT.updateAndGet(
+            current -> Math.max(current, System.currentTimeMillis() + relative)
+         );
+      }
+   }
+
+   private long getRetryWaitMills(MineSkinResponse mineSkinResponse, SkinRestorerConfig skinRestorer) {
+      long relative = mineSkinResponse.getRateLimitNextRelative();
+      if (relative > 0) {
+         return relative;
+      }
+
+      long delayMills = mineSkinResponse.getRateLimitDelayMills();
+      if (delayMills > 0) {
+         return delayMills;
+      }
+
+      return (long)skinRestorer.getRetryDelay();
+   }
+
+   private static boolean isRetryable(String errorCode) {
+      for (String retryable : RETRYABLE_ERROR_CODES) {
+         if (retryable.equals(errorCode)) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
    private byte[] requireValidSkin(String skinUrl, String model) throws IOException {
-      Request request = new Builder().get().header("User-Agent", "RSLB/1.1.1").url(skinUrl).build();
+      Request request = new Builder().get().header("User-Agent", this.core.getHttpRequestHeaderUserAgent()).url(skinUrl).build();
       byte[] bytes = Objects.requireNonNull(this.okHttpClient.newCall(request).execute().body()).bytes();
-
+      BufferedImage image;
       try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
-         BufferedImage image = ImageIO.read(bais);
-         boolean x64 = false;
-         if (image.getWidth() != 64) {
-            throw new SkinRestorerException("Skin width is not 64.");
+         image = ImageIO.read(bais);
+      }
+
+      if (image == null) {
+         throw new SkinRestorerException("Skin image could not be read.");
+      }
+
+      if (image.getWidth() != 64) {
+         throw new SkinRestorerException("Skin width is not 64.");
+      }
+
+      if (image.getHeight() != 32 && image.getHeight() != 64) {
+         throw new SkinRestorerException("Skin height is not 64 or 32.");
+      }
+
+      return bytes;
+   }
+
+   private static class MineSkinResponse {
+      private final boolean success;
+      private final JsonObject root;
+
+      private MineSkinResponse(boolean success, JsonObject root) {
+         this.success = success;
+         this.root = root;
+      }
+
+      public static MineSkinResponse parse(String responseBody) throws SkinRestorerException {
+         JsonObject root;
+         try {
+            root = JsonParser.parseString(responseBody).getAsJsonObject();
+         } catch (Exception e) {
+            throw new SkinRestorerException("MineSkin returned a non-JSON response.", e);
          }
 
-         if (image.getHeight() != 32 && image.getHeight() != 64) {
-            throw new SkinRestorerException("Skin height is not 64 or 32.");
+         boolean success = root.has("success") && root.getAsJsonPrimitive("success").getAsBoolean();
+         return new MineSkinResponse(success, root);
+      }
+
+      public boolean isSuccess() {
+         return this.success;
+      }
+
+      public String getFirstErrorCode() {
+         if (!this.root.has("errors") || !this.root.get("errors").isJsonArray()) {
+            return null;
          }
 
-         x64 = image.getHeight() == 64;
-         return bytes;
+         JsonArray errors = this.root.getAsJsonArray("errors");
+         if (errors.size() == 0) {
+            return null;
+         }
+
+         JsonObject first = errors.get(0).getAsJsonObject();
+         return first.has("code") ? first.getAsJsonPrimitive("code").getAsString() : null;
+      }
+
+      public JsonObject getTextureData() {
+         JsonObject texture = this.getNestedObject(new String[]{"skin", "texture"});
+         if (texture == null) {
+            texture = this.getNestedObject(new String[]{"data", "texture"});
+         }
+
+         if (texture != null && texture.has("data") && texture.get("data").isJsonObject()) {
+            return texture.getAsJsonObject("data");
+         }
+
+         if (texture != null && texture.has("value") && texture.has("signature")) {
+            return texture;
+         }
+
+         return null;
+      }
+
+      private JsonObject getNestedObject(String[] path) {
+         JsonElement current = this.root;
+         for (int i = 0; i < path.length; i++) {
+            if (current == null || !current.isJsonObject() || !current.getAsJsonObject().has(path[i])) {
+               return null;
+            }
+
+            current = current.getAsJsonObject().get(path[i]);
+         }
+
+         return current != null && current.isJsonObject() ? current.getAsJsonObject() : null;
+      }
+
+      public long getRateLimitNextRelative() {
+         JsonObject next = this.getRateLimitChild("next");
+         if (next == null || !next.has("relative")) {
+            return 0L;
+         }
+
+         JsonElement relative = next.get("relative");
+         return relative.isJsonPrimitive() && relative.getAsJsonPrimitive().isNumber() ? relative.getAsLong() : 0L;
+      }
+
+      public long getRateLimitDelayMills() {
+         JsonObject delay = this.getRateLimitChild("delay");
+         if (delay == null || !delay.has("millis")) {
+            return 0L;
+         }
+
+         JsonElement millis = delay.get("millis");
+         return millis.isJsonPrimitive() && millis.getAsJsonPrimitive().isNumber() ? millis.getAsLong() : 0L;
+      }
+
+      private JsonObject getRateLimitChild(String child) {
+         if (!this.root.has("rateLimit") || !this.root.get("rateLimit").isJsonObject()) {
+            return null;
+         }
+
+         JsonObject rateLimit = this.root.getAsJsonObject("rateLimit");
+         if (!rateLimit.has(child) || !rateLimit.get(child).isJsonObject()) {
+            return null;
+         }
+
+         return rateLimit.getAsJsonObject(child);
       }
    }
 }
