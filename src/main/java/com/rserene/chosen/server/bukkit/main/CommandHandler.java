@@ -188,7 +188,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     }
 
     /** 计算当前位置的补全候选（区间语义：替换光标前的最后一个词） */
-    private List<String> suggest(String[] args, CommandSender sender) {
+    private List<String> suggest(String[] args, CommandSender commandSender) {
         String last = args[args.length - 1].toLowerCase(Locale.ROOT);
 
         // 定位最后一个已知词节点：沿 args[0..n-2] 逐层匹配（参数位自动吞值并下移一层）
@@ -205,14 +205,15 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             node = next;
         }
 
-        // 当前位置是参数值：无静态候选
+        // 当前位置是参数值：委托核心建议器（在线玩家 / 档案名 / 服务 ID …），
+        // 与核心 brigadier 树的参数槽一一对应，并天然按权限过滤
         if (node.paramChild != null) {
-            return List.of();
+            return this.paramSuggestions(commandSender, args);
         }
 
         List<String> candidates = new ArrayList<>();
         for (Node candidate : node.words.values()) {
-            if (!hasPermission(sender, candidate.perms)) {
+            if (!hasPermission(commandSender, candidate.perms)) {
                 continue;
             }
             String name = candidate.display;
@@ -227,7 +228,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                     continue;
                 }
                 for (Node next : candidate.words.values()) {
-                    if (hasPermission(sender, next.perms)) {
+                    if (hasPermission(commandSender, next.perms)) {
                         candidates.add(name + " " + next.display);
                     }
                 }
@@ -237,6 +238,17 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             }
         }
         return candidates;
+    }
+
+    /** 参数值位置：完整路径拼接 rslb 前缀后委托核心命令树建议器 */
+    private List<String> paramSuggestions(CommandSender commandSender, String[] args) {
+        CommandAPI commandHandler = this.plugin.getCoreAPI().getCommandHandler();
+        if (commandHandler == null) {
+            return List.of();
+        }
+        ISender sender = new BukkitSender(commandSender);
+        // 核心 dispatcher 根结点为 "rslb"；末尾追加空格把当前词视作待补全的参数槽
+        return commandHandler.tabComplete(sender, "rslb " + String.join(" ", args) + " ");
     }
 
     /** 指令路径是否合法完整：词按小写匹配、参数位按位置消费任意值，要求落点分支可执行 */

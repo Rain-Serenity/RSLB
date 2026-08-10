@@ -42,7 +42,7 @@
 3. 左侧选择 **Auto Gradle Build** workflow；
 4. 在最新一次**成功**（绿色 ✓）的 run 底部，找到 **Artifacts** 区域；
 5. 点击 **RSLB Artifact** 下载 zip；
-6. 解压得到 `RSLB-1.0-all.jar`，放入服务端 `plugins/` 文件夹。
+6. 解压得到 `RSLB-1.1-all.jar`，放入服务端 `plugins/` 文件夹。
 
 > 提示：也可在代码仓库 Releases 页面查看是否有正式发布版。
 
@@ -138,7 +138,9 @@ LittleSkin 服务可自定义 `yggdrasilAuth.littleSkin.apiRoot`。
 
 所有指令通过 `/rslb` 调用，输入 `/rslb help` 查看有权限使用的指令列表。
 除 `/rslb help`、`/rslb confirm`、`/rslb link` 外，其余指令**默认仅 OP 可用**；
-TAB 补全会自动隐藏当前玩家没有权限的指令。
+TAB 补全会自动隐藏当前玩家没有权限的指令，指令名后接参数的位置会补全**在线玩家名**
+（如 `/rslb link to`、`/rslb info`、`/rslb rename <新名> <档案>` 的档案位、`/rslb profile set <档案>` 等）。
+纯文本参数位（如新档案名、验证码）不提供候选，直接手输即可。
 
 ### 指令表（按字母顺序）
 
@@ -261,7 +263,7 @@ TAB 补全会自动隐藏当前玩家没有权限的指令。
 chmod +x ./gradlew && ./gradlew shadowJar
 ```
 
-产物：`build/libs/RSLB-1.0-all.jar`（含全部依赖的 fat jar）。
+产物：`build/libs/RSLB-1.1-all.jar`（含全部依赖的 fat jar）。
 
 > 注意：`com.mojang:authlib` 与 `io.netty:netty-all` 必须与服务器自带版本一致，
 > 已在 `build.gradle.kts` 中锁定，**请勿升级**，否则登录拦截可能崩溃。
@@ -292,7 +294,8 @@ netty 管道（LoginHandler 注入）
 - **登录拦截**：`LoginHandler` 包装服务端 netty acceptor 与管道，在 vanilla 会话验证之前截获登录流程，使所有玩家必须经插件认证。拦截器初始化失败不影响插件加载，但所有登录会退回原版流程。
 - **认证服务**：`services/*.yml` 定义服务类型与 API 地址，`PluginConfig` 读取并校验 id 唯一性与服务重复。
 - **数据库**：默认 H2 单文件库（`rslb.mv.db`），支持 MySQL。表结构含用户数据（`userdata`）、游戏档案（`ingameprofile`）、皮肤缓存等，表名带 `table-prefix` 前缀。
-- **指令系统**：核心使用 brigadier 命令树（权限过滤、参数解析、TAB 补全），Bukkit 层桥接 `/rslb`。
+- **指令系统**：核心使用 brigadier 命令树（权限过滤、参数解析、TAB 补全），Bukkit 层桥接 `/rslb`——
+  指令名的补全与输入校验由 Bukkit 层的静态指令树完成，参数位置委托核心建议器补全在线玩家名。
 - **语言系统**：`messages.yml` 键值 + `{name}` 占位符替换，缺失键自动回填默认值。
 - **统计**：bStats 匿名上报（`Metrics.java` 官方类，仅改包名），开关 `settings.metrics-enabled`。
 
