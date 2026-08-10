@@ -19,17 +19,24 @@ initUUID: DEFAULT
 serviceType: LITTLESKIN
 
 # 皮肤修复（Skin Restorer）设置：
-#   restorer - 修复时机: OFF 关闭 / LOGIN 登录时修复 / ASYNC 异步修复
+#   restorer - 修复时机: OFF 关闭 / LOGIN 登录时修复
 #   method   - 皮肤获取方式: URL 直接链接 / UPLOAD 上传给服务器
 #   timeout / retry / retryDelay - 皮肤请求网络参数
+#   mineskinApiKey - MineSkin API Key，留空使用匿名额度（额度低），推荐到 https://account.mineskin.org 申请后填写
+#   visibility    - 生成的皮肤在 MineSkin 图库中的可见性
 #   proxy    - 皮肤请求使用的代理
-# 默认值: OFF 关闭
+# 默认值: LOGIN 登录时修复
 skinRestorer:
-  # 皮肤修复时机: OFF / LOGIN / ASYNC
-  # 默认值: 'OFF'
-  restorer: 'OFF'
+  # 皮肤修复时机: OFF / LOGIN
+  # 说明: LittleSkin 玩家的皮肤纹理由 LittleSkin 私钥签名，正版客户端无法识别而不显示；
+  # 开启后 RSLB 在登录时将该纹理交给 MineSkin 生成正版签名的纹理，使皮肤对正版客户端可见。
+  # LittleSkin登录建议设置成LOGIN
+  # 默认值: 'LOGIN'
+  restorer: 'LOGIN'
 
   # 皮肤获取方式: URL / UPLOAD
+  # URL - 将皮肤图片链接提交给 MineSkin，由 MineSkin 服务器下载；
+  # UPLOAD - 由 RSLB 下载皮肤图片后上传给 MineSkin，服务器无法直接访问皮肤站时使用。
   # 默认值: URL
   method: URL
 
@@ -44,6 +51,15 @@ skinRestorer:
   # 每次重试前的等待时间，单位毫秒。
   # 默认值: 5000
   retryDelay: 5000
+
+  # MineSkin API Key（支持 Bearer 认证），留空使用匿名额度。
+  # 获取地址: https://account.mineskin.org
+  # 默认值: ''
+  mineskinApiKey: ''
+
+  # 生成的皮肤在 MineSkin 图库中的可见性: PUBLIC / UNLISTED / PRIVATE
+  # 默认值: PUBLIC
+  visibility: PUBLIC
 
   # 皮肤请求代理设置。
   proxy:

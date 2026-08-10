@@ -104,12 +104,14 @@ name: '正版登录'                 # 服务显示名
 initNameFormat: '{name}'       # 初始档案名格式（{name} 替换为登录名，空格转 _）
 initUUID: DEFAULT              # 初始 UUID 策略：DEFAULT / OFFLINE / RANDOM
 serviceType: OFFICIAL          # OFFICIAL / LITTLESKIN
-skinRestorer:                  # 皮肤修复（默认关闭）
-  restorer: 'OFF'              # OFF / LOGIN / ASYNC（皮肤修复时机）
+skinRestorer:                  # 皮肤修复（默认关闭；外置登录皮肤对正版客户端不可见时开启）
+  restorer: 'OFF'              # OFF / LOGIN（皮肤修复时机）
   method: URL                  # URL / UPLOAD（皮肤获取方式）
   timeout: 10000               # 皮肤请求超时（毫秒）
   retry: 2                     # 皮肤请求失败重试次数
   retryDelay: 5000             # 重试间隔（毫秒）
+  mineskinApiKey: ''           # MineSkin API Key（留空为匿名额度）
+  visibility: PUBLIC           # 生成的皮肤在图库的可见性：PUBLIC / UNLISTED / PRIVATE
   proxy:                       # 皮肤请求代理
     type: DIRECT               # DIRECT / HTTP / SOCKS
     hostname: '127.0.0.1'
