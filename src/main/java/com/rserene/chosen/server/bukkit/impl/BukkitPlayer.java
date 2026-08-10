@@ -5,7 +5,10 @@ import com.rserene.chosen.server.api.internal.plugin.IPlayer;
 import java.net.SocketAddress;
 import java.util.Objects;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
@@ -23,7 +26,16 @@ public class BukkitPlayer implements IPlayer {
 
     @Override
     public void kickPlayer(String message) {
-        this.player.kick(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+        // 核心命令在异步线程执行，而玩家踢出只能在实体所在线程（Paper 主线程 / Folia 区域线程）操作。
+        // 统一经 RegionScheduler 调度（Paper 26.2 与 Folia 均支持），任务内部再次校验在线状态。
+        Player p = this.player;
+        Location location = p.getLocation();
+        Bukkit.getRegionScheduler().run(RSLB.getInstance(), location, task -> {
+            if (p.isOnline()) {
+                Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+                p.kick(component);
+            }
+        });
     }
 
     @Override

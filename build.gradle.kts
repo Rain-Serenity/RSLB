@@ -4,6 +4,8 @@ plugins {
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
+version = "1.1"
+
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
@@ -46,7 +48,7 @@ java {
 tasks {
     shadowJar {
         archiveBaseName = "RSLB"
-        archiveVersion = "1.0"
+        archiveVersion = "1.1"
 
         mergeServiceFiles()
 
