@@ -66,6 +66,12 @@ welcome_msg: "&8[&b&lRSLB&8]&r&a欢迎 &e{online_name} &a加入服务器！您�
 # 执行指令时发生异常
 command_error: "&8[&b&lRSLB&8]&r&c处理用户指令时发生异常，请与服务器管理员取得联系。"
 
+# 指令输入有误（未知子命令 / 缺少参数）时顶部提示行
+command_message_error_header: "&8[&b&lRSLB&8]&r&c你执行的指令有误，请查看指令帮助"
+
+# 没有权限使用指令
+command_message_no_permission: "&8[&b&lRSLB&8]&r&c你没有权限使用此指令"
+
 # 指令只能由玩家执行
 command_message_require_player: "&8[&b&lRSLB&8]&r&c这个指令只能由玩家执行。"
 
