@@ -44,6 +44,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         private final Map<String, Node> words = new TreeMap<>();
         private final String display;
         private final List<String> perms;
+        private List<String> selfPerms = List.of();
         private Node paramChild;
         private boolean terminable;
 
@@ -65,9 +66,19 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         }
 
         private Node param() {
+            return this.param(List.of());
+        }
+
+        /** 参数位：链式创建/获取，并设置该位作为执行终点（终结分支）时所需的权限 */
+        private Node param(String... perms) {
+            return this.param(List.of(perms));
+        }
+
+        private Node param(List<String> perms) {
             if (paramChild == null) {
                 paramChild = new Node(null);
             }
+            paramChild.selfPerms = perms;
             return paramChild;
         }
 
@@ -88,41 +99,47 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         ROOT.word("list", "rslb.list").end();
         ROOT.word("help", "rslb.base").end();
 
-        Node link = ROOT.word("link");
+        Node link = ROOT.word("link", "rslb.link.to", "rslb.link.accept", "rslb.link.code");
         link.word("to", "rslb.link.to").param().end();
         link.word("accept", "rslb.link.accept").param().end();
         link.word("code", "rslb.link.code").param().param().end();
 
-        Node whitelist = ROOT.word("whitelist");
+        Node whitelist = ROOT.word(
+            "whitelist",
+            "rslb.whitelist.add", "rslb.whitelist.remove",
+            "rslb.whitelist.specific.add", "rslb.whitelist.specific.remove",
+            "rslb.whitelist.list", "rslb.whitelist.list.verbose");
         whitelist.word("add", "rslb.whitelist.add").param().end();
         whitelist.word("remove", "rslb.whitelist.remove").param().end();
-        Node specific = whitelist.word("specific");
+        Node specific = whitelist.word("specific", "rslb.whitelist.specific.add", "rslb.whitelist.specific.remove");
         specific.word("add", "rslb.whitelist.specific.add").param().end();
         specific.word("remove", "rslb.whitelist.specific.remove").param().end();
         Node wlList = whitelist.word("list", "rslb.whitelist.list");
         wlList.end();
         wlList.word("verbose", "rslb.whitelist.list.verbose").end();
 
-        Node profile = ROOT.word("profile");
+        Node profile = ROOT.word(
+            "profile",
+            "rslb.profile.create", "rslb.profile.set.oneself", "rslb.profile.set.other", "rslb.profile.remove");
         Node create = profile.word("create", "rslb.profile.create");
-        create.param().end();
-        create.param().param().end();
-        Node set = profile.word("set");
-        set.param().end();
-        set.param().param().end();
-        profile.word("remove", "rslb.profile.remove").param().end();
+        create.param("rslb.profile.create").end();
+        create.param("rslb.profile.create").param("rslb.profile.create").end();
+        Node set = profile.word("set", "rslb.profile.set.oneself", "rslb.profile.set.other");
+        set.param("rslb.profile.set.oneself").end();
+        set.param("rslb.profile.set.oneself").param("rslb.profile.set.other").end();
+        profile.word("remove", "rslb.profile.remove").param("rslb.profile.remove").end();
 
-        Node rename = ROOT.word("rename");
-        rename.param().end();
-        rename.param().param().end();
+        Node rename = ROOT.word("rename", "rslb.rename.oneself", "rslb.rename.other");
+        rename.param("rslb.rename.oneself").end();
+        rename.param("rslb.rename.oneself").param("rslb.rename.other").end();
 
-        Node find = ROOT.word("find");
+        Node find = ROOT.word("find", "rslb.find.profile", "rslb.find.online");
         find.word("profile", "rslb.find.profile").param().end();
         find.word("online", "rslb.find.online").param().end();
 
-        Node info = ROOT.word("info");
+        Node info = ROOT.word("info", "rslb.info.oneself", "rslb.info.other");
         info.end();
-        info.param().end();
+        info.param("rslb.info.other").end();
     }
 
     private final RSLB plugin;
@@ -159,13 +176,19 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
             this.sendWrongCommand(sender);
             return true;
         }
-        if (!hasPermission(sender, target.perms)) {
-            sender.sendMessagePL(this.message("command_message_no_permission"));
-            return true;
-        }
-        if (!validPath(args)) {
+
+        List<List<String>> pathPerms = new ArrayList<>();
+        if (!validatePath(args, pathPerms)) {
             this.sendWrongCommand(sender);
             return true;
+        }
+        // 路径上每一组权限都需满足其一（词节点分支权限 + 参数位终结分支权限，
+        // 与核心命令树的 requires 一一对应），不满足则给出可配置的无权限提示
+        for (List<String> group : pathPerms) {
+            if (!hasPermission(sender, group)) {
+                sender.sendMessagePL(this.message("command_message_no_permission"));
+                return true;
+            }
         }
 
         this.executeCore(sender, "rslb " + canonicalPath(args));
@@ -251,27 +274,49 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         return commandHandler.tabComplete(sender, "rslb " + String.join(" ", args) + " ");
     }
 
-    /** 指令路径是否合法完整：词按小写匹配、参数位按位置消费任意值，要求落点分支可执行 */
-    private boolean validPath(String[] args) {
-        return match(ROOT, 0, args);
+    /**
+     * 指令路径是否合法完整：词按小写匹配、参数位按位置消费任意值，要求落点分支可执行；
+     * 同时把路径经过的每一组权限收集到 groups：词节点自身 perms（该词分支所需）
+     * 与参数位终结分支 selfPerms（如 rename 第二参数位需 rslb.rename.other）。
+     */
+    private boolean validatePath(String[] args, List<List<String>> groups) {
+        return match(ROOT, 0, args, groups);
     }
 
-    private boolean match(Node node, int i, String[] args) {
+    private boolean match(Node node, int i, String[] args, List<List<String>> groups) {
         if (i >= args.length) {
-            return node.terminable;
+            if (!node.terminable) {
+                return false;
+            }
+            if (!node.perms.isEmpty()) {
+                groups.add(node.perms);
+            }
+            if (!node.selfPerms.isEmpty()) {
+                groups.add(node.selfPerms);
+            }
+            return true;
         }
         if (node.paramChild != null) {
             // 参数位：消耗 args[i] 作为参数值
             if (i == args.length - 1) {
-                return node.paramChild.terminable;
+                if (!node.paramChild.terminable) {
+                    return false;
+                }
+                if (!node.paramChild.selfPerms.isEmpty()) {
+                    groups.add(node.paramChild.selfPerms);
+                }
+                return true;
             }
-            return match(node.paramChild, i + 1, args);
+            return match(node.paramChild, i + 1, args, groups);
         }
         Node next = node.words.get(args[i].toLowerCase(Locale.ROOT));
         if (next == null) {
             return false;
         }
-        return match(next, i + 1, args);
+        if (!next.perms.isEmpty()) {
+            groups.add(next.perms);
+        }
+        return match(next, i + 1, args, groups);
     }
 
     /** 把输入的指令路径规范化为核心命令树接受的大小写（参数保持原样） */
