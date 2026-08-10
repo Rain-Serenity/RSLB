@@ -16,6 +16,9 @@
 - **服务白名单**：可按认证服务开启白名单（`whitelist: true`），仅允许指定账号进入，白名单外的账号在登录阶段即被拒绝。
 - **风险指令二次确认**：`/rslb confirm` 机制防止误操作。
 - **数据持久化**：内置 H2 数据库，也可切换 MySQL（HikariCP 连接池）。
+- **皮肤修复**：外置登录玩家的皮肤对正版客户端不可见时，可开启 `skinRestorer`——插件提取皮肤 URL/模型，
+  通过 MineSkin v2 API 重新生成带正版签名的皮肤（支持 URL / 上传两种方式、PUBLIC / UNLISTED / PRIVATE 可见性、
+  内置全局限速排队与自动重试），修复结果落库缓存，签名有效且域名白名单内的皮肤直接放行。
 - **完整中文本地化**：全部消息集中在 `messages.yml`，支持 `&` 颜色码，可自由修改。
 - **bStats 匿名统计**：可关闭（`settings.metrics-enabled`）。
 
@@ -42,7 +45,7 @@
 3. 左侧选择 **Auto Gradle Build** workflow；
 4. 在最新一次**成功**（绿色 ✓）的 run 底部，找到 **Artifacts** 区域；
 5. 点击 **RSLB Artifact** 下载 zip；
-6. 解压得到 `RSLB-1.1-all.jar`，放入服务端 `plugins/` 文件夹。
+6. 解压得到 `RSLB-1.2-all.jar`，放入服务端 `plugins/` 文件夹。
 
 > 提示：也可在代码仓库 Releases 页面查看是否有正式发布版。
 
@@ -265,7 +268,7 @@ TAB 补全会自动隐藏当前玩家没有权限的指令，指令名后接参�
 chmod +x ./gradlew && ./gradlew shadowJar
 ```
 
-产物：`build/libs/RSLB-1.1-all.jar`（含全部依赖的 fat jar）。
+产物：`build/libs/RSLB-1.2-all.jar`（含全部依赖的 fat jar）。
 
 > 注意：`com.mojang:authlib` 与 `io.netty:netty-all` 必须与服务器自带版本一致，
 > 已在 `build.gradle.kts` 中锁定，**请勿升级**，否则登录拦截可能崩溃。
