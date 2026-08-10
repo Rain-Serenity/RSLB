@@ -31,6 +31,10 @@ public final class RSLB extends JavaPlugin implements IPlugin {
     private LoginHandler authListener;
 
     @Override
+    public void onLoad() {
+    }
+
+    @Override
     public void onEnable() {
         instance = this;
         try {
@@ -38,8 +42,8 @@ public final class RSLB extends JavaPlugin implements IPlugin {
             this.runServer = new BukkitServer(this);
             this.coreAPI = new RSLBCore(this);
             this.coreAPI.load();
+            new CommandHandler(this).register();
             new GlobalListener(this).register();
-            new CommandHandler(this).register("RSLB");
             initAuthListener();
             initMetrics();
         } catch (Throwable e) {

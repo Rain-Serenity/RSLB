@@ -5,11 +5,12 @@ author: Chosen_1st
 website: www.RSerene.com
 api-version: '26.2'
 folia-supported: true
-load: POSTWORLD
 commands:
   rslb:
-    description: "rslb - 正版与 LittleSkin 登录"
+    description: "RSLB 登录管理指令"
+    usage: "/rslb help"
     permission: rslb.base
+    permission-message: "&c你没有权限使用此指令。"
 permissions:
   rslb.base:
     description: "rslb base command"
