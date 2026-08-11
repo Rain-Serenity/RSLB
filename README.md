@@ -30,6 +30,10 @@
 | 服务端  | **26.2 的 Paper 系核心**：Paper 26.2 / Folia 26.2 及其分叉（如 Purpur） |
 | Java | 运行时 Java 21+（构建需要 JDK 25）                                   |
 
+> **`server.properties` 必配项**：
+> - `online-mode=true`：插件在 netty 层接管会话验证，所有玩家必须经插件认证后才能进入游戏；
+> - `enforce-secure-profile=false`：否则外置登录（如 LittleSkin）玩家会被服务端以"安全档案校验失败"强制踢出。
+
 > **为什么不能跑纯 Spigot / 其他版本核心？**
 > 1. 登录拦截依赖 Paper 专属 API `Bukkit.getGlobalRegionScheduler()`（纯 Spigot 没有此方法）；
 > 2. `LoginHandler` 直接编译引用 **26.2 的 NMS 类与字段**（`net.minecraft.network` 协议包、`Connection.channel`、
