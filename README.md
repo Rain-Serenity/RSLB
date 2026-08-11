@@ -34,13 +34,6 @@
 > - `online-mode=true`：插件在 netty 层接管会话验证，所有玩家必须经插件认证后才能进入游戏；
 > - `enforce-secure-profile=false`：否则外置登录（如 LittleSkin）玩家会被服务端以"安全档案校验失败"强制踢出。
 
-> **为什么不能跑纯 Spigot / 其他版本核心？**
-> 1. 登录拦截依赖 Paper 专属 API `Bukkit.getGlobalRegionScheduler()`（纯 Spigot 没有此方法）；
-> 2. `LoginHandler` 直接编译引用 **26.2 的 NMS 类与字段**（`net.minecraft.network` 协议包、`Connection.channel`、
->    `authenticatedProfile` 等），旧版核心的 NMS 结构不同，运行时直接崩溃。
->
-> 因此仅支持 26.2 的 Paper 系核心（`plugin.yml` 中 `api-version: '26.2'` 与此对应）。
-
 ## 下载最新版（GitHub Actions 自动构建）
 
 插件使用 GitHub Actions 在每次推送后自动构建，**最新构建产物在 Actions 中下载**：
@@ -154,7 +147,7 @@ TAB 补全会自动隐藏当前玩家没有权限的指令，指令名后接参�
 参数补全与指令隐藏走同一套权限判定：例如没有 `rslb.rename.other` 权限时，
 `/rslb rename` 的档案位不会给出任何候选。
 
-### 指令表（按字母顺序）
+### 指令表
 
 | 指令                                                  | 所需权限                                                             | 默认  | 说明                                             |
 |-----------------------------------------------------|------------------------------------------------------------------|-----|------------------------------------------------|
@@ -263,9 +256,9 @@ TAB 补全会自动隐藏当前玩家没有权限的指令，指令名后接参�
 /rslb confirm        # 15 秒内执行才生效
 ```
 
-## 构建（源码编译）
+## 构建
 
-需要 **JDK 25**（构建工具链）。
+需要 **JDK 25**。
 
 ```bash
 # Windows
@@ -309,15 +302,15 @@ netty 管道（LoginHandler 注入）
 - **指令系统**：核心使用 brigadier 命令树（权限过滤、参数解析、TAB 补全），Bukkit 层桥接 `/rslb`——
   指令名的补全与输入校验由 Bukkit 层的静态指令树完成，参数位置委托核心建议器补全在线玩家名。
 - **语言系统**：`messages.yml` 键值 + `{name}` 占位符替换，缺失键自动回填默认值。
-- **统计**：bStats 匿名上报（`Metrics.java` 官方类，仅改包名），开关 `settings.metrics-enabled`。
+- **统计**：bStats 匿名上报，开关 `settings.metrics-enabled`。
 
 ## 常见问题
 
-- **TAB 补全不显示指令**：无权限的指令会被隐藏（属正常现象）；若完全无补全，检查 `rslb.tab.complete` 权限（默认所有人）。
-- **踢出消息显示 `&` 原文**：请确认使用最新构建（已改为 adventure 组件渲染颜色）。
-- **升级后配置不生效**：旧 `config.yml` 结构变更后不会被自动覆盖，请对照模板手动更新或删除重建（注意数据库连接配置会丢失）。
+- **TAB 补全不显示指令**：无权限的指令会被隐藏；若完全无补全，检查 `rslb.tab.complete` 权限（默认所有人）。
+- **踢出消息显示 `&` 原文**：请确认使用最新构建。
+- **升级后配置不生效**：旧 `config.yml` 结构变更后不会被自动覆盖，请对照模板手动更新或删除重建。
 - **登录全部失败**：检查 `services/` 下至少存在一个有效服务，且服务 `id` 不重复。
 
 ## 许可
-
-请参阅仓库根目录 [LICENSE](LICENSE)。
+本插件基于 [MultiLogin](https://GitHub.com/CaaMoe/MultiLogin) 二次开发，因此继承上游 [GPL-3.0](LICENSE) 开源协议。
+本插件皮肤修复功能部分参照 [SkinsRestorer](https://GitHub.com/SkinsRestorer/SkinsRestorer/) 。
