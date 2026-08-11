@@ -14,6 +14,7 @@
 - **档案名自动纠正**：登录时若档案名与他人冲突，自动追加数字（Steven → Steven1 → Steven2），不会让玩家卡在登录界面。
 - **档案名自动回收**：在线账号在认证服务端（如正版）改名后，旧档案名自动释放给其他人注册（`auto-name-change`），防抢注。
 - **服务白名单**：可按认证服务开启白名单（`whitelist: true`），仅允许指定账号进入，白名单外的账号在登录阶段即被拒绝。
+- **指令 TAB 补全**：无权限的指令自动隐藏；参数位（在线玩家 / 档案）自动补全在线玩家名并支持前缀过滤，且补全同样受权限约束——无对应分支权限的参数不提供候选。
 - **风险指令二次确认**：`/rslb confirm` 机制防止误操作。
 - **数据持久化**：内置 H2 数据库，也可切换 MySQL（HikariCP 连接池）。
 - **皮肤修复**：外置登录玩家的皮肤对正版客户端不可见时，可开启 `skinRestorer`——插件提取皮肤 URL/模型，
@@ -45,7 +46,7 @@
 3. 左侧选择 **Auto Gradle Build** workflow；
 4. 在最新一次**成功**（绿色 ✓）的 run 底部，找到 **Artifacts** 区域；
 5. 点击 **RSLB Artifact** 下载 zip；
-6. 解压得到 `RSLB-1.2-all.jar`，放入服务端 `plugins/` 文件夹。
+6. 解压得到 `RSLB-2.0-all.jar`，放入服务端 `plugins/` 文件夹。
 
 > 提示：也可在代码仓库 Releases 页面查看是否有正式发布版。
 
@@ -146,6 +147,8 @@ LittleSkin 服务可自定义 `yggdrasilAuth.littleSkin.apiRoot`。
 TAB 补全会自动隐藏当前玩家没有权限的指令，指令名后接参数的位置会补全**在线玩家名**
 （如 `/rslb link to`、`/rslb info`、`/rslb rename <新名> <档案>` 的档案位、`/rslb profile set <档案>` 等）。
 纯文本参数位（如新档案名、验证码）不提供候选，直接手输即可。
+参数补全与指令隐藏走同一套权限判定：例如没有 `rslb.rename.other` 权限时，
+`/rslb rename` 的档案位不会给出任何候选。
 
 ### 指令表（按字母顺序）
 
@@ -268,7 +271,7 @@ TAB 补全会自动隐藏当前玩家没有权限的指令，指令名后接参�
 chmod +x ./gradlew && ./gradlew shadowJar
 ```
 
-产物：`build/libs/RSLB-1.2-all.jar`（含全部依赖的 fat jar）。
+产物：`build/libs/RSLB-2.0-all.jar`（含全部依赖的 fat jar）。
 
 > 注意：`com.mojang:authlib` 与 `io.netty:netty-all` 必须与服务器自带版本一致，
 > 已在 `build.gradle.kts` 中锁定，**请勿升级**，否则登录拦截可能崩溃。

@@ -1,32 +1,30 @@
 package com.rserene.chosen.server;
 
-import com.rserene.chosen.server.api.internal.logger.LoggerProvider;
-import com.rserene.chosen.server.api.internal.main.RSLBCoreAPI;
-import com.rserene.chosen.server.api.internal.plugin.IPlugin;
-import com.rserene.chosen.server.api.internal.plugin.IServer;
-import com.rserene.chosen.server.bukkit.auth.LoginHandler;
-import com.rserene.chosen.server.bukkit.impl.BukkitServer;
-import com.rserene.chosen.server.bukkit.logger.JavaUtilLoggerBridge;
-import com.rserene.chosen.server.bukkit.main.CommandHandler;
-import com.rserene.chosen.server.bukkit.main.GlobalListener;
-import com.rserene.chosen.server.bukkit.metrics.Metrics;
-import com.rserene.chosen.server.core.main.RSLBCore;
+import com.rserene.chosen.server.main.RSLBCoreAPI;
+import com.rserene.chosen.server.login.LoginHandler;
+import com.rserene.chosen.server.command.bukkit.CommandHandler;
+import com.rserene.chosen.server.player.event.GlobalListener;
+import com.rserene.chosen.server.metrics.Metrics;
+import com.rserene.chosen.server.main.RSLBCore;
+import java.io.File;
+import java.util.logging.Level;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * RSLB 主插件入口（Bukkit/Folia）。
+ * RSLB 主插件入口（Paper 26.2 / Folia）。
  *
  * 启动流程：
- *  1. 注册日志桥接（JavaUtilLoggerBridge）与 Bukkit 运行时适配（BukkitServer）；
- *  2. 初始化 RSLB 核心（RSLBCore）：加载配置、语言文件、认证服务与数据库；
- *  3. 注册事件监听（GlobalListener）与指令（CommandHandler）；
- *  4. 启动登录拦截器（LoginHandler）：包装 netty acceptor，强制所有登录
+ *  1. 初始化 RSLB 核心（RSLBCore）：加载配置、语言文件、认证服务与数据库
+ *     （日志直接使用 JavaPlugin.getLogger()，debug 开关由核心 debugEnabled 控制）；
+ *  2. 注册事件监听（GlobalListener）与指令（CommandHandler）；
+ *  3. 启动登录拦截器（LoginHandler）：包装 netty acceptor，强制所有登录
  *     经过 Yggdrasil 认证后才进入游戏。
  */
-public final class RSLB extends JavaPlugin implements IPlugin {
+public final class RSLB extends JavaPlugin {
     private static final int PLUGIN_ID = 33158;
     private static RSLB instance;
-    private BukkitServer runServer;
     private RSLBCoreAPI coreAPI;
     private LoginHandler authListener;
 
@@ -38,8 +36,6 @@ public final class RSLB extends JavaPlugin implements IPlugin {
     public void onEnable() {
         instance = this;
         try {
-            LoggerProvider.setLogger(new JavaUtilLoggerBridge(this.getLogger()));
-            this.runServer = new BukkitServer(this);
             this.coreAPI = new RSLBCore(this);
             this.coreAPI.load();
             new CommandHandler(this).register();
@@ -92,17 +88,66 @@ public final class RSLB extends JavaPlugin implements IPlugin {
             if (this.coreAPI != null) {
                 this.coreAPI.close();
             }
+            Bukkit.getAsyncScheduler().cancelTasks(this);
         } catch (Exception e) {
             this.getLogger().severe("An exception was encountered while closing: " + e.getMessage());
         }
     }
 
-    @Override
-    public IServer getRunServer() {
-        return this.runServer;
+    public boolean isDebugEnabled() {
+        return this.coreAPI instanceof RSLBCore core && core.isDebugEnabled();
     }
 
-    @Override
+    public void logDebug(String message) {
+        if (this.isDebugEnabled()) {
+            this.getLogger().log(Level.INFO, "[DEBUG] " + message);
+        }
+    }
+
+    public void logDebug(String message, Throwable throwable) {
+        if (this.isDebugEnabled()) {
+            this.getLogger().log(Level.INFO, "[DEBUG] " + message, throwable);
+        }
+    }
+
+    public void logDebug(Throwable throwable) {
+        if (this.isDebugEnabled()) {
+            this.getLogger().log(Level.INFO, "[DEBUG] " + throwable, throwable);
+        }
+    }
+
+    /**
+     * 正版模式判定：Bukkit 原生 online-mode，或后端代理已开启转发（BungeeCord / Velocity），
+     * 或本插件登录拦截器已生效（此时 MinecraftServer 侧自动开启 online 校验）。
+     */
+    public boolean isOnlineModeEnvironment() {
+        return Bukkit.getOnlineMode() || isBehindProxy() || isAuthListenerActive();
+    }
+
+    public boolean isForwardedEnvironment() {
+        return true;
+    }
+
+    private static boolean isBehindProxy() {
+        try {
+            File spigotFile = new File("spigot.yml");
+            if (spigotFile.exists()) {
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(spigotFile);
+                return config.getBoolean("settings.bungeecord", false);
+            }
+            File paperFile = new File("paper.yml");
+            if (paperFile.exists()) {
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(paperFile);
+                return config.getBoolean(
+                    "settings.velocity-support.enabled",
+                    config.getBoolean("velocity.enabled", false)
+                );
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
     public String getPluginVersion() {
         return getPluginMeta().getVersion();
     }
