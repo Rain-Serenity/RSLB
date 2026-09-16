@@ -34,18 +34,13 @@
 > - `online-mode=true`：插件在 netty 层接管会话验证，所有玩家必须经插件认证后才能进入游戏；
 > - `enforce-secure-profile=false`：否则外置登录（如 LittleSkin）玩家会被服务端以"安全档案校验失败"强制踢出。
 
-## 下载最新版（GitHub Actions 自动构建）
+## 下载稳定版（GitHub Release）
 
-插件使用 GitHub Actions 在每次推送后自动构建，**最新构建产物在 Actions 中下载**：
+1. 点击下载按钮打开仓库Release页面；  
+2. 找到适用于你Minecraft版本的插件版本；  
+3. 下载 Assets 中的 RSLB-x.x-all.jar  
 
-1. 打开仓库页面 `https://github.com/Rain-Serenity/RSLB`；
-2. 点击顶部 **Actions** 选项卡；
-3. 左侧选择 **Auto Gradle Build** workflow；
-4. 在最新一次**成功**（绿色 ✓）的 run 底部，找到 **Artifacts** 区域；
-5. 点击 **RSLB Artifact** 下载 zip；
-6. 解压得到 `RSLB-2.0-all.jar`，放入服务端 `plugins/` 文件夹。
-
-> 提示：也可在代码仓库 Releases 页面查看是否有正式发布版。
+> 提示：也可在代码仓库的 Action 页面下载开发版。
 
 ## 安装与首次启动
 
