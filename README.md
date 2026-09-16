@@ -36,9 +36,9 @@
 > - `online-mode=true`：插件在 netty 层接管会话验证，所有玩家必须经插件认证后才能进入游戏；
 > - `enforce-secure-profile=false`：否则外置登录（如 LittleSkin）玩家会被服务端以"安全档案校验失败"强制踢出。
 
-## 下载稳定版（GitHub Release）
+## 下载稳定版（GitHub Releases）
 
-1. 打开仓库Release页面；  
+1. 打开仓库 Releases 页面；  
 2. 找到适用于你Minecraft版本的插件版本；  
 3. 下载 Assets 中的 RSLB-x.x-all.jar  
 
