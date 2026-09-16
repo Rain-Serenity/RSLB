@@ -30,6 +30,8 @@
 | 服务端  | **Paper 系核心**: Paper / Folia 及其分叉（如 Purpur、Lophine） |
 | Java | 运行时 Java 25+                                        |
 
+目前支持的 Minecraft 版本: **26.2**、**26.3**
+
 > **`server.properties` 必配项**：
 > - `online-mode=true`：插件在 netty 层接管会话验证，所有玩家必须经插件认证后才能进入游戏；
 > - `enforce-secure-profile=false`：否则外置登录（如 LittleSkin）玩家会被服务端以"安全档案校验失败"强制踢出。
