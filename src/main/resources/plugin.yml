@@ -3,7 +3,7 @@ version: '${version}'
 main: com.rserene.chosen.server.RSLB
 author: Chosen_1st
 website: www.RSerene.com
-api-version: '26.2'
+api-version: '26.3'
 folia-supported: true
 commands:
   rslb:
