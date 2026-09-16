@@ -15,7 +15,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.3.build.+")
     // 26.3 的 Mojang-mapped NMS 类（Paper/Folia）。
-    // 来源：paperweight-userdev dev bundle 缓存（applyDevBundlePatches_.../output.jar），
+    // 来源：Paper dev/26.3 分支 paperclipForDevBundle 构建产物（Paperclip jar），
     // 运行时由服务器 jar 提供。
     compileOnly(files("libs/nms-26.3.jar"))
     // 以下两个版本必须与 26.3 服务器自带库（vanilla bundler）保持一致，切勿升级！

@@ -17,6 +17,9 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.security.PrivateKey;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -300,7 +303,13 @@ public final class LoginHandler {
                 }
                 SecretKey secretKey = packet.getSecretKey(privateKey);
                 String serverId = new BigInteger(Crypt.digestData("", server.getKeyPair().getPublic(), secretKey)).toString(16);
-                this.connection.setEncryptionKey(secretKey);
+                SecretKeySpec keySpec = new SecretKeySpec(secretKey.getEncoded(), "AES");
+                IvParameterSpec ivSpec = new IvParameterSpec(secretKey.getEncoded());
+                Cipher encryptCipher = Cipher.getInstance("AES/CFB8/NoPadding");
+                encryptCipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+                Cipher decryptCipher = Cipher.getInstance("AES/CFB8/NoPadding");
+                decryptCipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+                this.connection.setEncryptionKey(encryptCipher, decryptCipher);
                 plugin.logDebug("Encryption enabled for " + session.getUsername() + ", serverId=" + serverId);
                 authAsync(session, serverId);
             } catch (Exception e) {
