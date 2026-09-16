@@ -38,11 +38,11 @@
 
 ## 下载稳定版（GitHub Release）
 
-1. 点击下载按钮打开仓库Release页面；  
+1. 打开仓库Release页面；  
 2. 找到适用于你Minecraft版本的插件版本；  
 3. 下载 Assets 中的 RSLB-x.x-all.jar  
 
-> 提示：也可在代码仓库的 Action 页面下载开发版。
+> 提示：也可在仓库的 Action 页面下载开发版。
 
 ## 安装与首次启动
 
