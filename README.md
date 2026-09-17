@@ -311,3 +311,6 @@ netty 管道（LoginHandler 注入）
 ## 许可
 本插件基于 [MultiLogin](https://GitHub.com/CaaMoe/MultiLogin) 二次开发，因此继承上游 [GPL-3.0](LICENSE) 开源协议。  
 本插件皮肤修复功能部分参照 [SkinsRestorer](https://GitHub.com/SkinsRestorer/SkinsRestorer/) 。
+
+## 支持这个项目
+[支持](https://www.RSerene.com/about/sponsor.html)
