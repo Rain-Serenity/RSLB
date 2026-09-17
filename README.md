@@ -313,4 +313,4 @@ netty 管道（LoginHandler 注入）
 本插件皮肤修复功能部分参照 [SkinsRestorer](https://GitHub.com/SkinsRestorer/SkinsRestorer/) 。
 
 ## 支持这个项目
-[支持](https://www.RSerene.com/about/sponsor.html)
+如果你觉得这个项目对你有帮助的话欢迎[支持](https://www.RSerene.com/about/sponsor.html)我们！
