@@ -17,7 +17,6 @@ import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.security.PrivateKey;
-import javax.crypto.Cipher;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -301,9 +300,7 @@ public final class LoginHandler {
                 }
                 SecretKey secretKey = packet.getSecretKey(privateKey);
                 String serverId = new BigInteger(Crypt.digestData("", server.getKeyPair().getPublic(), secretKey)).toString(16);
-                Cipher decryptCipher = Crypt.getCipher(2, secretKey);
-                Cipher encryptCipher = Crypt.getCipher(1, secretKey);
-                this.connection.setEncryptionKey(decryptCipher, encryptCipher);
+                this.connection.setEncryptionKey(secretKey);
                 plugin.logDebug("Encryption enabled for " + session.getUsername() + ", serverId=" + serverId);
                 authAsync(session, serverId);
             } catch (Exception e) {
