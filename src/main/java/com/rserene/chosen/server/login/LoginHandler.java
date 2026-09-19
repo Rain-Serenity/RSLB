@@ -337,8 +337,9 @@ public final class LoginHandler {
                         final com.mojang.authlib.GameProfile acceptedProfile = mojangProfile;
                         Bukkit.getGlobalRegionScheduler().run(plugin, task -> completeLogin(acceptedProfile));
                     } else {
-                        plugin.getLogger().info("Auth rejected for " + session.getUsername() + ": " + authResult.getKickMessage());
-                        kick(session, authResult.getKickMessage());
+                        String reason = authResult.getKickMessage();
+                        com.rserene.chosen.server.util.MessageUtil.sendLegacy(Bukkit.getConsoleSender(), reason);
+                        kick(session, reason);
                     }
                 } catch (Exception e) {
                     plugin.getLogger().log(Level.SEVERE,"Auth error for " + session.getUsername(), e);
@@ -366,7 +367,9 @@ public final class LoginHandler {
 
         private void kick(LoginSession session, String message) {
             try {
-                Component reason = Component.literal(message);
+                Component reason = Component.literal(
+                    message.replaceAll("&([0-9a-fk-or])", "\u00a7$1")
+                );
                 this.connection.send(new ClientboundLoginDisconnectPacket(reason));
                 this.connection.disconnect(reason);
             } catch (Exception e) {
