@@ -1,6 +1,7 @@
 plugins {
     id("java-library")
     id("com.gradleup.shadow") version "9.6.1"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.23"
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
@@ -13,14 +14,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
-    // 26.2 的 Mojang-mapped NMS 类（Paper/Folia）。
-    // 来源：paperweight-userdev dev bundle 缓存（applyDevBundlePatches_.../output.jar），
-    // 运行时由服务器 jar 提供。
-    compileOnly(files("libs/nms-26.2.jar"))
-    // 以下两个版本必须与 26.2 服务器自带库（vanilla bundler）保持一致，切勿升级！
-    compileOnly("com.mojang:authlib:9.0.75")
-    compileOnly("io.netty:netty-all:4.2.15.Final")
+    paperweight.paperDevBundle("26.2.build.+")
 
     compileOnly("org.jetbrains:annotations:26.1.0")
     compileOnly("org.projectlombok:lombok:1.18.46")
@@ -37,8 +31,7 @@ dependencies {
     implementation("org.ow2.asm:asm:9.10.1")
     implementation("org.ow2.asm:asm-commons:9.10.1")
     implementation("com.google.code.gson:gson:2.14.0")
-    // brigadier 与服务器自带版本（1.0.500 魔改版）二进制兼容，保持官方最新发布版
-    implementation("com.mojang:brigadier:1.0.18")
+    implementation("com.mojang:brigadier:1.3.11")
 }
 
 java {
@@ -59,8 +52,7 @@ tasks {
             "okhttp3" to "com.rserene.chosen.server.libs.okhttp",
             "okio" to "com.rserene.chosen.server.libs.okio",
             "org.objectweb.asm" to "com.rserene.chosen.server.libs.asm",
-            "com.google.gson" to "com.rserene.chosen.server.libs.gson",
-            "kotlin" to "com.rserene.chosen.server.libs.kotlin"
+            "com.google.gson" to "com.rserene.chosen.server.libs.gson"
         )
         relocate.forEach { (from, to) -> relocate(from, to) }
 
