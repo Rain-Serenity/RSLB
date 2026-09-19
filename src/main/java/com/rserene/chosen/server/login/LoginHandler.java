@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import net.minecraft.network.Connection;
 import net.minecraft.network.HandlerNames;
@@ -77,6 +78,7 @@ public final class LoginHandler {
     private Field authenticatedProfileField;
     private Field stateField;
     private Method callPlayerPreLoginEventsMethod;
+    private Method setEncryptionKeyMethod;
 
     private volatile io.papermc.paper.threadedregions.scheduler.ScheduledTask tickTask;
 
@@ -93,6 +95,12 @@ public final class LoginHandler {
             this.callPlayerPreLoginEventsMethod =
                 ServerLoginPacketListenerImpl.class.getDeclaredMethod("callPlayerPreLoginEvents", com.mojang.authlib.GameProfile.class);
             this.callPlayerPreLoginEventsMethod.setAccessible(true);
+            try {
+                this.setEncryptionKeyMethod = Connection.class.getDeclaredMethod("setEncryptionKey", SecretKey.class);
+            } catch (NoSuchMethodException e) {
+                this.setEncryptionKeyMethod = Connection.class.getDeclaredMethod("setEncryptionKey", Cipher.class, Cipher.class);
+            }
+            this.setEncryptionKeyMethod.setAccessible(true);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to resolve NMS fields for login interception", e);
         }
@@ -239,6 +247,17 @@ public final class LoginHandler {
         }
     }
 
+    private void setEncryptionKey(Connection connection, SecretKey secretKey) throws Exception {
+        Class<?>[] paramTypes = setEncryptionKeyMethod.getParameterTypes();
+        if (paramTypes.length == 1 && paramTypes[0] == SecretKey.class) {
+            setEncryptionKeyMethod.invoke(connection, secretKey);
+        } else {
+            Cipher encryptCipher = Crypt.getCipher(1, secretKey);
+            Cipher decryptCipher = Crypt.getCipher(2, secretKey);
+            setEncryptionKeyMethod.invoke(connection, encryptCipher, decryptCipher);
+        }
+    }
+
     private final class Interceptor extends ChannelInboundHandlerAdapter {
         private final Connection connection;
 
@@ -300,7 +319,7 @@ public final class LoginHandler {
                 }
                 SecretKey secretKey = packet.getSecretKey(privateKey);
                 String serverId = new BigInteger(Crypt.digestData("", server.getKeyPair().getPublic(), secretKey)).toString(16);
-                this.connection.setEncryptionKey(secretKey);
+                setEncryptionKey(this.connection, secretKey);
                 plugin.logDebug("Encryption enabled for " + session.getUsername() + ", serverId=" + serverId);
                 authAsync(session, serverId);
             } catch (Exception e) {
