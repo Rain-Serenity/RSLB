@@ -24,12 +24,7 @@ dependencies {
     implementation("com.mysql:mysql-connector-j:9.7.0")
     implementation("com.h2database:h2:2.4.240")
     implementation("org.spongepowered:configurate-yaml:4.2.0")
-    implementation("org.spongepowered:configurate-core:4.2.0")
-    implementation("org.yaml:snakeyaml:2.6")
     implementation("com.squareup.okhttp3:okhttp:5.4.0")
-    implementation("com.squareup.okio:okio-jvm:3.18.1")
-    implementation("org.ow2.asm:asm:9.10.1")
-    implementation("org.ow2.asm:asm-commons:9.10.1")
     implementation("com.google.code.gson:gson:2.14.0")
     implementation("com.mojang:brigadier:1.3.11")
 }
@@ -51,7 +46,6 @@ tasks {
             "org.spongepowered.configurate" to "com.rserene.chosen.server.libs.configurate",
             "okhttp3" to "com.rserene.chosen.server.libs.okhttp",
             "okio" to "com.rserene.chosen.server.libs.okio",
-            "org.objectweb.asm" to "com.rserene.chosen.server.libs.asm",
             "com.google.gson" to "com.rserene.chosen.server.libs.gson"
         )
         relocate.forEach { (from, to) -> relocate(from, to) }
